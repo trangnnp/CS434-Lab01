@@ -8,8 +8,7 @@
 #include "player.h"
 #include <string>
 #include <string.h>
-#include <cstring>
-
+#include <set>
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -20,6 +19,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     qDebug() << "Start server";
     qDebug() << packBank.packs.size();
+
+    room.name = (char*)"Default Room Name";
 
     _server.listen(QHostAddress::Any, 4242);
     connect(&_server, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
@@ -47,21 +48,22 @@ void MainWindow::onNewConnection()
    player.id = _sockets.size();
    player.name = strdup("meo");
    player.clientSocket = clientSocket;
-   players.push_back(player);
+   room.players.push_back(player);
 
-    _sockets.push_back(clientSocket);
-    for (QTcpSocket* socket : _sockets) {
-        if (socket != clientSocket) {
-            socket->write(QByteArray::fromStdString(clientSocket->peerAddress().toString().toStdString() + " User " + to_string(player.id) + " connected to server !\n"));
+    for (Player player : room.players) {
+        if (player.clientSocket != clientSocket) {
+            player.clientSocket->write(QByteArray::fromStdString(clientSocket->peerAddress().toString().toStdString() + " User " + to_string(player.id) + " connected to server !\n"));
         } else {
-            socket->write(QByteArray::fromStdString(clientSocket->peerAddress().toString().toStdString() + " Hello User " + to_string(player.id) + " !\n"));
+            player.clientSocket->write(QByteArray::fromStdString(clientSocket->peerAddress().toString().toStdString() + " Hello User " + to_string(player.id) + " !\n"));
         }
     }
 
-    if (_sockets.size() == 3) {
+    if (room.players.size() == 3) {
         onGame = true;
-        for (QTcpSocket* socket : _sockets) {
-            socket->write(QByteArray::fromStdString("================== Game Starting ======================"));
+        getPacksForRoom(&room);
+        qDebug() << room.packs.size();
+        for (Player player : room.players) {
+            player.clientSocket->write(QByteArray::fromStdString("\n\n================== Game Starting ======================\n"));
         }
     }
 }
@@ -84,5 +86,16 @@ void MainWindow::onReadyRead()
             socket->write(QByteArray::fromStdString(sender->peerAddress().toString().toStdString() + ": hello from server"));
             qDebug() << sender->peerAddress();
         }
+    }
+}
+
+void MainWindow::getPacksForRoom(Room *room) {
+    set<int> numbers;
+    while (numbers.size() < room->limitPacks) {
+       numbers.insert(rand() % room->maxPacks);
+    }
+
+    for (int i: numbers) {
+        room->packs.push_back(packBank.packs.at(i));
     }
 }

@@ -7,6 +7,7 @@
 #include <vector>
 #include "player.h"
 #include "packbank.h"
+#include "room.h"
 
 using namespace std;
 
@@ -33,6 +34,8 @@ private:
     vector<Player> players;
     PackBank packBank = PackBank();
     bool onGame = false;
+    Room room = Room();
+    void getPacksForRoom(Room *room);
 };
 
 #endif // MAINWINDOW_H

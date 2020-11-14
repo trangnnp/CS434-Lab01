@@ -14,6 +14,7 @@ public:
     int total=0;
     vector<int*> prevIds;
     void initPacks();
+    void getPacksByIds(vector<Pack> *packs);
 };
 
 #endif // PACKBANK_H
