@@ -9,6 +9,7 @@
 #include <string>
 #include <string.h>
 #include <set>
+
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -35,7 +36,7 @@ void MainWindow::onNewConnection()
 {
    QTcpSocket *clientSocket = _server.nextPendingConnection();
 
-   if (onGame) {
+   if (isOnGame) {
        clientSocket->write(QByteArray::fromStdString("Game is started! Connection rejected!\n"));
        clientSocket->close();
        return;
@@ -59,12 +60,13 @@ void MainWindow::onNewConnection()
     }
 
     if (room.players.size() == 3) {
-        onGame = true;
+        isOnGame = true;
         getPacksForRoom(&room);
         qDebug() << room.packs.size();
         for (Player player : room.players) {
             player.clientSocket->write(QByteArray::fromStdString("\n\n================== Game Starting ======================\n"));
         }
+        onGame();
     }
 }
 
@@ -76,6 +78,24 @@ void MainWindow::onSocketStateChanged(QAbstractSocket::SocketState socketState)
         _sockets.removeOne(sender);
     }
 }
+
+void MainWindow::onGame() {
+    for (int i=0; i<room.packs.size(); i++) {
+        qDebug() << i;
+        for (Player player : room.players) {
+            player.clientSocket->write(QByteArray::fromStdString("Q=" + string(room.packs.at(i).q)));
+            player.clientSocket->write(QByteArray::fromStdString("A=" + string(room.packs.at(i).a)));
+            player.clientSocket->write(QByteArray::fromStdString("B=" + string(room.packs.at(i).b)));
+            player.clientSocket->write(QByteArray::fromStdString("C=" + string(room.packs.at(i).c)));
+            player.clientSocket->write(QByteArray::fromStdString("D=" + string(room.packs.at(i).d)));
+        }
+
+        if (!isOnGame) {
+            return;
+        }
+    }
+}
+
 
 void MainWindow::onReadyRead()
 {

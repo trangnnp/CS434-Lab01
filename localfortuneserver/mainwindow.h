@@ -33,9 +33,10 @@ private:
     QList<QTcpSocket*>  _sockets;
     vector<Player> players;
     PackBank packBank = PackBank();
-    bool onGame = false;
+    bool isOnGame = false;
     Room room = Room();
     void getPacksForRoom(Room *room);
+    void onGame();
 };
 
 #endif // MAINWINDOW_H
