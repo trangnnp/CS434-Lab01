@@ -32,6 +32,7 @@ private:
     QList<QTcpSocket*>  _sockets;
     vector<Player> players;
     PackBank packBank = PackBank();
+    bool onGame = false;
 };
 
 #endif // MAINWINDOW_H

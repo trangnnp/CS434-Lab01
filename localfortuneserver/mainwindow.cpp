@@ -34,6 +34,12 @@ void MainWindow::onNewConnection()
 {
    QTcpSocket *clientSocket = _server.nextPendingConnection();
 
+   if (onGame) {
+       clientSocket->write(QByteArray::fromStdString("Game is started! Connection rejected!\n"));
+       clientSocket->close();
+       return;
+   }
+
    connect(clientSocket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
    connect(clientSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onSocketStateChanged(QAbstractSocket::SocketState)));
 
@@ -49,6 +55,13 @@ void MainWindow::onNewConnection()
             socket->write(QByteArray::fromStdString(clientSocket->peerAddress().toString().toStdString() + " User " + to_string(player.id) + " connected to server !\n"));
         } else {
             socket->write(QByteArray::fromStdString(clientSocket->peerAddress().toString().toStdString() + " Hello User " + to_string(player.id) + " !\n"));
+        }
+    }
+
+    if (_sockets.size() == 3) {
+        onGame = true;
+        for (QTcpSocket* socket : _sockets) {
+            socket->write(QByteArray::fromStdString("================== Game Starting ======================"));
         }
     }
 }
