@@ -55,3 +55,12 @@ void MainWindow::onReadyRead() {
     qDebug() << QByteArray::fromStdString(curPack.c);
     qDebug() << QByteArray::fromStdString(curPack.d);
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    QString mString;
+    mString = ui->lineEdit->text();
+    ui->lineEdit->setText("");
+    // change man hinh
+    qDebug() << mString ;
+}
