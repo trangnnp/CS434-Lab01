@@ -46,14 +46,14 @@ void MainWindow::onNewConnection()
    connect(clientSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onSocketStateChanged(QAbstractSocket::SocketState)));
 
    Player player;
-   player.id = _sockets.size();
+   player.id = room.players.size();
    player.name = strdup("meo");
    player.clientSocket = clientSocket;
    room.players.push_back(player);
 
     for (Player player : room.players) {
         if (player.clientSocket != clientSocket) {
-            player.clientSocket->write(QByteArray::fromStdString(clientSocket->peerAddress().toString().toStdString() + " User " + to_string(player.id) + " connected to server !\n"));
+            player.clientSocket->write(QByteArray::fromStdString(clientSocket->peerAddress().toString().toStdString() + " User " + to_string(room.players.size()-1) + " connected to server !\n"));
         } else {
             player.clientSocket->write(QByteArray::fromStdString(clientSocket->peerAddress().toString().toStdString() + " Hello User " + to_string(player.id) + " !\n"));
         }
