@@ -46,7 +46,7 @@ void MainWindow::onReadyRead() {
 
         vector<string> vec;
         string delimiter = "\n";
-        splitS(data,vec);
+        splitS(data,vec,delimiter);
 
         for (auto i: vec) {
             qDebug() << QByteArray::fromStdString(i);

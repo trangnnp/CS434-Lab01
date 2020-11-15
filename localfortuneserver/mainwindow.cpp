@@ -59,7 +59,7 @@ void MainWindow::onNewConnection()
         }
     }
 
-    if (room.players.size() == 3) {
+    if (room.players.size() == 1) {
         isOnGame = true;
         getPacksForRoom(&room);
         qDebug() << room.packs.size();
@@ -83,11 +83,11 @@ void MainWindow::onGame() {
     for (int i=0; i<room.packs.size(); i++) {
         qDebug() << i;
         for (Player player : room.players) {
-            player.clientSocket->write(QByteArray::fromStdString("Q=" + string(room.packs.at(i).q)));
-            player.clientSocket->write(QByteArray::fromStdString("A=" + string(room.packs.at(i).a)));
-            player.clientSocket->write(QByteArray::fromStdString("B=" + string(room.packs.at(i).b)));
-            player.clientSocket->write(QByteArray::fromStdString("C=" + string(room.packs.at(i).c)));
-            player.clientSocket->write(QByteArray::fromStdString("D=" + string(room.packs.at(i).d)));
+            player.clientSocket->write(QByteArray::fromStdString("Q=" + string(room.packs.at(i).q)+"\p"));
+            player.clientSocket->write(QByteArray::fromStdString("A=" + string(room.packs.at(i).a)+"\p"));
+            player.clientSocket->write(QByteArray::fromStdString("B=" + string(room.packs.at(i).b)+"\p"));
+            player.clientSocket->write(QByteArray::fromStdString("C=" + string(room.packs.at(i).c)+"\p"));
+            player.clientSocket->write(QByteArray::fromStdString("D=" + string(room.packs.at(i).d)+"\n"));
         }
 
         if (!isOnGame) {
