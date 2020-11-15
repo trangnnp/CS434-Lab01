@@ -43,6 +43,8 @@ private:
     Room room = Room();
     void getPacksForRoom(Room *room);
     void onGame();
+    QByteArray sendConv(string data, string tag);
+    void addNewPlayer(string name, QTcpSocket* socket);
 };
 
 #endif // MAINWINDOW_H

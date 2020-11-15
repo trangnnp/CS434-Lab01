@@ -11,7 +11,7 @@ class Player
 public:
     Player();
     int id;
-    char* name;
+    string name;
     int stauts = 0;
     int score = 0;
     QTcpSocket *clientSocket;
