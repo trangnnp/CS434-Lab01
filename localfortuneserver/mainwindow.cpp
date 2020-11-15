@@ -87,9 +87,9 @@ void MainWindow::onGame() {
     for (int i=0; i<room.packs.size(); i++) {
         qDebug() << i;
         for (Player player : room.players) {
-            string packQuestion = "Q=" + string(room.packs.at(i).q)+"\p" + "A=" + string(room.packs.at(i).a)+"\p"
-                    + "B=" + string(room.packs.at(i).b)+"\p" + "C=" + string(room.packs.at(i).c)+"\p"
-                    "D=" + string(room.packs.at(i).d)+"\p";
+            string packQuestion = "Q=" + string(room.packs.at(i).q)+"\~" + "A=" + string(room.packs.at(i).a)+"\~"
+                    + "B=" + string(room.packs.at(i).b)+"\~" + "C=" + string(room.packs.at(i).c)+"\~"
+                    "D=" + string(room.packs.at(i).d)+"\~";
             QByteArray dataSend = sendConv(packQuestion,"Q");
             player.clientSocket->write(dataSend);
 
