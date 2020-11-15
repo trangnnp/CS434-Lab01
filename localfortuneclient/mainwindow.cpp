@@ -3,6 +3,7 @@
 
 #include <QDebug>
 #include <QHostAddress>
+#include <QStackedWidget>
 #include <string>
 #include <sstream>
 

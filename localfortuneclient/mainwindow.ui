@@ -25,6 +25,9 @@
      <pointsize>16</pointsize>
     </font>
    </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <layout class="QGridLayout" name="screen1" rowstretch="0" columnstretch="3,0">
@@ -122,6 +125,11 @@
             <family>Tahoma</family>
             <pointsize>16</pointsize>
            </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(170, 85, 0);
+border-radius: 10;
+padding: 10px;</string>
           </property>
           <property name="text">
            <string>Continue</string>
