@@ -3,6 +3,7 @@
 
 #include <QDebug>
 #include <QHostAddress>
+#include <QStackedWidget>
 #include <string>
 #include <sstream>
 #include <algorithm>
@@ -134,4 +135,13 @@ void MainWindow::onReadyRead() {
 //    qDebug() << QByteArray::fromStdString(curPack.b);
 //    qDebug() << QByteArray::fromStdString(curPack.c);
 //    qDebug() << QByteArray::fromStdString(curPack.d);
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    QString mString;
+    mString = ui->lineEdit->text();
+    ui->lineEdit->setText("");
+    // change man hinh
+    qDebug() << mString ;
 }

@@ -21,6 +21,9 @@ public:
 public slots:
     void onReadyRead();
 
+private slots:
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTcpSocket  _socket;
