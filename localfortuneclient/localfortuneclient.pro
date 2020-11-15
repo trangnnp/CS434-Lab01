@@ -1,8 +1,10 @@
 HEADERS       = client.h \
-    mainwindow.h
+    mainwindow.h \
+    pack.h
 SOURCES       = client.cpp \
                 main.cpp \
-                mainwindow.cpp
+                mainwindow.cpp \
+                pack.cpp
 
 FORMS += \
     mainwindow.ui \
