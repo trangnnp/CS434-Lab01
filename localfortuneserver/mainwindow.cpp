@@ -32,12 +32,16 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+QByteArray sendConv(string data, string tag) {
+    return QByteArray::fromStdString("##"+tag+"%%"+data);
+}
+
 void MainWindow::onNewConnection()
 {
    QTcpSocket *clientSocket = _server.nextPendingConnection();
 
    if (isOnGame) {
-       clientSocket->write(QByteArray::fromStdString("Game is started! Connection rejected!\n"));
+       clientSocket->write(sendConv("Game is started! Connection rejected!\n","N"));
        clientSocket->close();
        return;
    }
@@ -53,9 +57,9 @@ void MainWindow::onNewConnection()
 
     for (Player player : room.players) {
         if (player.clientSocket != clientSocket) {
-            player.clientSocket->write(QByteArray::fromStdString(clientSocket->peerAddress().toString().toStdString() + " User " + to_string(room.players.size()-1) + " connected to server !\n"));
+            player.clientSocket->write(sendConv(clientSocket->peerAddress().toString().toStdString() + " User " + to_string(room.players.size()-1) + " connected to server !\n","N"));
         } else {
-            player.clientSocket->write(QByteArray::fromStdString(clientSocket->peerAddress().toString().toStdString() + " Hello User " + to_string(player.id) + " !\n"));
+            player.clientSocket->write(sendConv(clientSocket->peerAddress().toString().toStdString() + " Hello User " + to_string(player.id) + " !\n","N"));
         }
     }
 
@@ -64,7 +68,7 @@ void MainWindow::onNewConnection()
         getPacksForRoom(&room);
         qDebug() << room.packs.size();
         for (Player player : room.players) {
-            player.clientSocket->write(QByteArray::fromStdString("\n\n================== Game Starting ======================\n"));
+            player.clientSocket->write(sendConv("\n\n================== Game Starting ======================\n","N"));
         }
         onGame();
     }
@@ -83,11 +87,12 @@ void MainWindow::onGame() {
     for (int i=0; i<room.packs.size(); i++) {
         qDebug() << i;
         for (Player player : room.players) {
-            player.clientSocket->write(QByteArray::fromStdString("Q=" + string(room.packs.at(i).q)+"\p"));
-            player.clientSocket->write(QByteArray::fromStdString("A=" + string(room.packs.at(i).a)+"\p"));
-            player.clientSocket->write(QByteArray::fromStdString("B=" + string(room.packs.at(i).b)+"\p"));
-            player.clientSocket->write(QByteArray::fromStdString("C=" + string(room.packs.at(i).c)+"\p"));
-            player.clientSocket->write(QByteArray::fromStdString("D=" + string(room.packs.at(i).d)+"\n"));
+            string packQuestion = "Q=" + string(room.packs.at(i).q)+"\p" + "A=" + string(room.packs.at(i).a)+"\p"
+                    + "B=" + string(room.packs.at(i).b)+"\p" + "C=" + string(room.packs.at(i).c)+"\p"
+                    "D=" + string(room.packs.at(i).d)+"\p";
+            QByteArray dataSend = sendConv(packQuestion,"Q");
+            player.clientSocket->write(dataSend);
+
         }
 
         if (!isOnGame) {

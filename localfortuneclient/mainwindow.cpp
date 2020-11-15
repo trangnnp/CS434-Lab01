@@ -26,14 +26,20 @@ template <class Container>
 void splitS(const string& str, Container& cont,
               const string& delims = "\n")
 {
-    std::size_t current, previous = 0;
-    current = str.find_first_of(delims);
+    std::size_t current, previous, mid = 0;
+    previous = str.find_first_of("##");
+    mid = str.find_first_of("%%",previous);
+    current = str.find_first_of("##",previous);
+
+    pair<string,string> packet;
     while (current != std::string::npos) {
-        cont.push_back(str.substr(previous, current - previous));
-        previous = current + 1;
-        current = str.find_first_of(delims, previous);
+        packet.first = str.substr(previous+2, mid - previous - 2);
+        packet.second = str.substr(mid + 2, current - mid - 2);
+        cont.push_back(packet);
+        previous = current + 2;
+        current = str.find_first_of("##", previous);
+        mid = str.find_first_of("%%",previous);
     }
-    cont.push_back(str.substr(previous, current - previous));
 }
 
 void MainWindow::onReadyRead() {
@@ -44,12 +50,12 @@ void MainWindow::onReadyRead() {
     //    data.erase(data.begin(), data.begin()+1);
         qDebug() << QByteArray::fromStdString(data);
 
-        vector<string> vec;
+        vector<pair<string,string>> vec;
         string delimiter = "\n";
-        splitS(data,vec);
+        splitS(data,vec,delimiter);
 
         for (auto i: vec) {
-            qDebug() << QByteArray::fromStdString(i);
+            qDebug() << QByteArray::fromStdString(i.second);
         }
 
     }
