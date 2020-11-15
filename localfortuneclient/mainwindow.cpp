@@ -29,7 +29,8 @@ void splitS(const string& str, Container& cont,
     std::size_t current, previous, mid = 0;
     previous = str.find_first_of("##");
     mid = str.find_first_of("%%",previous);
-    current = str.find_first_of("##",previous);
+    current = str.find_first_of("##",previous+2);
+
 
     pair<string,string> packet;
     while (current != std::string::npos) {
@@ -48,11 +49,12 @@ void MainWindow::onReadyRead() {
     //    qDebug() << datas;
         string data = datas.toStdString();
     //    data.erase(data.begin(), data.begin()+1);
-        qDebug() << QByteArray::fromStdString(data);
+//        qDebug() << QByteArray::fromStdString(data);
 
         vector<pair<string,string>> vec;
         string delimiter = "\n";
         splitS(data,vec,delimiter);
+
 
         for (auto i: vec) {
             qDebug() << QByteArray::fromStdString(i.second);
