@@ -1,7 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "ui_dialog.h"
-#include "ui_server.h"
 
 #include <QDebug>
 #include <QHostAddress>
