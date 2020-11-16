@@ -84,7 +84,8 @@ void MainWindow::onSocketStateChanged(QAbstractSocket::SocketState socketState)
 
 void MainWindow::onGame() {
     for (int i=0; i<room.packs.size(); i++) {
-        qDebug() << i;
+        qDebug() << QByteArray::fromStdString("Sending " + to_string(i));
+        room.curPackId++;
         for (Player player : room.players) {
             string packQuestion = "Q=" + string(room.packs.at(i).q)+"\~" + "A=" + string(room.packs.at(i).a)+"\~"
                     + "B=" + string(room.packs.at(i).b)+"\~" + "C=" + string(room.packs.at(i).c)+"\~"
@@ -100,20 +101,55 @@ void MainWindow::onGame() {
     }
 }
 
+void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
+    qDebug() << "======collectAnswer======";
+    for (Player player : room.players) {
+        if (player.clientSocket == socket) {
+            qDebug() << "======found player======";
+            if (player.stauts == 2) {
+                socket->write(sendConv("You cannot answer this question!","N"));
+                return;
+            }
+
+            if (answer == room.packs.at(room.curPackId).correct) {
+                socket->write(sendConv("You right!","K"));
+            } else {
+                socket->write(sendConv("You wrong!","K"));
+                if (++player.stauts == 2) {
+                    socket->write(sendConv("Chet!","N"));
+                }
+            }
+            return;
+        }
+    }
+}
+
+void MainWindow::sendCorrectAnswer() {
+    for (Player player : room.players) {
+        player.clientSocket->write(sendConv("The correct answer is " + to_string(room.packs.at(room.curPackId).correct) + " ! ","K"));
+    }
+}
 
 void MainWindow::onReadyRead() {
     QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
     QByteArray datas = sender->readAll();
     string data = datas.toStdString();
+    qDebug() << QByteArray::fromStdString("datas: ") + datas;
 
     vector<pair<string,string>> vec;
     string delimiter = "\n";
-    splitS(data,vec,delimiter);
+    splitS(data.append("##"),vec,delimiter);
 
     for (auto i: vec) {
+        qDebug() << QByteArray::fromStdString("first: ") + i.first[0];
+        qDebug() << QByteArray::fromStdString("second: "+ i.second);
         switch(i.first[0]) {
             case 'J':
                 addNewPlayer(i.second, sender);
+                break;
+            case 'W':
+                sender->write(sendConv("Your answer is: " + i.second + " ! ","N"));
+                collectAnswer(stoi(i.second), sender);
                 break;
         }
     }

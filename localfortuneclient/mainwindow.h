@@ -30,6 +30,7 @@ private:
     Pack curPack = Pack();
     void createMe(string name);
     QByteArray sendConv(string data, string tag);
+    void sendAnswer(int answer);
 };
 
 #endif // MAINWINDOW_H

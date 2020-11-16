@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent):
     ui->setupUi(this);
     _socket.connectToHost(QHostAddress("127.0.0.1"), 4242);
     connect(&_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    createMe("Meo" + to_string(rand()%10));
 }
 
 MainWindow::~MainWindow() {
@@ -85,28 +86,39 @@ void splitQ(const string& str, Container& cont,
 }
 
 void MainWindow::onReadyRead() {
-    while (_socket.bytesAvailable() > 0) {
+//    while (_socket.canReadLine()) {
         QByteArray datas = _socket.readAll();
         string data = datas.toStdString();
+        qDebug() << QByteArray::fromStdString("datas: ") + datas;
 
         vector<pair<string,string>> vec;
         string delimiter = "\n";
-        splitS(data,vec,delimiter);
+        splitS(data.append("##"),vec,delimiter);
 
         vector<Pack> questions;
 
         for (auto i: vec) {
+            qDebug() << QByteArray::fromStdString("first: ") + i.first[0];
+            qDebug() << QByteArray::fromStdString("second: "+ i.second);
             switch(i.first[0]) {
                 case 'N':
                     qDebug() << QByteArray::fromStdString(i.second);
                     break;
                 case 'Q':
-                    splitQ(i.second,questions);
+                    splitQ(i.second, questions);
+                    sendAnswer(rand() % 4);
+                    break;
+                case 'K':
+                    qDebug() << QByteArray::fromStdString(i.second);
                     break;
             }
         }
+//    }
+}
 
-    }
+void MainWindow::sendAnswer(int answer) {
+    _socket.write(sendConv(to_string(answer), "W"));
+    qDebug() << "Sent";
 }
 
 
