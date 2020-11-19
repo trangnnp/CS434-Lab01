@@ -28,6 +28,10 @@ private:
     Ui::MainWindow *ui;
     QTcpSocket  _socket;
     Pack curPack = Pack();
+    void createMe(string name);
+    void onGame();
+    QByteArray sendConv(string data, string tag);
+    void sendAnswer(int answer);
 };
 
 #endif // MAINWINDOW_H

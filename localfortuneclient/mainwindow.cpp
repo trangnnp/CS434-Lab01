@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <iterator>
 
+
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -17,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent):
     ui->setupUi(this);
     _socket.connectToHost(QHostAddress("127.0.0.1"), 4242);
     connect(&_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    createMe("Meo" + to_string(rand()%10));
 }
 
 MainWindow::~MainWindow() {
@@ -30,7 +32,7 @@ void splitS(const string& str, Container& cont,
     std::size_t current, previous, mid = 0;
     previous = str.find_first_of("##");
     mid = str.find_first_of("%%",previous);
-    current = str.find_first_of("##",previous+2);
+    current = min(str.length(), str.find_first_of("##",previous+2));
 
 
     pair<string,string> packet;
@@ -44,14 +46,17 @@ void splitS(const string& str, Container& cont,
     }
 }
 
-template <class Container>
-void splitQ(const string& str, Container& cont,
+QByteArray MainWindow::sendConv(string data, string tag) {
+    return QByteArray::fromStdString("##"+tag+"%%"+data);
+}
+
+
+void splitQ(const string& str, Pack& curPack,
               const string& delims = "\~")
 {
     std::size_t current, previous = 0;
     current = str.find_first_of(delims);
 
-    Pack curPack;
     curPack.q = str.substr(previous,current - previous);
     previous = current + 1;
     current = str.find_first_of(delims,previous);
@@ -76,72 +81,56 @@ void splitQ(const string& str, Container& cont,
     qDebug() << QByteArray::fromStdString(curPack.c);
     qDebug() << QByteArray::fromStdString(curPack.d);
 
-    cont.push_back(curPack);
 }
 
 void MainWindow::onReadyRead() {
-    while (_socket.bytesAvailable() > 0) {
+//    while (_socket.canReadLine()) {
         QByteArray datas = _socket.readAll();
-    //    qDebug() << datas;
         string data = datas.toStdString();
-    //    data.erase(data.begin(), data.begin()+1);
-//        qDebug() << QByteArray::fromStdString(data);
+        qDebug() << QByteArray::fromStdString("datas: ") + datas;
 
         vector<pair<string,string>> vec;
         string delimiter = "\n";
-        splitS(data,vec,delimiter);
-
-
-        vector<Pack> questions;
+        splitS(data.append("##"),vec,delimiter);
 
         for (auto i: vec) {
+            Pack question;
+            qDebug() << QByteArray::fromStdString("first: ") + i.first[0];
+            qDebug() << QByteArray::fromStdString("second: "+ i.second);
             switch(i.first[0]) {
                 case 'N':
                     qDebug() << QByteArray::fromStdString(i.second);
                     break;
                 case 'Q':
-                    splitQ(i.second,questions);
+                    splitQ(i.second, question);
+                    question.onGame();
+                    sendAnswer(rand() % 4);
+                    break;
+                case 'K':
+                    qDebug() << QByteArray::fromStdString(i.second);
                     break;
             }
         }
-
-    }
-
-
-//    switch(datas[0]) {
-//        case 'Q':
-//          curPack.q = data;
-//          break;
-//        case 'A':
-//          curPack.a = data;
-//          break;
-//        case 'B':
-//          curPack.b = data;
-//          break;
-//        case 'C':
-//          curPack.c = data;
-//          break;
-//        case 'D':
-//          curPack.d = data;
-//          break;
-//        case 'K':
-//          stringstream geek(data);
-//          geek >> curPack.correct;
-//          break;
 //    }
-
-//    qDebug() << QByteArray::fromStdString(curPack.q);
-//    qDebug() << QByteArray::fromStdString(curPack.a);
-//    qDebug() << QByteArray::fromStdString(curPack.b);
-//    qDebug() << QByteArray::fromStdString(curPack.c);
-//    qDebug() << QByteArray::fromStdString(curPack.d);
 }
+
+
+void MainWindow::sendAnswer(int answer) {
+    _socket.write(sendConv(to_string(answer), "W"));
+    qDebug() << "Sent";
+}
+
 
 void MainWindow::on_pushButton_clicked()
 {
     QString mString;
     mString = ui->lineEdit->text();
     ui->lineEdit->setText("");
+    createMe(mString.toStdString());
     // change man hinh
-    qDebug() << mString ;
+    qDebug() << mString;
+}
+
+void MainWindow::createMe(string name) {
+    _socket.write(sendConv(name, "J"));
 }

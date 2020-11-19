@@ -21,6 +21,4 @@ target.path = $$[QT_INSTALL_EXAMPLES]/corelib/ipc/localfortuneserver
 INSTALLS += target
 
 FORMS += \
-    dialog.ui \
-    mainwindow.ui \
-    server.ui
+    mainwindow.ui

@@ -5,6 +5,8 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <vector>
+#include <chrono>
+#include <thread>
 #include "player.h"
 #include "packbank.h"
 #include "room.h"
@@ -43,6 +45,10 @@ private:
     Room room = Room();
     void getPacksForRoom(Room *room);
     void onGame();
+    QByteArray sendConv(string data, string tag);
+    void addNewPlayer(string name, QTcpSocket* socket);
+    void collectAnswer(int answer, QTcpSocket* socket);
+    void sendCorrectAnswer();
 };
 
 #endif // MAINWINDOW_H

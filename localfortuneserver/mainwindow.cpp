@@ -1,7 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "ui_dialog.h"
-#include "ui_server.h"
 
 #include <QDebug>
 #include <QHostAddress>
@@ -11,6 +9,9 @@
 #include <string>
 #include <string.h>
 #include <set>
+#include <sstream>
+#include <algorithm>
+#include <iterator>
 
 using namespace std;
 
@@ -34,7 +35,27 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-QByteArray sendConv(string data, string tag) {
+template <class Container>
+void splitS(const string& str, Container& cont,
+              const string& delims = "\n")
+{
+    std::size_t current, previous, mid = 0;
+    previous = str.find_first_of("##");
+    mid = str.find_first_of("%%",previous);
+    current = min(str.length(), str.find_first_of("##",previous+2));
+
+    pair<string,string> packet;
+    while (current != std::string::npos) {
+        packet.first = str.substr(previous+2, mid - previous - 2);
+        packet.second = str.substr(mid + 2, current - mid - 2);
+        cont.push_back(packet);
+        previous = current;
+        current = str.find_first_of("##", previous+2);
+        mid = str.find_first_of("%%",previous);
+    }
+}
+
+QByteArray MainWindow::sendConv(string data, string tag) {
     return QByteArray::fromStdString("##"+tag+"%%"+data);
 }
 
@@ -50,30 +71,6 @@ void MainWindow::onNewConnection()
 
    connect(clientSocket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
    connect(clientSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onSocketStateChanged(QAbstractSocket::SocketState)));
-
-   Player player;
-   player.id = room.players.size();
-   player.name = strdup("meo");
-   player.clientSocket = clientSocket;
-   room.players.push_back(player);
-
-    for (Player player : room.players) {
-        if (player.clientSocket != clientSocket) {
-            player.clientSocket->write(sendConv(clientSocket->peerAddress().toString().toStdString() + " User " + to_string(room.players.size()-1) + " connected to server !\n","N"));
-        } else {
-            player.clientSocket->write(sendConv(clientSocket->peerAddress().toString().toStdString() + " Hello User " + to_string(player.id) + " !\n","N"));
-        }
-    }
-
-    if (room.players.size() == 1) {
-        isOnGame = true;
-        getPacksForRoom(&room);
-        qDebug() << room.packs.size();
-        for (Player player : room.players) {
-            player.clientSocket->write(sendConv("\n\n================== Game Starting ======================\n","N"));
-        }
-        onGame();
-    }
 }
 
 void MainWindow::onSocketStateChanged(QAbstractSocket::SocketState socketState)
@@ -86,9 +83,14 @@ void MainWindow::onSocketStateChanged(QAbstractSocket::SocketState socketState)
 }
 
 void MainWindow::onGame() {
+    using namespace std::this_thread; // sleep_for, sleep_until
+    using namespace std::chrono; // nanoseconds, system_clock, seconds
+
     for (int i=0; i<room.packs.size(); i++) {
-        qDebug() << i;
+        qDebug() << QByteArray::fromStdString("Sending " + to_string(i));
+        room.curPackId++;
         for (Player player : room.players) {
+            qDebug() << QByteArray::fromStdString("send to player: " + to_string(player.id));
             string packQuestion = "Q=" + string(room.packs.at(i).q)+"\~" + "A=" + string(room.packs.at(i).a)+"\~"
                     + "B=" + string(room.packs.at(i).b)+"\~" + "C=" + string(room.packs.at(i).c)+"\~"
                     "D=" + string(room.packs.at(i).d)+"\~";
@@ -100,21 +102,94 @@ void MainWindow::onGame() {
         if (!isOnGame) {
             return;
         }
+
+        qDebug() << QByteArray::fromStdString("lan " + to_string(i));
+        sleep_until(system_clock::now() + seconds(3));
     }
 }
 
+void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
+    qDebug() << "======collectAnswer======";
+    for (Player player : room.players) {
+        if (player.clientSocket == socket) {
+            qDebug() << "======found player======";
+            if (player.stauts == 2) {
+                socket->write(sendConv("You cannot answer this question!","N"));
+                return;
+            }
 
-void MainWindow::onReadyRead()
-{
-    QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
-    QByteArray datas = sender->readAll();
-    for (QTcpSocket* socket : _sockets) {
-        if (socket != sender) {
-            socket->write(QByteArray::fromStdString(sender->peerAddress().toString().toStdString() + ": hello from server"));
-            qDebug() << sender->peerAddress();
+            if (answer == room.packs.at(room.curPackId).correct) {
+                socket->write(sendConv("You right!","K"));
+            } else {
+                socket->write(sendConv("You wrong!","K"));
+                if (++player.stauts == 2) {
+                    socket->write(sendConv("Chet!","N"));
+                }
+            }
+            return;
         }
     }
 }
+
+void MainWindow::sendCorrectAnswer() {
+    for (Player player : room.players) {
+        player.clientSocket->write(sendConv("The correct answer is " + to_string(room.packs.at(room.curPackId).correct) + " ! ","K"));
+    }
+}
+
+void MainWindow::onReadyRead() {
+    QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
+    QByteArray datas = sender->readAll();
+    string data = datas.toStdString();
+    qDebug() << QByteArray::fromStdString("datas: ") + datas;
+
+    vector<pair<string,string>> vec;
+    string delimiter = "\n";
+    splitS(data.append("##"),vec,delimiter);
+
+    for (auto i: vec) {
+        qDebug() << QByteArray::fromStdString("first: ") + i.first[0];
+        qDebug() << QByteArray::fromStdString("second: "+ i.second);
+        switch(i.first[0]) {
+            case 'J':
+                addNewPlayer(i.second, sender);
+                break;
+            case 'W':
+                sender->write(sendConv("Your answer is: " + i.second + " ! ","N"));
+                collectAnswer(stoi(i.second), sender);
+                break;
+        }
+    }
+}
+
+void MainWindow::addNewPlayer(string name, QTcpSocket* socket) {
+    Player player;
+    player.id = room.players.size();
+    player.name = name;
+    player.clientSocket = socket;
+    room.players.push_back(player);
+    qDebug() << QByteArray::fromStdString("Add new player: " + name);
+
+     for (Player player : room.players) {
+         if (player.clientSocket != socket) {
+             player.clientSocket->write(sendConv(" Player " + name + " has just joined !\n","N"));
+         } else {
+             player.clientSocket->write(sendConv(" Hello " + name + " !\n","N"));
+         }
+     }
+
+     if (room.players.size() == 2) {
+         isOnGame = true;
+         getPacksForRoom(&room);
+         qDebug() << room.packs.size();
+         for (Player player : room.players) {
+             player.clientSocket->write(sendConv("\n\n================== Game Starting ======================\n","N"));
+         }
+         onGame();
+     }
+
+}
+
 
 void MainWindow::getPacksForRoom(Room *room) {
     set<int> numbers;
