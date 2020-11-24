@@ -8,22 +8,35 @@
 #include <sstream>
 #include <algorithm>
 #include <iterator>
+#include <QObject>
 
-
-MainWindow::MainWindow(QWidget *parent):
-    QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    _socket(this)
-{
-    ui->setupUi(this);
+MainWindow::MainWindow(QObject *parent):QObject(parent) {
     _socket.connectToHost(QHostAddress("127.0.0.1"), 4242);
     connect(&_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
-    createMe("Meo" + to_string(rand()%10));
+//    createMe("Meo" + to_string(rand()%10));
+    qDebug() << "Constructor Done!";
 }
 
-MainWindow::~MainWindow() {
-    delete ui;
+void MainWindow::printMessage(QString txt)
+{
+qDebug() << "Message from QML: " << txt;
+//_socket.connectToHost(QHostAddress("127.0.0.1"), 4242);
+//connect(&_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+//createMe("Meo" + to_string(rand()%10));
 }
+
+//MainWindow::MainWindow(QWidget *parent):
+//    QMainWindow(parent),
+//    ui(new Ui::MainWindow),
+//    _socket(this)
+//{
+//    ui->setupUi(this);
+
+//}
+
+//MainWindow::~MainWindow() {
+//    delete ui;
+//}
 
 template <class Container>
 void splitS(const string& str, Container& cont,
@@ -126,11 +139,11 @@ void MainWindow::on_pushButton_clicked()
     QString mString;
     mString = ui->lineEdit->text();
     ui->lineEdit->setText("");
-    createMe(mString.toStdString());
+    createMe(mString);
     // change man hinh
     qDebug() << mString;
 }
 
-void MainWindow::createMe(string name) {
-    _socket.write(sendConv(name, "J"));
+void MainWindow::createMe(QString name) {
+    _socket.write(sendConv(name.toStdString(), "J"));
 }

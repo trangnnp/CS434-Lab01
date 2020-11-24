@@ -11,7 +11,12 @@ FORMS += \
     mainwindow.ui
 
 QT           += network widgets
+QT += quick qml
+QT += qml quick core quickcontrols2
 
 # install
 target.path = $$[QT_INSTALL_EXAMPLES]/corelib/ipc/localfortuneclient
 INSTALLS += target
+
+RESOURCES += \
+    qml.qrc
