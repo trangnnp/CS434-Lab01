@@ -161,7 +161,7 @@ ApplicationWindow {
                             radius: 20
                             Label {
                                 anchors.centerIn: parent
-                                text: "pack Q"
+                                text: client.packq
                                 color: "#443224"
                             }
                         }
@@ -184,7 +184,7 @@ ApplicationWindow {
                                     radius: 30
                                     Label {
                                         anchors.centerIn: parent
-                                        text: '<b>A:</b> ' + "pack A"
+                                        text: '<b>A:</b> ' + client.packa
                                         color: "#443224"
                                     }
                                 }
@@ -196,7 +196,7 @@ ApplicationWindow {
                                     radius: 30
                                     Label {
                                         anchors.centerIn: parent
-                                        text: '<b>B:</b> ' + "pack B"
+                                        text: '<b>B:</b> ' + client.packb
                                         color: "#443224"
                                     }
                                 }
@@ -220,7 +220,7 @@ ApplicationWindow {
                                     radius: 30
                                     Label {
                                         anchors.centerIn: parent
-                                        text: '<b>C:</b> ' + "pack C"
+                                        text: '<b>C:</b> ' + client.packc
                                         color: "#443224"
                                     }
                                 }
@@ -232,7 +232,7 @@ ApplicationWindow {
                                     radius: 30
                                     Label {
                                         anchors.centerIn: parent
-                                        text: '<b>D:</b> ' + "pack D"
+                                        text: '<b>D:</b> ' + client.packd
                                         color: "#443224"
                                     }
                                 }

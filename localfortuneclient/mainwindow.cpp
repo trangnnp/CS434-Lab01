@@ -13,30 +13,20 @@
 MainWindow::MainWindow(QObject *parent):QObject(parent) {
     _socket.connectToHost(QHostAddress("127.0.0.1"), 4242);
     connect(&_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
-//    createMe("Meo" + to_string(rand()%10));
+//    createMe(QByteArray::fromStdString("Meo" + to_string(rand()%10)));
+//    curPack.q = QByteArray::fromStdString("bbbbbbbbbbbbbbbbbbbbb");
     qDebug() << "Constructor Done!";
 }
 
 void MainWindow::printMessage(QString txt)
 {
 qDebug() << "Message from QML: " << txt;
-//_socket.connectToHost(QHostAddress("127.0.0.1"), 4242);
-//connect(&_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
-//createMe("Meo" + to_string(rand()%10));
 }
 
-//MainWindow::MainWindow(QWidget *parent):
-//    QMainWindow(parent),
-//    ui(new Ui::MainWindow),
-//    _socket(this)
-//{
-//    ui->setupUi(this);
 
-//}
-
-//MainWindow::~MainWindow() {
+MainWindow::~MainWindow() {
 //    delete ui;
-//}
+}
 
 template <class Container>
 void splitS(const string& str, Container& cont,
@@ -64,36 +54,35 @@ QByteArray MainWindow::sendConv(string data, string tag) {
 }
 
 
-void splitQ(const string& str, Pack& curPack,
-              const string& delims = "\~")
-{
+void MainWindow::splitQ(const string& str) {
+    const string& delims = "\~";
     std::size_t current, previous = 0;
     current = str.find_first_of(delims);
 
-    curPack.q = str.substr(previous,current - previous);
+    curPack.q = QByteArray::fromStdString(str.substr(previous+2,current - previous-2));
     previous = current + 1;
     current = str.find_first_of(delims,previous);
 
-    curPack.a = str.substr(previous,current - previous);
+    curPack.a = QByteArray::fromStdString(str.substr(previous+2,current - previous-2));
     previous = current + 1;
     current = str.find_first_of(delims,previous);
 
-    curPack.b = str.substr(previous,current - previous);
+    curPack.b = QByteArray::fromStdString(str.substr(previous+2,current - previous-2));
     previous = current + 1;
     current = str.find_first_of(delims,previous);
 
-    curPack.c = str.substr(previous,current - previous);
+    curPack.c = QByteArray::fromStdString(str.substr(previous+2,current - previous-2));
     previous = current + 1;
     current = str.find_first_of(delims,previous);
 
-    curPack.d = str.substr(previous,current - previous);
+    curPack.d = QByteArray::fromStdString(str.substr(previous+2,current - previous-3));
+    curPackChanged();
 
-    qDebug() << QByteArray::fromStdString(curPack.q);
-    qDebug() << QByteArray::fromStdString(curPack.a);
-    qDebug() << QByteArray::fromStdString(curPack.b);
-    qDebug() << QByteArray::fromStdString(curPack.c);
-    qDebug() << QByteArray::fromStdString(curPack.d);
-
+    qDebug() << curPack.q;
+    qDebug() << curPack.a;
+    qDebug() << curPack.b;
+    qDebug() << curPack.c;
+    qDebug() << curPack.d;
 }
 
 void MainWindow::onReadyRead() {
@@ -106,8 +95,11 @@ void MainWindow::onReadyRead() {
         string delimiter = "\n";
         splitS(data.append("##"),vec,delimiter);
 
+        qDebug() << vec.size();
+
+
         for (auto i: vec) {
-            Pack question;
+//            Pack *question = new Pack();
             qDebug() << QByteArray::fromStdString("first: ") + i.first[0];
             qDebug() << QByteArray::fromStdString("second: "+ i.second);
             switch(i.first[0]) {
@@ -115,15 +107,16 @@ void MainWindow::onReadyRead() {
                     qDebug() << QByteArray::fromStdString(i.second);
                     break;
                 case 'Q':
-                    splitQ(i.second, question);
-                    question.onGame();
-                    sendAnswer(rand() % 4);
+                    splitQ(i.second);
+//                    question.onGame();
+//                    sendAnswer(rand() % 4);
                     break;
                 case 'K':
                     qDebug() << QByteArray::fromStdString(i.second);
                     break;
             }
         }
+
 //    }
 }
 

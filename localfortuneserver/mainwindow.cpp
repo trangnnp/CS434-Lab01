@@ -83,8 +83,6 @@ void MainWindow::onSocketStateChanged(QAbstractSocket::SocketState socketState)
 }
 
 void MainWindow::onGame() {
-    using namespace std::this_thread; // sleep_for, sleep_until
-    using namespace std::chrono; // nanoseconds, system_clock, seconds
 
     for (int i=0; i<room.packs.size(); i++) {
         qDebug() << QByteArray::fromStdString("Sending " + to_string(i));
@@ -104,7 +102,6 @@ void MainWindow::onGame() {
         }
 
         qDebug() << QByteArray::fromStdString("lan " + to_string(i));
-        sleep_until(system_clock::now() + seconds(3));
     }
 }
 
@@ -178,7 +175,7 @@ void MainWindow::addNewPlayer(string name, QTcpSocket* socket) {
          }
      }
 
-     if (room.players.size() == 2) {
+     if (room.players.size() == 1) {
          isOnGame = true;
          getPacksForRoom(&room);
          qDebug() << room.packs.size();

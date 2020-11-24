@@ -8,7 +8,7 @@ class Room
 public:
     Room();
     char* name;
-    int limitPacks = 3;
+    int limitPacks = 2;
     int maxPacks = 30;
     vector<Player> players;
     vector<Pack> packs;

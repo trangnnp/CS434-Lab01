@@ -5,6 +5,7 @@
 #include<string.h>
 #include<iostream>
 #include<thread>
+#include <QString>
 
 using namespace std;
 
@@ -16,11 +17,11 @@ private:
 public:
     Pack();
 //    Pack(char* q, char* a, char* b, char* c, char* d, int correct);
-    string q;
-    string a;
-    string b;
-    string c;
-    string d;
+    QString q;
+    QString a;
+    QString b;
+    QString c;
+    QString d;
     int correct = -1;
 
     void onGame();
