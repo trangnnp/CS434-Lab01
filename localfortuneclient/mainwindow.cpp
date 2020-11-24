@@ -85,6 +85,27 @@ void MainWindow::splitQ(const string& str) {
     qDebug() << curPack.d;
 }
 
+void MainWindow::checkAnwer(int correct) {
+//color: client.aResult===0 ? choosen : client.aResult===1 ? correct : client.aResult===2 ? correctans : client.aResult ==4 ? wrongans : normal
+
+    if (correct == 0) if (aResult==0) aResult=1; else aResult=2;
+    if (correct == 1) if (bResult==0) bResult=1; else bResult=2;
+    if (correct == 2) if (cResult==0) cResult=1; else cResult=2;
+    if (correct == 3) if (dResult==0) dResult=1; else dResult=2;
+
+    if (aResult == 0 and correct!=0) aResult=4;
+    if (bResult == 0 and correct!=1) bResult=4;
+    if (cResult == 0 and correct!=2) cResult=4;
+    if (dResult == 0 and correct!=3) dResult=4;
+    qDebug() << aResult;
+    qDebug() << bResult;
+    qDebug() << cResult;
+    qDebug() << dResult;
+
+
+    resultUpdated();
+}
+
 void MainWindow::onReadyRead() {
 //    while (_socket.canReadLine()) {
         QByteArray datas = _socket.readAll();
@@ -113,6 +134,7 @@ void MainWindow::onReadyRead() {
                     break;
                 case 'K':
                     qDebug() << QByteArray::fromStdString(i.second);
+                    checkAnwer(atoi(i.second.c_str()));
                     break;
             }
         }

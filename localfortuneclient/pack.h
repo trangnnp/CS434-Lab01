@@ -22,6 +22,12 @@ public:
     QString b;
     QString c;
     QString d;
+
+    int aResult = 3;
+    int bResult = 3;
+    int cResult = 3;
+    int dResult = 3;
+
     int correct = -1;
 
     void onGame();

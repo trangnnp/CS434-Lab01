@@ -64,6 +64,14 @@ ApplicationWindow {
     width: 1200
     height: 620
 
+    property var choosen: "#f4a261"
+    property var correctans: "#e76f51"
+    property var normal: "#eec1a2"
+    property var wrongans: "#354f52"
+    property var correct: "#81b29a"
+
+
+
     MainWindow {
         id: client
     }
@@ -157,7 +165,7 @@ ApplicationWindow {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             Layout.preferredHeight: 3
-                            color: "#eec1a2"
+                            color: "#FFBD99"
                             radius: 20
                             Label {
                                 anchors.centerIn: parent
@@ -178,26 +186,41 @@ ApplicationWindow {
                                 anchors.fill: parent
                                 Rectangle {
                                     id: packA
+
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    color: "#eec1a2"
+                                    color: client.aResult===0 ? choosen : client.aResult===1 ? correct : client.aResult===2 ? correctans : client.aResult ==4 ? wrongans : normal
                                     radius: 30
                                     Label {
                                         anchors.centerIn: parent
                                         text: '<b>A:</b> ' + client.packa
                                         color: "#443224"
                                     }
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: {
+                                            client.sendAnswer(0)
+                                            client.aResult = 0
+                                        }
+                                    }
                                 }
                                 Rectangle {
                                     id: packB
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    color: "#eec1a2"
+                                    color: client.bResult===0 ? choosen : client.bResult===1 ? correct : client.bResult===2 ? correctans : client.bResult ==4 ? wrongans : normal
                                     radius: 30
                                     Label {
                                         anchors.centerIn: parent
                                         text: '<b>B:</b> ' + client.packb
                                         color: "#443224"
+                                    }
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: {
+                                            client.sendAnswer(1)
+                                            client.bResult = 0
+                                        }
                                     }
                                 }
                             }
@@ -216,24 +239,38 @@ ApplicationWindow {
                                     id: packC
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    color: "#eec1a2"
+                                    color: client.cResult===0 ? choosen : client.cResult===1 ? correct : client.cResult===2 ? correctans : client.cResult ==4 ? wrongans : normal
                                     radius: 30
                                     Label {
                                         anchors.centerIn: parent
                                         text: '<b>C:</b> ' + client.packc
                                         color: "#443224"
                                     }
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: {
+                                            client.sendAnswer(2)
+                                            client.cResult = 0
+                                        }
+                                    }
                                 }
                                 Rectangle {
                                     id: packD
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    color: "#eec1a2"
+                                    color: client.dResult===0 ? choosen : client.dResult===1 ? correct : client.dResult===2 ? correctans : client.dResult ==4 ? wrongans : normal
                                     radius: 30
                                     Label {
                                         anchors.centerIn: parent
                                         text: '<b>D:</b> ' + client.packd
                                         color: "#443224"
+                                    }
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: {
+                                            client.sendAnswer(3)
+                                            client.dResult = 0
+                                        }
                                     }
                                 }
                             }
