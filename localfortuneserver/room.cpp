@@ -53,3 +53,14 @@ void Room::run(){
 //        qDebug() << QByteArray::fromStdString("lan " + to_string(i));
 //    }
 }
+
+void Room::updateScores() {
+    qDebug() << "============updateScores=============";
+    string res = "-";
+    for (Player player : players) {
+        res += to_string(player.score) + "-";
+    }
+
+    sendAll(sendConv(res,"N"));
+
+}

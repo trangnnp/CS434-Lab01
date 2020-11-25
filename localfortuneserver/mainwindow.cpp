@@ -36,6 +36,7 @@ MainWindow::~MainWindow()
     if (!room->isFinished()) {
         room->terminate();
     }
+
     delete ui;
 }
 
@@ -124,15 +125,17 @@ void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
             }
 
             socket->write(sendConv(to_string(room->packs.at(room->curPackId).correct),"K"));
-
-//            if (answer == room->packs.at(room->curPackId).correct) {
-//                socket->write(sendConv("You right!","K"));
-//            } else {
-//                socket->write(sendConv("You wrong!","K"));
-//                if (++player.stauts == 2) {
-//                    socket->write(sendConv("Chet!","N"));
-//                }
-//            }
+            qDebug() << "======ready update scores======";
+            socket->write(sendConv("really?","N"));
+            if (answer == room->packs.at(room->curPackId).correct) {
+                socket->write(sendConv("You right!","K"));
+            } else {
+                socket->write(sendConv("You wrong!","K"));
+                if (++player.stauts == 2) {
+                    socket->write(sendConv("Chet!","N"));
+                }
+            }
+            room->updateScores();
             return;
         }
     }

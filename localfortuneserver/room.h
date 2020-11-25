@@ -17,6 +17,8 @@ public:
     void run();
     void sendAll(QByteArray dataSend);
     bool isOnGame=false;
+
+    void updateScores();
 };
 
 #endif // ROOM_H
