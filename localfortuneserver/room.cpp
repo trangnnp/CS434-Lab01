@@ -24,7 +24,8 @@ void Room::run(){
 //    sendAll(sendConv("Meooooooooooooooooooooooooooooooooooooo","N"));
 
     for (int i=0; i<packs.size(); i++) {
-        qDebug() << QByteArray::fromStdString("Sending " + to_string(i));
+        curPackId++;
+        qDebug() << QByteArray::fromStdString("Sending " + to_string(curPackId));
         string packQuestion = "Q=" + string(packs.at(i).q)+"\~" + "A=" + string(packs.at(i).a)+"\~"
                             + "B=" + string(packs.at(i).b)+"\~" + "C=" + string(packs.at(i).c)+"\~"
                             "D=" + string(packs.at(i).d)+"\~";
