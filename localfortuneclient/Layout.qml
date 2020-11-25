@@ -49,7 +49,7 @@
 ****************************************************************************/
 
 import QtQuick 2.15
-import "../shared" as Examples
+//import "../shared" as Examples
 import QtQuick.Window 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
@@ -58,6 +58,7 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick 2.0
 
 import MainWindow 1.0
+import ToDo 1.0
 
 
 ApplicationWindow {
@@ -85,7 +86,6 @@ ApplicationWindow {
         id: client
     }
 
-
     Item {
         id: list
         function myQmlFunction(msg) {
@@ -95,16 +95,12 @@ ApplicationWindow {
     }
 
 
-//    #443224 eec1a2
-
-
     ColumnLayout{
         spacing: 2
         Layout.alignment: Qt.AlignHCenter
         Layout.fillWidth: true
         Layout.fillHeight: true
         id : welcomePage
-//        color: "#5d5b59"
 
 
         Text {
@@ -165,7 +161,7 @@ ApplicationWindow {
                 Image {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    Layout.preferredHeight: 2
+                    Layout.preferredHeight: 3
                     source: "qrc:/shared/2.jpg"
                 }
                 Rectangle {
@@ -193,7 +189,7 @@ ApplicationWindow {
                             border.width: 2
                             Label {
                                 anchors.centerIn: parent
-                                text: client.packq
+                                text: '<b> ' + client.packq + '</b> '
                                 color: textColor
                             }
                         }
@@ -319,44 +315,22 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.preferredWidth: 1
             color: "#010103"
-            ListModel {
-                    id: listModel
-                    ListElement { name: 'Meo1'; code: "12.000.000"; language: "english" }
-                    ListElement { name: 'Meo2'; code: "10.000.000"; language: "french" }
-                    ListElement { name: 'Meo3'; code: "900.000"; language: "long-language" }
-                }
-
                 ListView {
                     property var columnWidths: ({"avatar": 50, "name": 100, "code": 50}) // fixed sizes or minimum sizes
                     property var calculatedColumns: ["code", "language"]   // list auto sized columns in here
 
                     orientation: Qt.Vertical
                     anchors.fill: parent
-                    model: listModel
+                    model: ToDoModel {
+                        list: toDoList
+                    }
                     anchors.margins: 10
                     spacing: 10
-
-//                    TextMetrics {
-//                        id: textMetrics
-//                    }
-
-//                    onModelChanged: {
-//                        for (var i = 0; i < calculatedColumns.length; i++) {
-//                            var role = calculatedColumns[i]
-//                            if (!columnWidths[role]) columnWidths[role] = 0
-//                            var modelWidth = columnWidths[role]
-//                            for(var j = 0; j < model.count; j++){
-//                                textMetrics.text = model.get(j)[role]
-//                                modelWidth = Math.max(textMetrics.width, modelWidth)
-//                            }
-//                            columnWidths[role] = modelWidth
-//                        }
-//                    }
 
                     delegate: Component {
                         Row {
                             spacing: 10
-                            Rectangle { height: parent.height; width: parent.height; color: "pink"; radius: 10 }
+                            Rectangle { height: parent.height; width: parent.height; color: avatar; radius: 10 }
                             Column {
                                 Label {
                                     Layout.fillHeight: true
@@ -372,66 +346,16 @@ ApplicationWindow {
                                     Layout.fillWidth: true
                                     Layout.preferredHeight: implicitHeight
                                     Layout.preferredWidth: columnWidths.code
-                                    text: code
+                                    text: score
                                     color: "pink"
                                 }
 
                             }
                         }
                     }
-
-//                    delegate: RowLayout {
-
-//                        property var columnWidths: ListView.view.columnWidths
-
-//                        Rectangle {
-//                            id: avatar
-//                            Layout.fillHeight: true
-//                            Layout.fillWidth: true
-//                            Layout.preferredHeight: implicitHeight
-//                            Layout.preferredWidth: 1
-//                            color: "pink"
-//                        }
-
-//                        Rectangle {
-//                            Layout.fillHeight: true
-//                            Layout.fillWidth: true
-//                            Layout.preferredHeight: implicitHeight
-//                            Layout.preferredWidth: 2
-//                            color: "pink"
-//                            Label {
-//                                Layout.fillHeight: true
-//                                Layout.fillWidth: true
-//                                Layout.preferredHeight: implicitHeight
-//                                Layout.preferredWidth: 2
-//                                text: name
-//                                color: "pink"
-//                            }
-
-//                        }
-
-
-//                        Label {
-//                            Layout.fillHeight: true
-//                            Layout.fillWidth: true
-//                            Layout.preferredHeight: implicitHeight
-//                            Layout.preferredWidth: columnWidths.code
-//                            text: code
-//                            color: "pink"
-//                        }
-
-////                        Label {
-////                            Layout.fillHeight: true
-////                            Layout.fillWidth: true
-////                            Layout.preferredHeight: implicitHeight
-////                            Layout.preferredWidth: columnWidths.language
-////                            text: language
-////                            color: "pink"
-////                        }
-//                    }
+                    }
                 }
 
         }
-    }
 }
 

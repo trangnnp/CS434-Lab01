@@ -55,16 +55,24 @@ OBJECTS_DIR   = ./
 SOURCES       = ../localfortuneclient/client.cpp \
 		../localfortuneclient/main.cpp \
 		../localfortuneclient/mainwindow.cpp \
-		../localfortuneclient/pack.cpp qrc_qml.cpp \
+		../localfortuneclient/pack.cpp \
+		../localfortuneclient/playerlist.cpp \
+		../localfortuneclient/playermodel.cpp qrc_qml.cpp \
 		moc_client.cpp \
-		moc_mainwindow.cpp
+		moc_mainwindow.cpp \
+		moc_playerlist.cpp \
+		moc_playermodel.cpp
 OBJECTS       = client.o \
 		main.o \
 		mainwindow.o \
 		pack.o \
+		playerlist.o \
+		playermodel.o \
 		qrc_qml.o \
 		moc_client.o \
-		moc_mainwindow.o
+		moc_mainwindow.o \
+		moc_playerlist.o \
+		moc_playermodel.o
 DIST          = ../../../Qt/5.15.2/clang_64/mkspecs/features/spec_pre.prf \
 		../../../Qt/5.15.2/clang_64/mkspecs/qdevice.pri \
 		../../../Qt/5.15.2/clang_64/mkspecs/features/device_config.prf \
@@ -244,10 +252,14 @@ DIST          = ../../../Qt/5.15.2/clang_64/mkspecs/features/spec_pre.prf \
 		../../../Qt/5.15.2/clang_64/mkspecs/features/lex.prf \
 		../localfortuneclient/localfortuneclient.pro ../localfortuneclient/client.h \
 		../localfortuneclient/mainwindow.h \
-		../localfortuneclient/pack.h ../localfortuneclient/client.cpp \
+		../localfortuneclient/pack.h \
+		../localfortuneclient/playerlist.h \
+		../localfortuneclient/playermodel.h ../localfortuneclient/client.cpp \
 		../localfortuneclient/main.cpp \
 		../localfortuneclient/mainwindow.cpp \
-		../localfortuneclient/pack.cpp
+		../localfortuneclient/pack.cpp \
+		../localfortuneclient/playerlist.cpp \
+		../localfortuneclient/playermodel.cpp
 QMAKE_TARGET  = localfortuneclient
 DESTDIR       = 
 TARGET        = localfortuneclient.app/Contents/MacOS/localfortuneclient
@@ -676,8 +688,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../localfortuneclient/qml.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../Qt/5.15.2/clang_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../localfortuneclient/client.h ../localfortuneclient/mainwindow.h ../localfortuneclient/pack.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../localfortuneclient/client.cpp ../localfortuneclient/main.cpp ../localfortuneclient/mainwindow.cpp ../localfortuneclient/pack.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../localfortuneclient/client.h ../localfortuneclient/mainwindow.h ../localfortuneclient/pack.h ../localfortuneclient/playerlist.h ../localfortuneclient/playermodel.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../localfortuneclient/client.cpp ../localfortuneclient/main.cpp ../localfortuneclient/mainwindow.cpp ../localfortuneclient/pack.cpp ../localfortuneclient/playerlist.cpp ../localfortuneclient/playermodel.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../localfortuneclient/mainwindow.ui ../localfortuneclient/mainwindow.ui $(DISTDIR)/
 
 
@@ -711,7 +723,6 @@ compiler_rcc_clean:
 qrc_qml.cpp: ../localfortuneclient/qml.qrc \
 		../../../Qt/5.15.2/clang_64/bin/rcc \
 		../localfortuneclient/Layout.qml \
-		../localfortuneclient/LayoutForm.ui.qml \
 		../localfortuneclient/coffee4.jpg \
 		../localfortuneclient/coffee.jpg \
 		../localfortuneclient/coffee2.jpg \
@@ -726,9 +737,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: ../../../Qt/5.15.2/clang_64/mkspecs/features/data/dummy.cpp
 	/Library/Developer/CommandLineTools/usr/bin/clang++ -pipe -stdlib=libc++ -g -std=gnu++11 $(EXPORT_ARCH_ARGS) -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -mmacosx-version-min=10.13 -Wall -Wextra -dM -E -o moc_predefs.h ../../../Qt/5.15.2/clang_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_client.cpp moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_client.cpp moc_mainwindow.cpp moc_playerlist.cpp moc_playermodel.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_client.cpp moc_mainwindow.cpp
+	-$(DEL_FILE) moc_client.cpp moc_mainwindow.cpp moc_playerlist.cpp moc_playermodel.cpp
 moc_client.cpp: ../localfortuneclient/client.h \
 		../../../Qt/5.15.2/clang_64/lib/QtWidgets.framework/Headers/QDialog \
 		../../../Qt/5.15.2/clang_64/lib/QtWidgets.framework/Headers/qdialog.h \
@@ -755,6 +766,22 @@ moc_mainwindow.cpp: ../localfortuneclient/mainwindow.h \
 		moc_predefs.h \
 		../../../Qt/5.15.2/clang_64/bin/moc
 	/Users/trangnnp/Qt/5.15.2/clang_64/bin/moc $(DEFINES) --include /Users/trangnnp/Desktop/CS494-Lab01/build-localfortuneclient-Desktop_Qt_5_15_2_clang_64bit-Debug/moc_predefs.h -I/Users/trangnnp/Qt/5.15.2/clang_64/mkspecs/macx-clang -I/Users/trangnnp/Desktop/CS494-Lab01/localfortuneclient -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtQuickControls2.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtQuick.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtGui.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtQmlModels.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtQml.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtNetwork.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/12.0.0/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/Users/trangnnp/Qt/5.15.2/clang_64/lib ../localfortuneclient/mainwindow.h -o moc_mainwindow.cpp
+
+moc_playerlist.cpp: ../localfortuneclient/playerlist.h \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/QObject \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/QVector \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/qvector.h \
+		moc_predefs.h \
+		../../../Qt/5.15.2/clang_64/bin/moc
+	/Users/trangnnp/Qt/5.15.2/clang_64/bin/moc $(DEFINES) --include /Users/trangnnp/Desktop/CS494-Lab01/build-localfortuneclient-Desktop_Qt_5_15_2_clang_64bit-Debug/moc_predefs.h -I/Users/trangnnp/Qt/5.15.2/clang_64/mkspecs/macx-clang -I/Users/trangnnp/Desktop/CS494-Lab01/localfortuneclient -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtQuickControls2.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtQuick.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtGui.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtQmlModels.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtQml.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtNetwork.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/12.0.0/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/Users/trangnnp/Qt/5.15.2/clang_64/lib ../localfortuneclient/playerlist.h -o moc_playerlist.cpp
+
+moc_playermodel.cpp: ../localfortuneclient/playermodel.h \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/QAbstractListModel \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/qabstractitemmodel.h \
+		moc_predefs.h \
+		../../../Qt/5.15.2/clang_64/bin/moc
+	/Users/trangnnp/Qt/5.15.2/clang_64/bin/moc $(DEFINES) --include /Users/trangnnp/Desktop/CS494-Lab01/build-localfortuneclient-Desktop_Qt_5_15_2_clang_64bit-Debug/moc_predefs.h -I/Users/trangnnp/Qt/5.15.2/clang_64/mkspecs/macx-clang -I/Users/trangnnp/Desktop/CS494-Lab01/localfortuneclient -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtQuickControls2.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtQuick.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtGui.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtQmlModels.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtQml.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtNetwork.framework/Headers -I/Users/trangnnp/Qt/5.15.2/clang_64/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/12.0.0/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/Users/trangnnp/Qt/5.15.2/clang_64/lib ../localfortuneclient/playermodel.h -o moc_playermodel.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -970,6 +997,18 @@ main.o: ../localfortuneclient/main.cpp ../../../Qt/5.15.2/clang_64/lib/QtGui.fra
 		../../../Qt/5.15.2/clang_64/lib/QtGui.framework/Headers/qguiapplication.h \
 		../../../Qt/5.15.2/clang_64/lib/QtQml.framework/Headers/QQmlApplicationEngine \
 		../../../Qt/5.15.2/clang_64/lib/QtQml.framework/Headers/qqmlapplicationengine.h \
+		../../../Qt/5.15.2/clang_64/lib/QtQml.framework/Headers/QQmlContext \
+		../../../Qt/5.15.2/clang_64/lib/QtQml.framework/Headers/qqmlcontext.h \
+		../../../Qt/5.15.2/clang_64/lib/QtQml.framework/Headers/QQmlComponent \
+		../../../Qt/5.15.2/clang_64/lib/QtQml.framework/Headers/qqmlcomponent.h \
+		../localfortuneclient/playerlist.h \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/QObject \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/QVector \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/qvector.h \
+		../localfortuneclient/playermodel.h \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/QAbstractListModel \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/qabstractitemmodel.h \
 		../localfortuneclient/mainwindow.h \
 		../../../Qt/5.15.2/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
 		../../../Qt/5.15.2/clang_64/lib/QtWidgets.framework/Headers/qmainwindow.h \
@@ -977,11 +1016,7 @@ main.o: ../localfortuneclient/main.cpp ../../../Qt/5.15.2/clang_64/lib/QtGui.fra
 		../../../Qt/5.15.2/clang_64/lib/QtNetwork.framework/Headers/qtcpsocket.h \
 		../localfortuneclient/pack.h \
 		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/QString \
-		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
-		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/QObject \
-		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
-		../../../Qt/5.15.2/clang_64/lib/QtQml.framework/Headers/QQmlComponent \
-		../../../Qt/5.15.2/clang_64/lib/QtQml.framework/Headers/qqmlcomponent.h
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/qstring.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../localfortuneclient/main.cpp
 
 mainwindow.o: ../localfortuneclient/mainwindow.cpp ../localfortuneclient/mainwindow.h \
@@ -1008,6 +1043,23 @@ pack.o: ../localfortuneclient/pack.cpp ../localfortuneclient/pack.h \
 		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/qstring.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pack.o ../localfortuneclient/pack.cpp
 
+playerlist.o: ../localfortuneclient/playerlist.cpp ../localfortuneclient/playerlist.h \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/QObject \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/QVector \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/qvector.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o playerlist.o ../localfortuneclient/playerlist.cpp
+
+playermodel.o: ../localfortuneclient/playermodel.cpp ../localfortuneclient/playerlist.h \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/QObject \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/QVector \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/qvector.h \
+		../localfortuneclient/playermodel.h \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/QAbstractListModel \
+		../../../Qt/5.15.2/clang_64/lib/QtCore.framework/Headers/qabstractitemmodel.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o playermodel.o ../localfortuneclient/playermodel.cpp
+
 qrc_qml.o: qrc_qml.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_qml.o qrc_qml.cpp
 
@@ -1016,6 +1068,12 @@ moc_client.o: moc_client.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_playerlist.o: moc_playerlist.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_playerlist.o moc_playerlist.cpp
+
+moc_playermodel.o: moc_playermodel.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_playermodel.o moc_playermodel.cpp
 
 ####### Install
 

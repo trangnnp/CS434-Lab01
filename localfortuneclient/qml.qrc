@@ -10,6 +10,5 @@
     <qresource prefix="/qmlfiles"/>
     <qresource prefix="/">
         <file>Layout.qml</file>
-        <file>LayoutForm.ui.qml</file>
     </qresource>
 </RCC>

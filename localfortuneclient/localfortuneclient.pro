@@ -1,10 +1,14 @@
 HEADERS       = client.h \
     mainwindow.h \
-    pack.h
+    pack.h \
+    playerlist.h \
+    playermodel.h
 SOURCES       = client.cpp \
                 main.cpp \
                 mainwindow.cpp \
-                pack.cpp
+                pack.cpp \
+                playerlist.cpp \
+                playermodel.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -20,3 +24,5 @@ INSTALLS += target
 
 RESOURCES += \
     qml.qrc
+
+DISTFILES +=
