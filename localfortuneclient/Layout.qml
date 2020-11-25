@@ -58,7 +58,7 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick 2.0
 
 import MainWindow 1.0
-import ToDo 1.0
+import PlayerModel 1.0
 
 
 ApplicationWindow {
@@ -116,15 +116,15 @@ ApplicationWindow {
             id: edit
             anchors.topMargin: 10
             anchors.leftMargin: 10
-            width: flick.width
+//            width: flick.width
             focus: true
             wrapMode: TextEdit.Wrap
             Layout.alignment: Qt.AlignHCenter
         }
 
         Button {
-          anchors.top: parent.top
-          anchors.left: parent.left
+//          anchors.top: parent.top
+//          anchors.left: parent.left
           anchors.topMargin: 40
           anchors.leftMargin: 20
           text: "Continue"
@@ -321,8 +321,8 @@ ApplicationWindow {
 
                     orientation: Qt.Vertical
                     anchors.fill: parent
-                    model: ToDoModel {
-                        list: toDoList
+                    model: PlayerModel {
+                        list: playerList
                     }
                     anchors.margins: 10
                     spacing: 10
@@ -345,7 +345,7 @@ ApplicationWindow {
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
                                     Layout.preferredHeight: implicitHeight
-                                    Layout.preferredWidth: columnWidths.code
+//                                    Layout.preferredWidth: columnWidths.code
                                     text: score
                                     color: "pink"
                                 }

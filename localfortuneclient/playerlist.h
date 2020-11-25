@@ -1,10 +1,10 @@
-#ifndef TODOLIST_H
-#define TODOLIST_H
+#ifndef PLAYERLIST_H
+#define PLAYERLIST_H
 
 #include <QObject>
 #include <QVector>
 
-struct ToDoItem
+struct Player
 {
 //    bool done;
 //    QString description;
@@ -13,15 +13,15 @@ struct ToDoItem
     QString avatar;
 };
 
-class ToDoList : public QObject
+class PlayerList : public QObject
 {
     Q_OBJECT
 public:
-    explicit ToDoList(QObject *parent = nullptr);
+    explicit PlayerList(QObject *parent = nullptr);
 
-    QVector<ToDoItem> items() const;
+    QVector<Player> items() const;
 
-    bool setItemAt(int index, const ToDoItem &item);
+    bool setItemAt(int index, const Player &item);
 
 signals:
     void preItemAppended();
@@ -31,11 +31,11 @@ signals:
     void postItemRemoved();
 
 public slots:
-    void appendItem(ToDoItem item);
+    void appendItem(Player item);
     void removeCompletedItems();
 
 private:
-    QVector<ToDoItem> mItems;
+    QVector<Player> mItems;
 };
 
-#endif // TODOLIST_H
+#endif // PLAYERLIST_H

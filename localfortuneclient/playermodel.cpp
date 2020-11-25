@@ -1,12 +1,12 @@
 #include "playerlist.h"
 #include "playermodel.h"
-ToDoModel::ToDoModel(QObject *parent)
+PlayerModel::PlayerModel(QObject *parent)
     : QAbstractListModel(parent)
     , mList(nullptr)
 {
 }
 
-int ToDoModel::rowCount(const QModelIndex &parent) const
+int PlayerModel::rowCount(const QModelIndex &parent) const
 {
     // For list models only the root node (an invalid parent) should return the list's size. For all
     // other (valid) parents, rowCount() should return 0 so that it does not become a tree model.
@@ -16,12 +16,12 @@ int ToDoModel::rowCount(const QModelIndex &parent) const
     return mList->items().size();
 }
 
-QVariant ToDoModel::data(const QModelIndex &index, int role) const
+QVariant PlayerModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || !mList)
         return QVariant();
 
-    const ToDoItem item = mList->items().at(index.row());
+    const Player item = mList->items().at(index.row());
     switch (role) {
     case NameRole:
         return QVariant(item.name);
@@ -34,12 +34,12 @@ QVariant ToDoModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-bool ToDoModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool PlayerModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (!mList)
         return false;
 
-    ToDoItem item = mList->items().at(index.row());
+    Player item = mList->items().at(index.row());
     switch (role) {
     case NameRole:
         item.name = value.toString();
@@ -59,7 +59,7 @@ bool ToDoModel::setData(const QModelIndex &index, const QVariant &value, int rol
     return false;
 }
 
-Qt::ItemFlags ToDoModel::flags(const QModelIndex &index) const
+Qt::ItemFlags PlayerModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return Qt::NoItemFlags;
@@ -67,7 +67,7 @@ Qt::ItemFlags ToDoModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEditable;
 }
 
-QHash<int, QByteArray> ToDoModel::roleNames() const
+QHash<int, QByteArray> PlayerModel::roleNames() const
 {
     QHash<int, QByteArray> names;
     names[NameRole] = "name";
@@ -76,12 +76,12 @@ QHash<int, QByteArray> ToDoModel::roleNames() const
     return names;
 }
 
-ToDoList *ToDoModel::list() const
+PlayerList *PlayerModel::list() const
 {
     return mList;
 }
 
-void ToDoModel::setList(ToDoList *list)
+void PlayerModel::setList(PlayerList *list)
 {
     beginResetModel();
 
@@ -91,18 +91,18 @@ void ToDoModel::setList(ToDoList *list)
     mList = list;
 
     if (mList) {
-        connect(mList, &ToDoList::preItemAppended, this, [=]() {
+        connect(mList, &PlayerList::preItemAppended, this, [=]() {
             const int index = mList->items().size();
             beginInsertRows(QModelIndex(), index, index);
         });
-        connect(mList, &ToDoList::postItemAppended, this, [=]() {
+        connect(mList, &PlayerList::postItemAppended, this, [=]() {
             endInsertRows();
         });
 
-        connect(mList, &ToDoList::preItemRemoved, this, [=](int index) {
+        connect(mList, &PlayerList::preItemRemoved, this, [=](int index) {
             beginRemoveRows(QModelIndex(), index, index);
         });
-        connect(mList, &ToDoList::postItemRemoved, this, [=]() {
+        connect(mList, &PlayerList::postItemRemoved, this, [=]() {
             endRemoveRows();
         });
     }

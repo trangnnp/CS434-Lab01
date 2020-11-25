@@ -1,17 +1,17 @@
-#ifndef TODOMODEL_H
-#define TODOMODEL_H
+#ifndef PlayerMODEL_H
+#define PlayerMODEL_H
 
 #include <QAbstractListModel>
 
-class ToDoList;
+class PlayerList;
 
-class ToDoModel : public QAbstractListModel
+class PlayerModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(ToDoList *list READ list WRITE setList)
+    Q_PROPERTY(PlayerList *list READ list WRITE setList)
 
 public:
-    explicit ToDoModel(QObject *parent = nullptr);
+    explicit PlayerModel(QObject *parent = nullptr);
 
     enum {
         NameRole = Qt::UserRole,
@@ -32,11 +32,11 @@ public:
 
     virtual QHash<int, QByteArray> roleNames() const override;
 
-    ToDoList *list() const;
-    void setList(ToDoList *list);
+    PlayerList *list() const;
+    void setList(PlayerList *list);
 
 private:
-    ToDoList *mList;
+    PlayerList *mList;
 };
 
-#endif // TODOMODEL_H
+#endif // PlayerMODEL_H

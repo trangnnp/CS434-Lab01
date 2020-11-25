@@ -21,27 +21,27 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_ToDoModel_t {
+struct qt_meta_stringdata_PlayerModel_t {
     QByteArrayData data[3];
-    char stringdata0[25];
+    char stringdata0[29];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_ToDoModel_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_PlayerModel_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_ToDoModel_t qt_meta_stringdata_ToDoModel = {
+static const qt_meta_stringdata_PlayerModel_t qt_meta_stringdata_PlayerModel = {
     {
-QT_MOC_LITERAL(0, 0, 9), // "ToDoModel"
-QT_MOC_LITERAL(1, 10, 4), // "list"
-QT_MOC_LITERAL(2, 15, 9) // "ToDoList*"
+QT_MOC_LITERAL(0, 0, 11), // "PlayerModel"
+QT_MOC_LITERAL(1, 12, 4), // "list"
+QT_MOC_LITERAL(2, 17, 11) // "PlayerList*"
 
     },
-    "ToDoModel\0list\0ToDoList*"
+    "PlayerModel\0list\0PlayerList*"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_ToDoModel[] = {
+static const uint qt_meta_data_PlayerModel[] = {
 
  // content:
        8,       // revision
@@ -60,24 +60,24 @@ static const uint qt_meta_data_ToDoModel[] = {
        0        // eod
 };
 
-void ToDoModel::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void PlayerModel::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
 
 #ifndef QT_NO_PROPERTIES
     if (_c == QMetaObject::ReadProperty) {
-        auto *_t = static_cast<ToDoModel *>(_o);
+        auto *_t = static_cast<PlayerModel *>(_o);
         Q_UNUSED(_t)
         void *_v = _a[0];
         switch (_id) {
-        case 0: *reinterpret_cast< ToDoList**>(_v) = _t->list(); break;
+        case 0: *reinterpret_cast< PlayerList**>(_v) = _t->list(); break;
         default: break;
         }
     } else if (_c == QMetaObject::WriteProperty) {
-        auto *_t = static_cast<ToDoModel *>(_o);
+        auto *_t = static_cast<PlayerModel *>(_o);
         Q_UNUSED(_t)
         void *_v = _a[0];
         switch (_id) {
-        case 0: _t->setList(*reinterpret_cast< ToDoList**>(_v)); break;
+        case 0: _t->setList(*reinterpret_cast< PlayerList**>(_v)); break;
         default: break;
         }
     } else if (_c == QMetaObject::ResetProperty) {
@@ -89,30 +89,30 @@ void ToDoModel::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
     Q_UNUSED(_a);
 }
 
-QT_INIT_METAOBJECT const QMetaObject ToDoModel::staticMetaObject = { {
+QT_INIT_METAOBJECT const QMetaObject PlayerModel::staticMetaObject = { {
     QMetaObject::SuperData::link<QAbstractListModel::staticMetaObject>(),
-    qt_meta_stringdata_ToDoModel.data,
-    qt_meta_data_ToDoModel,
+    qt_meta_stringdata_PlayerModel.data,
+    qt_meta_data_PlayerModel,
     qt_static_metacall,
     nullptr,
     nullptr
 } };
 
 
-const QMetaObject *ToDoModel::metaObject() const
+const QMetaObject *PlayerModel::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *ToDoModel::qt_metacast(const char *_clname)
+void *PlayerModel::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_ToDoModel.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_PlayerModel.stringdata0))
         return static_cast<void*>(this);
     return QAbstractListModel::qt_metacast(_clname);
 }
 
-int ToDoModel::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int PlayerModel::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QAbstractListModel::qt_metacall(_c, _id, _a);
     if (_id < 0)

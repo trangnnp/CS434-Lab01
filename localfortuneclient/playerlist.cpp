@@ -1,22 +1,22 @@
 #include "playerlist.h"
 
-ToDoList::ToDoList(QObject *parent) : QObject(parent)
+PlayerList::PlayerList(QObject *parent) : QObject(parent)
 {
 //    mItems.append({ true, QStringLiteral("Wash the car") });
 //    mItems.append({ false, QStringLiteral("Fix the sink") });
 }
 
-QVector<ToDoItem> ToDoList::items() const
+QVector<Player> PlayerList::items() const
 {
     return mItems;
 }
 
-bool ToDoList::setItemAt(int index, const ToDoItem &item)
+bool PlayerList::setItemAt(int index, const Player &item)
 {
     if (index < 0 || index >= mItems.size())
         return false;
 
-    const ToDoItem &oldItem = mItems.at(index);
+    const Player &oldItem = mItems.at(index);
     if (item.name == oldItem.name && item.score == oldItem.score)
         return false;
 
@@ -24,14 +24,14 @@ bool ToDoList::setItemAt(int index, const ToDoItem &item)
     return true;
 }
 
-void ToDoList::appendItem(ToDoItem item)
+void PlayerList::appendItem(Player item)
 {
     emit preItemAppended();
     mItems.append(item);
     emit postItemAppended();
 }
 
-void ToDoList::removeCompletedItems()
+void PlayerList::removeCompletedItems()
 {
 //    for (int i = 0; i < mItems.size(); ) {
 //        if (mItems.at(i).done) {

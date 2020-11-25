@@ -30,24 +30,24 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
-    qmlRegisterType<ToDoModel>("ToDo", 1, 0, "ToDoModel");
-    qmlRegisterUncreatableType<ToDoList>("ToDo", 1, 0, "ToDoList",
-        QStringLiteral("ToDoList should not be created in QML"));
+    qmlRegisterType<PlayerModel>("PlayerModel", 1, 0, "PlayerModel");
+    qmlRegisterUncreatableType<PlayerList>("PlayerList", 1, 0, "PlayerList",
+        QStringLiteral("playerList should not be created in QML"));
 
-    ToDoList toDoList;
-    ToDoItem item = ToDoItem();
+    PlayerList playerList;
+    Player item = Player();
     item.name = "Meo1";
     item.score=10000;
     item.avatar="#f4a261";
-    toDoList.appendItem(item);
+    playerList.appendItem(item);
 
     item.name = "Meo2";
     item.score=20000;
     item.avatar="pink";
-    toDoList.appendItem(item);
+    playerList.appendItem(item);
 
     QQmlApplicationEngine engine;
-    engine.rootContext()->setContextProperty(QStringLiteral("toDoList"), &toDoList);
+    engine.rootContext()->setContextProperty(QStringLiteral("playerList"), &playerList);
     engine.load(QUrl(QLatin1String("qrc:/Layout.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
