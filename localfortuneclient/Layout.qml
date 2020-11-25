@@ -55,8 +55,10 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 import QtQml.Models 2.15
 import QtQuick.Controls.Styles 1.4
+import QtQuick 2.0
 
 import MainWindow 1.0
+
 
 ApplicationWindow {
     id: root
@@ -66,15 +68,32 @@ ApplicationWindow {
 
     property var choosen: "#f4a261"
     property var correctans: "#e76f51"
-    property var normal: "#eec1a2"
+//    property var normal: "#eec1a2"
+    property var normal: "#003494"
+
     property var wrongans: "#354f52"
     property var correct: "#81b29a"
+
+    property var packColor: "#003494"
+    property var boderColor: "#fff0ad"
+    property var textColor: "white"
+    property var prefixColor: "<b> <font color=\"#ffea00\">A:</font> <font color=\"#ffea00\"></font><b>"
 
 
 
     MainWindow {
         id: client
     }
+
+
+    Item {
+        id: list
+        function myQmlFunction(msg) {
+              console.log("Got message:", msg)
+              return "some return value"
+        }
+    }
+
 
 //    #443224 eec1a2
 
@@ -117,7 +136,6 @@ ApplicationWindow {
               client.createMe(edit.text)
               welcomePage.visible = false
               onGameLayout.visible = true
-
           }
         }
     }
@@ -143,34 +161,40 @@ ApplicationWindow {
             ColumnLayout {
                 visible: true
                 anchors.fill: parent
+                spacing: 0
                 Image {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.preferredHeight: 2
-                    source: "qrc:/shared/coffee2.jpg"
-
+                    source: "qrc:/shared/2.jpg"
                 }
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.preferredHeight: 1
-                    color: "#1e1b18"
+                    color: "#010103"
 
                     ColumnLayout {
                         anchors.fill: parent
-                        anchors.margins: 40
+                        anchors.topMargin: 10
+                        anchors.bottomMargin: 30
+                        anchors.leftMargin: 40
+                        anchors.rightMargin: 40
+
 
                         Rectangle {
                             id: packQ
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             Layout.preferredHeight: 3
-                            color: "#FFBD99"
+                            color: packColor
                             radius: 20
+                            border.color: boderColor
+                            border.width: 2
                             Label {
                                 anchors.centerIn: parent
                                 text: client.packq
-                                color: "#443224"
+                                color: textColor
                             }
                         }
 
@@ -180,7 +204,7 @@ ApplicationWindow {
                             Layout.fillHeight: true
                             anchors.margins: 20
                             Layout.preferredHeight: 2
-                            color: "#1e1b18"
+                            color: "#010103"
 
                             RowLayout {
                                 anchors.fill: parent
@@ -191,10 +215,12 @@ ApplicationWindow {
                                     Layout.fillHeight: true
                                     color: client.aResult===0 ? choosen : client.aResult===1 ? correct : client.aResult===2 ? correctans : client.aResult ==4 ? wrongans : normal
                                     radius: 30
+                                    border.color: boderColor
+                                    border.width: 2
                                     Label {
                                         anchors.centerIn: parent
-                                        text: '<b>A:</b> ' + client.packa
-                                        color: "#443224"
+                                        text: "<b> <font color=\"#ffea00\">A:</font> <font color=\"#ffea00\"> </font><b>" + client.packa
+                                        color: textColor
                                     }
                                     MouseArea {
                                         anchors.fill: parent
@@ -210,10 +236,12 @@ ApplicationWindow {
                                     Layout.fillHeight: true
                                     color: client.bResult===0 ? choosen : client.bResult===1 ? correct : client.bResult===2 ? correctans : client.bResult ==4 ? wrongans : normal
                                     radius: 30
+                                    border.color: boderColor
+                                    border.width: 2
                                     Label {
                                         anchors.centerIn: parent
-                                        text: '<b>B:</b> ' + client.packb
-                                        color: "#443224"
+                                        text: "<b> <font color=\"#ffea00\">B:</font> <font color=\"#ffea00\"> </font><b>" + client.packb
+                                        color: textColor
                                     }
                                     MouseArea {
                                         anchors.fill: parent
@@ -231,7 +259,7 @@ ApplicationWindow {
                             Layout.fillHeight: true
                             anchors.margins: 20
                             Layout.preferredHeight: 2
-                            color: "#1e1b18"
+                            color: "#010103"
 
                             RowLayout {
                                 anchors.fill: parent
@@ -241,10 +269,12 @@ ApplicationWindow {
                                     Layout.fillHeight: true
                                     color: client.cResult===0 ? choosen : client.cResult===1 ? correct : client.cResult===2 ? correctans : client.cResult ==4 ? wrongans : normal
                                     radius: 30
+                                    border.color: boderColor
+                                    border.width: 2
                                     Label {
                                         anchors.centerIn: parent
-                                        text: '<b>C:</b> ' + client.packc
-                                        color: "#443224"
+                                        text: "<b> <font color=\"#ffea00\">C:</font> <font color=\"#ffea00\"> </font><b>" + client.packc
+                                        color: textColor
                                     }
                                     MouseArea {
                                         anchors.fill: parent
@@ -260,10 +290,13 @@ ApplicationWindow {
                                     Layout.fillHeight: true
                                     color: client.dResult===0 ? choosen : client.dResult===1 ? correct : client.dResult===2 ? correctans : client.dResult ==4 ? wrongans : normal
                                     radius: 30
+                                    border.color: boderColor
+                                    border.width: 2
                                     Label {
                                         anchors.centerIn: parent
-                                        text: '<b>D:</b> ' + client.packd
-                                        color: "#443224"
+                                        text: "<b> <font color=\"#ffea00\">D:</font> <font color=\"#ffea00\"> </font><b>" + client.packd
+                                        color: textColor
+                                        horizontalAlignment: Text.AlignLeft
                                     }
                                     MouseArea {
                                         anchors.fill: parent
@@ -285,7 +318,7 @@ ApplicationWindow {
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            color: "#1e1b18"
+            color: "#010103"
             ListModel {
                     id: listModel
                     ListElement { name: 'Meo1'; code: "12.000.000"; language: "english" }
@@ -323,7 +356,7 @@ ApplicationWindow {
                     delegate: Component {
                         Row {
                             spacing: 10
-                            Rectangle { height: parent.height; width: parent.height; color: "pink" }
+                            Rectangle { height: parent.height; width: parent.height; color: "pink"; radius: 10 }
                             Column {
                                 Label {
                                     Layout.fillHeight: true

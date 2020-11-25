@@ -14,7 +14,8 @@ public:
     vector<Player> players;
     vector<Pack> packs;
     int curPackId = -1;
-    void run();
+    int maxPlayer = 2;
+    void run() override;
     void sendAll(QByteArray dataSend);
     bool isOnGame=false;
 

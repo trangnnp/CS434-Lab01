@@ -136,6 +136,12 @@ void MainWindow::onReadyRead() {
                     qDebug() << QByteArray::fromStdString(i.second);
                     checkAnwer(atoi(i.second.c_str()));
                     break;
+                case 'E':
+                    qDebug() << QByteArray::fromStdString(i.second);
+                    break;
+                case 'J':
+                    qDebug() << QByteArray::fromStdString(i.second);
+                    break;
             }
         }
 

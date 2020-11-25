@@ -128,9 +128,9 @@ void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
             qDebug() << "======ready update scores======";
             socket->write(sendConv("really?","N"));
             if (answer == room->packs.at(room->curPackId).correct) {
-                socket->write(sendConv("You right!","K"));
+                socket->write(sendConv("You right!","N"));
             } else {
-                socket->write(sendConv("You wrong!","K"));
+                socket->write(sendConv("You wrong!","N"));
                 if (++player.stauts == 2) {
                     socket->write(sendConv("Chet!","N"));
                 }
@@ -173,6 +173,13 @@ void MainWindow::onReadyRead() {
 }
 
 void MainWindow::addNewPlayer(string name, QTcpSocket* socket) {
+    for (Player player : room->players) {
+        if (strcmp(name.c_str(), player.name.c_str()) == 0) {
+            socket->write(sendConv("Name is not available!","E"));
+            return;
+        }
+    }
+
     Player player;
     player.id = room->players.size();
     player.name = name;
@@ -184,11 +191,11 @@ void MainWindow::addNewPlayer(string name, QTcpSocket* socket) {
          if (player.clientSocket != socket) {
              player.clientSocket->write(sendConv(" Player " + name + " has just joined !\n","N"));
          } else {
-             player.clientSocket->write(sendConv(" Hello " + name + " !\n","N"));
+             player.clientSocket->write(sendConv(" Hello " + name + " !\n","J"));
          }
      }
 
-     if (room->players.size() == 1) {
+     if (room->players.size() >= room->maxPlayer) {
          isOnGame = true;
          getPacksForRoom(room);
          qDebug() << room->packs.size();

@@ -19,7 +19,7 @@ void Room::sendAll(QByteArray dataSend) {
     }
 }
 
-void Room::run(){
+void Room::run() {
     qDebug() << "running";
 //    sendAll(sendConv("Meooooooooooooooooooooooooooooooooooooo","N"));
 
@@ -31,6 +31,8 @@ void Room::run(){
                             "D=" + string(packs.at(i).d)+"\~";
         sendAll(sendConv(packQuestion,"Q"));
     }
+
+    exec();
 
 //    for (int i=0; i<packs.size(); i++) {
 //        qDebug() << QByteArray::fromStdString("Sending " + to_string(i));
