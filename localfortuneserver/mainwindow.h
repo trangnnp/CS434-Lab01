@@ -42,7 +42,7 @@ private:
     vector<Player> players;
     PackBank packBank = PackBank();
     bool isOnGame = false;
-    Room room = Room();
+    Room *room = new Room();
     void getPacksForRoom(Room *room);
     void onGame();
     QByteArray sendConv(string data, string tag);

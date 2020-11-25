@@ -2,8 +2,9 @@
 #define ROOM_H
 #include "player.h"
 #include "pack.h"
+#include <QThread>
 
-class Room
+class Room: public QThread
 {
 public:
     Room();
@@ -13,6 +14,9 @@ public:
     vector<Player> players;
     vector<Pack> packs;
     int curPackId = -1;
+    void run();
+    void sendAll(QByteArray dataSend);
+    bool isOnGame=false;
 };
 
 #endif // ROOM_H
