@@ -151,9 +151,8 @@ void MainWindow::sendCorrectAnswer() {
 }
 
 void MainWindow::sendData() {
-    qDebug() << "vo dc send data";
-    qDebug() << room->sendData;
-    for (Player player : players) {
+    for (Player player : room->players) {
+        qDebug() << i;
         player.clientSocket->write(room->sendData);
     }
 }
