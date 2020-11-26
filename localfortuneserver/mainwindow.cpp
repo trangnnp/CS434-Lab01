@@ -93,6 +93,7 @@ void MainWindow::onGame() {
     room->start();
 
     room->sendAll(sendConv("\n\n================== Game Starting ======================\n","N"));
+    room->sendRoomInfo();
 }
 
 void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {

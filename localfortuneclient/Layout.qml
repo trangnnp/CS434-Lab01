@@ -194,7 +194,7 @@ ApplicationWindow {
                             property real radius: Math.min(canvas.width, canvas.height) / 2 - lineWidth/2
 
                             property real minimumValue: 0
-                            property real maximumValue: 100
+                            property real maximumValue: client.timeLimited*1000
                             property real currentValue: 0
 
 
@@ -270,16 +270,14 @@ ApplicationWindow {
                                 text = currentValue
                             }
 
-                            Text {
-                                anchors.centerIn: parent
-
-                                text: canvas.text
-                                color: canvas.primaryColor
-                            }
+//                            Text {
+//                                anchors.centerIn: parent
+//                                text: canvas.text
+//                                color: canvas.primaryColor
+//                            }
 
                             MouseArea {
                                 id: mouseArea
-
                                 anchors.fill: parent
                                 onClicked: canvas.clicked()
                                 onPressedChanged: canvas.requestPaint()
@@ -289,10 +287,10 @@ ApplicationWindow {
                          // Timer to show off the progress bar
                          Timer {
                              id: simpletimer
-                             interval: 1000
+                             interval: 100
                              repeat: true
                              running: true
-                             onTriggered: canvas.currentValue < canvas.maximumValue ? canvas.currentValue += 1.0 : canvas.currentValue = canvas.minimumValue
+                             onTriggered: canvas.currentValue < canvas.maximumValue ? canvas.currentValue += interval: canvas.currentValue = canvas.minimumValue
                          }
                     }
 
@@ -312,30 +310,33 @@ ApplicationWindow {
                     }
 
                     Frame {
+                        id: frame
                         x: image.paintedWidth*0.03
                         y: image.paintedHeight*0.1
+
+                        property var textSize: 14
+
                         Column {
-                            property var textSize: 14
+
                             spacing: 5
                             Text {
-                                text: '<b> Num. of Players: </b> meoooo'
-                                font.family: "Helvetica"; font.pointSize: textSize; color: textColor
+                                text: '<b> Num. of Players: </b> ' + client.totalPlayer
+                                font.family: "Helvetica"; font.pointSize: frame.textSize; color: textColor
                             }
                             Text {
-                                text: '<b> Num. of Questions: </b>'
-                                font.family: "Helvetica"; font.pointSize: textSize; color: textColor
+                                text: '<b> Num. of Questions: </b>' + client.totalQuestion
+                                font.family: "Helvetica"; font.pointSize: frame.textSize; color: textColor
                             }
                             Text {
-                                text: '<b> Current Question: </b>'
-                                font.family: "Helvetica"; font.pointSize: textSize; color: textColor
+                                text: '<b> Current Question: </b>' + "<b> <font color=\"#ffea00\">" + client.totalPlayer + "</font> <font color=\"#ffea00\"></font><b>"
+                                font.family: "Helvetica"; font.pointSize: frame.textSize; color: textColor
                             }
                             Text {
-                                text: '<b> Time limited: </b>'
-                                font.family: "Helvetica"; font.pointSize: textSize; color: textColor
+                                text: '<b> Time limited: </b>' + client.timeLimited + " seconds"
+                                font.family: "Helvetica"; font.pointSize: frame.textSize; color: textColor
                             }
                         }
                     }
-
                 }
                 Rectangle {
                     Layout.fillWidth: true
@@ -362,6 +363,7 @@ ApplicationWindow {
                             border.width: 2
                             Label {
                                 anchors.centerIn: parent
+                                wrapMode: Text.WordWrap
                                 text: '<b> ' + client.packq + '</b> '
                                 color: textColor
                             }

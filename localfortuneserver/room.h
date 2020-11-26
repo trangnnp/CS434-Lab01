@@ -29,6 +29,7 @@ public:
     Room();
     char* name;
     int limitPacks = 2;
+    int timeLimited = 5;
     int maxPacks = 30;
     vector<Player> players;
     vector<Pack> packs;
@@ -37,11 +38,12 @@ public:
     void run() override;
     void sendAll(QByteArray dataSend);
     void sendPlayersInfo();
+    void sendRoomInfo();
     string playersInfo();
+    string roomInfo();
     int scorePerPack=1000;
     bool isOnGame=false;
     void updateScores();
-    bool cmp(const Player *a, const Player *b);
     bool isSent=false;
     QByteArray sendData;
     void emitSendSignal();

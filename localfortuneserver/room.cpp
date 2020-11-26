@@ -50,6 +50,19 @@ string Room::playersInfo() {
     return data;
 }
 
+void Room::sendRoomInfo() {
+    sendAll(sendConv(roomInfo(), "I"));
+}
+
+string Room::roomInfo() {
+    string data = "";
+    data += string(name) + "-";
+    data += to_string(players.size()) + "-";
+    data += to_string(packs.size()) + "-";
+    data += to_string(timeLimited) + "-";
+    return data;
+}
+
 void Room::run() {
     qDebug() << "running";
     qDebug() << "Mario";

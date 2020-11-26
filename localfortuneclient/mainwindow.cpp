@@ -170,6 +170,10 @@ void MainWindow::onReadyRead() {
                 qDebug() << QByteArray::fromStdString(i.second);
                 updatePlayerInfo(i.second);
                 break;
+            case 'I':
+                qDebug() << QByteArray::fromStdString(i.second);
+                extractRoomInfo(i.second);
+                break;
         }
     }
 }
@@ -188,6 +192,9 @@ void MainWindow::updatePlayerInfo(string data) {
 
         Player p = Player();
         p.name =  QByteArray::fromStdString(info.at(0));
+        if (p.name == myName) {
+            p.name += " (you)";
+        }
         p.score = atoi(info.at(1).c_str());
         p.avatar = QByteArray::fromStdString(info.at(2));
 
@@ -201,6 +208,17 @@ void MainWindow::addNewMsg(string data) {
     msg.content = QByteArray::fromStdString(data);
     msg.sender = QByteArray::fromStdString("Server");
     singletonData->msgList.appendItem(msg);
+}
+
+void MainWindow::extractRoomInfo(string data) {
+    vector<string> info;
+    string delimiter = "-";
+    splitConbinedCmd(info, data, delimiter);
+    roomName = QByteArray::fromStdString(info.at(0));
+    totalQuestion = atoi(info.at(1).c_str());
+    totalPlayer = atoi(info.at(2).c_str());
+    timeLimited = atoi(info.at(3).c_str());
+    initRoom();
 }
 
 string MainWindow::getTime() {
@@ -239,4 +257,5 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::createMe(QString name) {
     _socket.write(sendConv(name.toStdString(), "J"));
+    myName = name;
 }

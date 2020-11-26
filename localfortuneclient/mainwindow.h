@@ -33,7 +33,12 @@ class MainWindow : public QObject
     Q_PROPERTY(int bResult MEMBER bResult NOTIFY resultUpdated);
     Q_PROPERTY(int cResult MEMBER cResult NOTIFY resultUpdated);
     Q_PROPERTY(int dResult MEMBER dResult NOTIFY resultUpdated);
+
     Q_PROPERTY(int playerStatus MEMBER playerStatus NOTIFY playerStatusUpdated);
+    Q_PROPERTY(int totalQuestion MEMBER totalQuestion NOTIFY initRoom);
+    Q_PROPERTY(int totalPlayer MEMBER totalPlayer NOTIFY initRoom);
+    Q_PROPERTY(QString roomName MEMBER roomName NOTIFY initRoom);
+    Q_PROPERTY(int timeLimited MEMBER timeLimited NOTIFY initRoom);
 
 public:
 //    explicit MainWindow(QWidget *parent = 0);
@@ -48,6 +53,7 @@ signals:
     void curPackChanged();
     void resultUpdated();
     void playerStatusUpdated();
+    void initRoom();
 
 private:
     Ui::MainWindow *ui;
@@ -59,9 +65,15 @@ private:
     QByteArray sendConv(string data, string tag);
     void updatePlayerInfo(string data);
     void addNewMsg(string data);
+    void extractRoomInfo(string data);
     string getTime();
+    QString myName;
 
     int playerStatus=0;
+    int totalQuestion=0;
+    int totalPlayer=0;
+    int timeLimited=0;
+    QString roomName="Name";
 
     void splitConbinedCmd(vector<string>& res, const string& str, string delims);
     QString getQ() const{ return curPack.q; }
