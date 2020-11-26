@@ -116,7 +116,7 @@ void MainWindow::onGame() {
 
 void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
     qDebug() << "======collectAnswer======";
-    for (Player player : room->players) {
+    for (Player &player : room->players) {
         if (player.clientSocket == socket) {
             qDebug() << "======found player======";
             if (player.stauts == 2) {
@@ -129,22 +129,22 @@ void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
             socket->write(sendConv("really?","N"));
             if (answer == room->packs.at(room->curPackId).correct) {
                 socket->write(sendConv("You right!","N"));
+                player.score+=room->scorePerPack;
+                qDebug() << player.score;
             } else {
                 socket->write(sendConv("You wrong!","N"));
                 if (++player.stauts == 2) {
                     socket->write(sendConv("Chet!","N"));
                 }
             }
-            room->updateScores();
+            room->sendPlayersInfo();
             return;
         }
     }
 }
 
 void MainWindow::sendCorrectAnswer() {
-    for (Player player : room->players) {
-        player.clientSocket->write(sendConv("The correct answer is " + to_string(room->packs.at(room->curPackId).correct) + " ! ","K"));
-    }
+    room->sendAll(sendConv("The correct answer is " + to_string(room->packs.at(room->curPackId).correct) + " ! ","K"));
 }
 
 void MainWindow::onReadyRead() {

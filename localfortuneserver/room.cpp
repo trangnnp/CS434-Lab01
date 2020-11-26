@@ -3,6 +3,8 @@
 #include <random>
 #include <set>
 #include <QDebug>
+#include <algorithm>
+using namespace std;
 
 Room::Room():QThread()
 {
@@ -70,11 +72,13 @@ void Room::run() {
 
 void Room::updateScores() {
     qDebug() << "============updateScores=============";
-    string res = "-";
+    string res;
+
+    sort( players.begin(), players.end(), []( Player a, Player b ){ return a.score < b.score;});
+
     for (Player player : players) {
         res += to_string(player.score) + "-";
     }
 
-    sendAll(sendConv(res,"N"));
-
+    sendAll(sendConv(res, "U"));
 }

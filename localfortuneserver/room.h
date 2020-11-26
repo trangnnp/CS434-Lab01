@@ -14,13 +14,15 @@ public:
     vector<Player> players;
     vector<Pack> packs;
     int curPackId = -1;
-    int maxPlayer = 2;
+    int maxPlayer = 1;
     void run() override;
     void sendAll(QByteArray dataSend);
     void sendPlayersInfo();
     string playersInfo();
+    int scorePerPack=1000;
     bool isOnGame=false;
     void updateScores();
+    bool cmp(const Player *a, const Player *b);
 };
 
 #endif // ROOM_H

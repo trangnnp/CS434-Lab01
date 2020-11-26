@@ -430,43 +430,48 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.preferredWidth: 1
             color: "#010103"
-                ListView {
-                    property var columnWidths: ({"avatar": 50, "name": 100, "code": 50}) // fixed sizes or minimum sizes
-                    property var calculatedColumns: ["code", "language"]   // list auto sized columns in here
+            function formatNumber(data) {
+                return data.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+            }
+            ListView {
+                property var columnWidths: ({"avatar": 50, "name": 100, "code": 50}) // fixed sizes or minimum sizes
+                property var calculatedColumns: ["code", "language"]   // list auto sized columns in here
 
-                    orientation: Qt.Vertical
-                    anchors.fill: parent
-                    model: PlayerModel {
-                        list: playerList
-                    }
-                    anchors.margins: 10
-                    spacing: 10
+                orientation: Qt.Vertical
+                anchors.fill: parent
+                model: PlayerModel {
+                    list: playerList
+                }
+                anchors.margins: 10
+                spacing: 10
 
-                    delegate: Component {
-                        Row {
-                            spacing: 10
-                            Rectangle { height: parent.height; width: parent.height; color: avatar; radius: 10 }
-                            Column {
-                                Label {
-                                    Layout.fillHeight: true
-                                    Layout.fillWidth: true
-                                    Layout.preferredHeight: implicitHeight
-                                    Layout.preferredWidth: 2
-                                    text: '<b> ' + name + '</b> '
-                                    color: "pink"
-                                }
 
-                                Label {
-                                    Layout.fillHeight: true
-                                    Layout.fillWidth: true
-                                    Layout.preferredHeight: implicitHeight
-                                    text: score
-                                    color: "pink"
-                                }
+
+                delegate: Component {
+                    Row {
+                        spacing: 10
+                        Rectangle { height: parent.height; width: parent.height; color: avatar; radius: 10 }
+                        Column {
+                            Label {
+                                Layout.fillHeight: true
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: implicitHeight
+                                Layout.preferredWidth: 2
+                                text: '<b> ' + name + '</b> '
+                                color: "pink"
+                            }
+
+                            Label {
+                                Layout.fillHeight: true
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: implicitHeight
+                                text: rankingLayout.formatNumber(score)
+                                color: "pink"
                             }
                         }
                     }
                 }
+            }
         }
 
         }

@@ -160,6 +160,10 @@ void MainWindow::onReadyRead() {
                 qDebug() << QByteArray::fromStdString(i.second);
                 updatePlayerInfo(i.second);
                 break;
+            case 'U':
+                qDebug() << QByteArray::fromStdString(i.second);
+                updatePlayerInfo(i.second);
+                break;
         }
     }
 }
@@ -173,7 +177,6 @@ void MainWindow::updatePlayerInfo(string data) {
     splitConbinedCmd(players, data, delimiter);
 
     for (auto player: players) {
-        qDebug() << QByteArray::fromStdString(player);
         vector<string> info;
         splitConbinedCmd(info, player.append("-"), "-");
 

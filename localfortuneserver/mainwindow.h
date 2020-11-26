@@ -39,7 +39,6 @@ private:
     Ui::MainWindow *ui;
     QTcpServer  _server;
     QList<QTcpSocket*>  _sockets;
-    vector<Player> players;
     PackBank packBank = PackBank();
     bool isOnGame = false;
     Room *room = new Room();
