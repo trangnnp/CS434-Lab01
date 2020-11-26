@@ -1,5 +1,7 @@
 HEADERS       = client.h \
     mainwindow.h \
+    msglist.h \
+    msgmodel.h \
     pack.h \
     playerlist.h \
     playermodel.h \
@@ -7,6 +9,8 @@ HEADERS       = client.h \
 SOURCES       = client.cpp \
                 main.cpp \
                 mainwindow.cpp \
+                msglist.cpp \
+                msgmodel.cpp \
                 pack.cpp \
                 playerlist.cpp \
                 playermodel.cpp \

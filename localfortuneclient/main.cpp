@@ -21,7 +21,11 @@
 #include <QQmlComponent>
 
 #include "playerlist.h"
+#include "msglist.h"
+
 #include "playermodel.h"
+#include "msgmodel.h"
+
 #include "mainwindow.h"
 #include "singletondata.h"
 
@@ -35,11 +39,18 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
     qmlRegisterType<PlayerModel>("PlayerModel", 1, 0, "PlayerModel");
+    qmlRegisterType<MsgModel>("MsgModel", 1, 0, "MsgModel");
+
     qmlRegisterUncreatableType<PlayerList>("PlayerList", 1, 0, "PlayerList",
         QStringLiteral("playerList should not be created in QML"));
 
+    qmlRegisterUncreatableType<MsgList>("MsgList", 1, 0, "MsgList",
+        QStringLiteral("MsgList should not be created in QML"));
+
     QQmlApplicationEngine engine;
+    engine.rootContext()->setContextProperty(QStringLiteral("msgList"), &t->msgList);
     engine.rootContext()->setContextProperty(QStringLiteral("playerList"), &t->playerList);
+
     engine.load(QUrl(QLatin1String("qrc:/Layout.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;

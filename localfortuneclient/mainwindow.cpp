@@ -12,9 +12,11 @@
 #include <QQmlContext>
 #include <QQmlEngine>
 #include "playerlist.h"
+#include "msglist.h"
 #include <QQuickItem>
 #include <QQmlApplicationEngine>
 #include "singletondata.h"
+#include <time.h>
 
 MainWindow::MainWindow(QObject *parent):QObject(parent) {
     _socket.connectToHost(QHostAddress("127.0.0.1"), 4242);
@@ -22,7 +24,11 @@ MainWindow::MainWindow(QObject *parent):QObject(parent) {
 //    createMe(QByteArray::fromStdString("Meo" + to_string(rand()%10)));
 //    curPack.q = QByteArray::fromStdString("bbbbbbbbbbbbbbbbbbbbb");
     qDebug() << "Constructor Done!";
-
+    Msg msg = Msg();
+    msg.timestamp = QByteArray::fromStdString(getTime());
+    msg.content = QByteArray::fromStdString("Hello!");
+    msg.sender = QByteArray::fromStdString("Server");
+    singletonData->msgList.appendItem(msg);
 }
 
 void MainWindow::printMessage(QString txt)
@@ -37,8 +43,7 @@ MainWindow::~MainWindow() {
 }
 
 template <class Container>
-void splitS(const string& str, Container& cont,
-              const string& delims = "\n")
+void splitS(const string& str, Container& cont, const string& delims = "\n")
 {
     std::size_t current, previous, mid = 0;
     previous = str.find_first_of("##");
@@ -142,6 +147,7 @@ void MainWindow::onReadyRead() {
         switch(i.first[0]) {
             case 'N':
                 qDebug() << QByteArray::fromStdString(i.second);
+                addNewMsg(i.second);
                 break;
             case 'Q':
                 splitQ(i.second);
@@ -187,6 +193,24 @@ void MainWindow::updatePlayerInfo(string data) {
 
         singletonData->playerList.appendItem(p);
     }
+}
+
+void MainWindow::addNewMsg(string data) {
+    Msg msg = Msg();
+    msg.timestamp = QByteArray::fromStdString(getTime());
+    msg.content = QByteArray::fromStdString(data);
+    msg.sender = QByteArray::fromStdString("Server");
+    singletonData->msgList.appendItem(msg);
+}
+
+string MainWindow::getTime() {
+    tm * timeinfo;
+    time_t rawtime;
+    char timebuff[120] = {0};
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+    strftime(timebuff, 12, "%r", timeinfo);
+    return string(timebuff);
 }
 
 void MainWindow::sendAnswer(int answer) {

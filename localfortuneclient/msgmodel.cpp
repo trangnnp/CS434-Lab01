@@ -1,13 +1,12 @@
-#include "playerlist.h"
-#include "playermodel.h"
-
-PlayerModel::PlayerModel(QObject *parent)
+#include "msglist.h"
+#include "msgmodel.h"
+MsgModel::MsgModel(QObject *parent)
     : QAbstractListModel(parent)
     , mList(nullptr)
 {
 }
 
-int PlayerModel::rowCount(const QModelIndex &parent) const
+int MsgModel::rowCount(const QModelIndex &parent) const
 {
     // For list models only the root node (an invalid parent) should return the list's size. For all
     // other (valid) parents, rowCount() should return 0 so that it does not become a tree model.
@@ -17,39 +16,39 @@ int PlayerModel::rowCount(const QModelIndex &parent) const
     return mList->items().size();
 }
 
-QVariant PlayerModel::data(const QModelIndex &index, int role) const
+QVariant MsgModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || !mList)
         return QVariant();
 
-    const Player item = mList->items().at(index.row());
+    const Msg item = mList->items().at(index.row());
     switch (role) {
-    case NameRole:
-        return QVariant(item.name);
-    case ScoreRole:
-        return QVariant(item.score);
-    case AvatarRole:
-        return QVariant(item.avatar);
+    case TimestampRole:
+        return QVariant(item.timestamp);
+    case SenderRole:
+        return QVariant(item.sender);
+    case ContentRole:
+        return QVariant(item.content);
     }
 
     return QVariant();
 }
 
-bool PlayerModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool MsgModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (!mList)
         return false;
 
-    Player item = mList->items().at(index.row());
+    Msg item = mList->items().at(index.row());
     switch (role) {
-    case NameRole:
-        item.name = value.toString();
+    case TimestampRole:
+        item.timestamp = value.toString();
         break;
-    case ScoreRole:
-        item.score = value.toInt();
+    case SenderRole:
+        item.sender = value.toString();
         break;
-    case AvatarRole:
-        item.avatar = value.toString();
+    case ContentRole:
+        item.content = value.toString();
         break;
     }
 
@@ -60,7 +59,7 @@ bool PlayerModel::setData(const QModelIndex &index, const QVariant &value, int r
     return false;
 }
 
-Qt::ItemFlags PlayerModel::flags(const QModelIndex &index) const
+Qt::ItemFlags MsgModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return Qt::NoItemFlags;
@@ -68,21 +67,21 @@ Qt::ItemFlags PlayerModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEditable;
 }
 
-QHash<int, QByteArray> PlayerModel::roleNames() const
+QHash<int, QByteArray> MsgModel::roleNames() const
 {
     QHash<int, QByteArray> names;
-    names[NameRole] = "name";
-    names[ScoreRole] = "score";
-    names[AvatarRole] = "avatar";
+    names[TimestampRole] = "timestamp";
+    names[SenderRole] = "sender";
+    names[ContentRole] = "content";
     return names;
 }
 
-PlayerList *PlayerModel::list() const
+MsgList *MsgModel::list() const
 {
     return mList;
 }
 
-void PlayerModel::setList(PlayerList *list)
+void MsgModel::setList(MsgList *list)
 {
     beginResetModel();
 
@@ -92,18 +91,18 @@ void PlayerModel::setList(PlayerList *list)
     mList = list;
 
     if (mList) {
-        connect(mList, &PlayerList::preItemAppended, this, [=]() {
+        connect(mList, &MsgList::preItemAppended, this, [=]() {
             const int index = mList->items().size();
             beginInsertRows(QModelIndex(), index, index);
         });
-        connect(mList, &PlayerList::postItemAppended, this, [=]() {
+        connect(mList, &MsgList::postItemAppended, this, [=]() {
             endInsertRows();
         });
 
-        connect(mList, &PlayerList::preItemRemoved, this, [=](int index) {
+        connect(mList, &MsgList::preItemRemoved, this, [=](int index) {
             beginRemoveRows(QModelIndex(), index, index);
         });
-        connect(mList, &PlayerList::postItemRemoved, this, [=]() {
+        connect(mList, &MsgList::postItemRemoved, this, [=]() {
             endRemoveRows();
         });
     }

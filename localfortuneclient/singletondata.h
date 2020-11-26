@@ -1,6 +1,7 @@
 #ifndef TESTT_H
 #define TESTT_H
 #include "playerlist.h"
+#include "msglist.h"
 
 class SingletonClass
 {
@@ -11,8 +12,9 @@ class SingletonClass
            return instance;
         }
 
-        void Relocate(int X, int Y, int Z);
         PlayerList playerList;
+        MsgList msgList;
+
 
     private:
         SingletonClass();

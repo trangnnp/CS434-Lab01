@@ -55,6 +55,8 @@ private:
     void checkAnwer(int correct);
     QByteArray sendConv(string data, string tag);
     void updatePlayerInfo(string data);
+    void addNewMsg(string data);
+    string getTime();
     void splitConbinedCmd(vector<string>& res, const string& str, string delims);
     QString getQ() const{ return curPack.q; }
     QString getA() const{ return curPack.a; }

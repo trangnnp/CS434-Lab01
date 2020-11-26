@@ -60,6 +60,8 @@ import QtQuick.Controls 1.4
 
 import MainWindow 1.0
 import PlayerModel 1.0
+import MsgModel 1.0
+
 
 import QtQml 2.2
 
@@ -429,46 +431,85 @@ ApplicationWindow {
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.preferredWidth: 1
+            anchors.margins: 20
+
             color: "#010103"
+
             function formatNumber(data) {
                 return data.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
             }
-            ListView {
-                property var columnWidths: ({"avatar": 50, "name": 100, "code": 50}) // fixed sizes or minimum sizes
-                property var calculatedColumns: ["code", "language"]   // list auto sized columns in here
 
-                orientation: Qt.Vertical
-                anchors.fill: parent
-                model: PlayerModel {
-                    list: playerList
-                }
+
+            ColumnLayout {
                 anchors.margins: 10
-                spacing: 10
+                anchors.fill: parent
 
+                ListView {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
 
+                    orientation: Qt.Vertical
+                    Layout.preferredHeight: 5
+                    model: PlayerModel {
+                        list: playerList
+                    }
+                    spacing: 10
 
-                delegate: Component {
-                    Row {
-                        spacing: 10
-                        Rectangle { height: parent.height; width: parent.height; color: avatar; radius: 10 }
-                        Column {
-                            Label {
-                                Layout.fillHeight: true
-                                Layout.fillWidth: true
-                                Layout.preferredHeight: implicitHeight
-                                Layout.preferredWidth: 2
-                                text: '<b> ' + name + '</b> '
-                                color: "pink"
-                            }
+                    delegate: Component {
+                        Row {
+                            spacing: 10
+                            Rectangle { height: parent.height; width: parent.height; color: avatar; radius: 10 }
+                            Column {
+                                Label {
+                                    Layout.fillHeight: true
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: implicitHeight
+                                    text: '<b> ' + name + '</b> '
+                                    color: "pink"
+                                }
 
-                            Label {
-                                Layout.fillHeight: true
-                                Layout.fillWidth: true
-                                Layout.preferredHeight: implicitHeight
-                                text: rankingLayout.formatNumber(score)
-                                color: "pink"
+                                Label {
+                                    Layout.fillHeight: true
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: implicitHeight
+                                    text: rankingLayout.formatNumber(score)
+                                    color: "pink"
+                                }
                             }
                         }
+                    }
+                }
+
+
+
+                ListView {
+                    id: listview
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.preferredHeight: 3
+
+                    orientation: Qt.Vertical
+                    model: MsgModel {
+                        list: msgList
+                    }
+                    spacing: 5
+
+                    delegate: Component {
+                        Row {
+                            Label {
+                                Layout.fillHeight: true
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: implicitHeight
+                                width: listview.width
+                                text: "[" + timestamp + "] " + '<b> ' + sender + '</b> ' + ": " + content
+                                color: "yellow"
+                                wrapMode: Text.WordWrap
+                            }
+                        }
+                    }
+
+                    onCountChanged: {
+                        Qt.callLater( listview.positionViewAtEnd )
                     }
                 }
             }
