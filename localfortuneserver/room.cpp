@@ -20,7 +20,8 @@ void Room::sendAll(QByteArray dataSend) {
 }
 
 void Room::run(){
-    qDebug() << "running";
+    qDebug() << "Mario";
+
 //    sendAll(sendConv("Meooooooooooooooooooooooooooooooooooooo","N"));
 
     for (int i=0; i<packs.size(); i++) {
@@ -29,7 +30,12 @@ void Room::run(){
         string packQuestion = "Q=" + string(packs.at(i).q)+"\~" + "A=" + string(packs.at(i).a)+"\~"
                             + "B=" + string(packs.at(i).b)+"\~" + "C=" + string(packs.at(i).c)+"\~"
                             "D=" + string(packs.at(i).d)+"\~";
-        sendAll(sendConv(packQuestion,"Q"));
+        sendData = sendConv(packQuestion,"Q");
+        emitSendSignal();
+//        while (!isSent) {
+
+//        }
+//        isSent = true;
     }
 
 //    for (int i=0; i<packs.size(); i++) {
@@ -64,3 +70,9 @@ void Room::updateScores() {
     sendAll(sendConv(res,"N"));
 
 }
+
+void Room::emitSendSignal() {
+    qDebug() << "vo dc emit signal";
+    emit sendSignal();
+}
+

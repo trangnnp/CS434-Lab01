@@ -3,9 +3,11 @@
 #include "player.h"
 #include "pack.h"
 #include <QThread>
+#include <QObject>
 
 class Room: public QThread
 {
+    Q_OBJECT
 public:
     Room();
     char* name;
@@ -17,8 +19,14 @@ public:
     void run();
     void sendAll(QByteArray dataSend);
     bool isOnGame=false;
+    bool isSent=false;
+    QByteArray sendData;
 
     void updateScores();
+
+    void emitSendSignal();
+signals:
+    void sendSignal();
 };
 
 #endif // ROOM_H

@@ -35,6 +35,7 @@ public slots:
     void onNewConnection();
     void onSocketStateChanged(QAbstractSocket::SocketState socketState);
     void onReadyRead();
+    void sendData();
 private:
     Ui::MainWindow *ui;
     QTcpServer  _server;
