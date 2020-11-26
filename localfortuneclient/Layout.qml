@@ -71,6 +71,11 @@ ApplicationWindow {
     width: 1200
     height: 620
 
+    function myQmlFunction(msg) {
+          console.log("Got message:", msg)
+          return "some return value"
+    }
+
     property var choosen: "#f4a261"
     property var correctans: "#e76f51"
 //    property var normal: "#eec1a2"
@@ -84,18 +89,8 @@ ApplicationWindow {
     property var textColor: "white"
     property var prefixColor: "<b> <font color=\"#ffea00\">A:</font> <font color=\"#ffea00\"></font><b>"
 
-
-
     MainWindow {
         id: client
-    }
-
-    Item {
-        id: list
-        function myQmlFunction(msg) {
-              console.log("Got message:", msg)
-              return "some return value"
-        }
     }
 
 

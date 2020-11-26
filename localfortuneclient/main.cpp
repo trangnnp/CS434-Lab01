@@ -19,7 +19,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQmlComponent>
-
+#include <QMetaObject>
 #include "playerlist.h"
 #include "msglist.h"
 
@@ -47,13 +47,23 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<MsgList>("MsgList", 1, 0, "MsgList",
         QStringLiteral("MsgList should not be created in QML"));
 
-    QQmlApplicationEngine engine;
+    QQmlEngine engine;
     engine.rootContext()->setContextProperty(QStringLiteral("msgList"), &t->msgList);
     engine.rootContext()->setContextProperty(QStringLiteral("playerList"), &t->playerList);
 
-    engine.load(QUrl(QLatin1String("qrc:/Layout.qml")));
-    if (engine.rootObjects().isEmpty())
-        return -1;
+    QQmlComponent component(&engine, "qrc:/Layout.qml");
+    QObject *object = component.create();
+
+
+    QVariant returnedValue;
+    QVariant msg = "Hello from C++";
+
+    QMetaObject::invokeMethod(object, "myQmlFunction",
+        Q_RETURN_ARG(QVariant, returnedValue),
+        Q_ARG(QVariant, msg));
+
+    qDebug() << "QML function returned:" << returnedValue.toString();
+
 
     return app.exec();
 }
