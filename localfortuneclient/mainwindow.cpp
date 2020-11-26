@@ -14,7 +14,7 @@
 #include "playerlist.h"
 #include <QQuickItem>
 #include <QQmlApplicationEngine>
-#include "testt.h"
+#include "singletondata.h"
 
 MainWindow::MainWindow(QObject *parent):QObject(parent) {
     _socket.connectToHost(QHostAddress("127.0.0.1"), 4242);
@@ -93,6 +93,17 @@ void MainWindow::splitQ(const string& str) {
     qDebug() << curPack.d;
 }
 
+void MainWindow::splitConbinedCmd(vector<string>& res, const string& str, string delims) {
+    std::size_t current, previous = 0;
+    current = str.find_first_of(delims);
+
+    while (current!=0 && previous <= str.size() - 1) {
+        res.push_back(str.substr(previous, current - previous));
+        previous = current + 1;
+        current = str.find_first_of(delims,previous);
+    }
+}
+
 void MainWindow::checkAnwer(int correct) {
 //color: client.aResult===0 ? choosen : client.aResult===1 ? correct : client.aResult===2 ? correctans : client.aResult ==4 ? wrongans : normal
 
@@ -147,45 +158,32 @@ void MainWindow::onReadyRead() {
                 break;
             case 'P':
                 qDebug() << QByteArray::fromStdString(i.second);
-//                addNewPlayer(i.second);
-
+                updatePlayerInfo(i.second);
                 break;
         }
     }
 }
 
-void MainWindow::addNewPlayer(string data) {
+void MainWindow::updatePlayerInfo(string data) {
     singletonData->playerList.resetItems();
+    qDebug() << "==========Update player info============";
 
-    vector<pair<string,string>> vec;
+    vector<string> players;
     string delimiter = "*";
-    splitS(data.append("##"), vec, delimiter);
-    for (auto i: vec) {
-        string info = i.second;
-        qDebug() << QByteArray::fromStdString(info);
+    splitConbinedCmd(players, data, delimiter);
+
+    for (auto player: players) {
+        qDebug() << QByteArray::fromStdString(player);
+        vector<string> info;
+        splitConbinedCmd(info, player.append("-"), "-");
 
         Player p = Player();
-        int current = info.find_first_of('-');
-        p.name = QByteArray::fromStdString(info.substr(0,current-1));
-        int previous = current + 1;
-        current = info.find_first_of('-', previous);
-        p.avatar = QByteArray::fromStdString(info.substr(0,current-1));
-        p.score = 0;
-
-        qDebug() << p.name;
+        p.name =  QByteArray::fromStdString(info.at(0));
+        p.score = atoi(info.at(1).c_str());
+        p.avatar = QByteArray::fromStdString(info.at(2));
 
         singletonData->playerList.appendItem(p);
     }
-
-//
-
-//    p.name = QByteArray::fromStdString(data.substr(0,current-1));
-//    int previous = current + 1;
-//    current = data.find_first_of('-', previous);
-//    p.avatar = QByteArray::fromStdString(data.substr(0,current-1));
-//    p.score = 0;
-
-//    playerList.appendItem(p);
 }
 
 void MainWindow::sendAnswer(int answer) {

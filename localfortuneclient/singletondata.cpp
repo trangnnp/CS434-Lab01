@@ -1,4 +1,4 @@
-#include "testt.h"
+#include "singletondata.h"
 
 SingletonClass::SingletonClass()
 {

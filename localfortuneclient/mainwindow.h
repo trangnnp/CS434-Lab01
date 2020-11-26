@@ -5,7 +5,7 @@
 #include <QTcpSocket>
 
 #include "pack.h"
-#include "testt.h"
+#include "singletondata.h"
 #include <QObject>
 
 
@@ -54,7 +54,8 @@ private:
     void splitQ(const string& str);
     void checkAnwer(int correct);
     QByteArray sendConv(string data, string tag);
-    void addNewPlayer(string data);
+    void updatePlayerInfo(string data);
+    void splitConbinedCmd(vector<string>& res, const string& str, string delims);
     QString getQ() const{ return curPack.q; }
     QString getA() const{ return curPack.a; }
     QString getB() const{ return curPack.b; }

@@ -24,7 +24,7 @@ void Room::sendPlayersInfo() {
 }
 
 string Room::playersInfo() {
-    string data = "*";
+    string data = "";
     for (Player player : players) {
         data += player.name +"-"+to_string(player.score)+"-"+player.avatar + "*";
     }

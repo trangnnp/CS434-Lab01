@@ -23,7 +23,7 @@
 #include "playerlist.h"
 #include "playermodel.h"
 #include "mainwindow.h"
-#include "testt.h"
+#include "singletondata.h"
 
 
 int main(int argc, char *argv[])

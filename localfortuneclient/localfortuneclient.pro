@@ -3,14 +3,14 @@ HEADERS       = client.h \
     pack.h \
     playerlist.h \
     playermodel.h \
-    testt.h
+    singletondata.h
 SOURCES       = client.cpp \
                 main.cpp \
                 mainwindow.cpp \
                 pack.cpp \
                 playerlist.cpp \
                 playermodel.cpp \
-                testt.cpp
+                singletondata.cpp
 
 FORMS += \
     mainwindow.ui \
