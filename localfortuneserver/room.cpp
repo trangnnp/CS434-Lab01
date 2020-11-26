@@ -111,7 +111,7 @@ void Room::updateScores() {
     qDebug() << "============updateScores=============";
     string res;
 
-    sort( players.begin(), players.end(), []( Player a, Player b ){ return a.score < b.score;});
+    sort(players.begin(), players.end(), []( Player &a, Player &b ){ return a.score > b.score;});
 
     for (Player player : players) {
         res += to_string(player.score) + "-";

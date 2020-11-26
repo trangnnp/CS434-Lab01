@@ -196,7 +196,7 @@ void MainWindow::updatePlayerInfo(string data) {
             p.name += " (you)";
         }
         p.score = atoi(info.at(1).c_str());
-        p.avatar = QByteArray::fromStdString(info.at(2));
+        p.avatar = QByteArray::fromStdString("#" + info.at(2));
 
         singletonData->playerList.appendItem(p);
     }

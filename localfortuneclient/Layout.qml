@@ -351,7 +351,6 @@ ApplicationWindow {
                         anchors.leftMargin: 40
                         anchors.rightMargin: 40
 
-
                         Rectangle {
                             id: packQ
                             Layout.fillWidth: true
@@ -362,6 +361,8 @@ ApplicationWindow {
                             border.color: boderColor
                             border.width: 2
                             Label {
+                                Layout.fillHeight: true
+                                Layout.fillWidth: true
                                 anchors.centerIn: parent
                                 wrapMode: Text.WordWrap
                                 text: '<b> ' + client.packq + '</b> '
