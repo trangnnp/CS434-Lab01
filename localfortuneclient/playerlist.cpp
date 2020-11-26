@@ -43,5 +43,14 @@ void PlayerList::removeCompletedItems()
 //        } else {
 //            ++i;
 //        }
-//    }
+    //    }
+}
+
+void PlayerList::resetItems()
+{
+    for (int i = 0; i < mItems.size(); ) {
+        emit preItemRemoved(i);
+        mItems.removeAt(i);
+        emit postItemRemoved();
+     }
 }

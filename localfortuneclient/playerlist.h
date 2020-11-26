@@ -33,6 +33,7 @@ signals:
 public slots:
     void appendItem(Player item);
     void removeCompletedItems();
+    void resetItems();
 
 private:
     QVector<Player> mItems;

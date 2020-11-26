@@ -19,6 +19,18 @@ void Room::sendAll(QByteArray dataSend) {
     }
 }
 
+void Room::sendPlayersInfo() {
+    sendAll(sendConv(playersInfo(), "P"));
+}
+
+string Room::playersInfo() {
+    string data = "*";
+    for (Player player : players) {
+        data += player.name +"-"+to_string(player.score)+"-"+player.avatar + "*";
+    }
+    return data;
+}
+
 void Room::run() {
     qDebug() << "running";
 //    sendAll(sendConv("Meooooooooooooooooooooooooooooooooooooo","N"));

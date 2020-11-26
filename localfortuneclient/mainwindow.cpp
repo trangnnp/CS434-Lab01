@@ -9,6 +9,12 @@
 #include <algorithm>
 #include <iterator>
 #include <QObject>
+#include <QQmlContext>
+#include <QQmlEngine>
+#include "playerlist.h"
+#include <QQuickItem>
+#include <QQmlApplicationEngine>
+#include "testt.h"
 
 MainWindow::MainWindow(QObject *parent):QObject(parent) {
     _socket.connectToHost(QHostAddress("127.0.0.1"), 4242);
@@ -16,11 +22,13 @@ MainWindow::MainWindow(QObject *parent):QObject(parent) {
 //    createMe(QByteArray::fromStdString("Meo" + to_string(rand()%10)));
 //    curPack.q = QByteArray::fromStdString("bbbbbbbbbbbbbbbbbbbbb");
     qDebug() << "Constructor Done!";
+
 }
 
 void MainWindow::printMessage(QString txt)
 {
 qDebug() << "Message from QML: " << txt;
+
 }
 
 
@@ -107,47 +115,78 @@ void MainWindow::checkAnwer(int correct) {
 }
 
 void MainWindow::onReadyRead() {
-//    while (_socket.canReadLine()) {
-        QByteArray datas = _socket.readAll();
-        string data = datas.toStdString();
-        qDebug() << QByteArray::fromStdString("datas: ") + datas;
+    QByteArray datas = _socket.readAll();
+    string data = datas.toStdString();
+    qDebug() << QByteArray::fromStdString("datas: ") + datas;
 
-        vector<pair<string,string>> vec;
-        string delimiter = "\n";
-        splitS(data.append("##"),vec,delimiter);
+    vector<pair<string,string>> vec;
+    string delimiter = "\n";
+    splitS(data.append("##"),vec,delimiter);
 
-        qDebug() << vec.size();
+    qDebug() << vec.size();
 
+    for (auto i: vec) {
+        qDebug() << QByteArray::fromStdString("first: ") + i.first[0];
+        qDebug() << QByteArray::fromStdString("second: "+ i.second);
+        switch(i.first[0]) {
+            case 'N':
+                qDebug() << QByteArray::fromStdString(i.second);
+                break;
+            case 'Q':
+                splitQ(i.second);
+                break;
+            case 'K':
+                qDebug() << QByteArray::fromStdString(i.second);
+                checkAnwer(atoi(i.second.c_str()));
+                break;
+            case 'E':
+                qDebug() << QByteArray::fromStdString(i.second);
+                break;
+            case 'J':
+                qDebug() << QByteArray::fromStdString(i.second);
+                break;
+            case 'P':
+                qDebug() << QByteArray::fromStdString(i.second);
+//                addNewPlayer(i.second);
 
-        for (auto i: vec) {
-//            Pack *question = new Pack();
-            qDebug() << QByteArray::fromStdString("first: ") + i.first[0];
-            qDebug() << QByteArray::fromStdString("second: "+ i.second);
-            switch(i.first[0]) {
-                case 'N':
-                    qDebug() << QByteArray::fromStdString(i.second);
-                    break;
-                case 'Q':
-                    splitQ(i.second);
-//                    question.onGame();
-//                    sendAnswer(rand() % 4);
-                    break;
-                case 'K':
-                    qDebug() << QByteArray::fromStdString(i.second);
-                    checkAnwer(atoi(i.second.c_str()));
-                    break;
-                case 'E':
-                    qDebug() << QByteArray::fromStdString(i.second);
-                    break;
-                case 'J':
-                    qDebug() << QByteArray::fromStdString(i.second);
-                    break;
-            }
+                break;
         }
-
-//    }
+    }
 }
 
+void MainWindow::addNewPlayer(string data) {
+    singletonData->playerList.resetItems();
+
+    vector<pair<string,string>> vec;
+    string delimiter = "*";
+    splitS(data.append("##"), vec, delimiter);
+    for (auto i: vec) {
+        string info = i.second;
+        qDebug() << QByteArray::fromStdString(info);
+
+        Player p = Player();
+        int current = info.find_first_of('-');
+        p.name = QByteArray::fromStdString(info.substr(0,current-1));
+        int previous = current + 1;
+        current = info.find_first_of('-', previous);
+        p.avatar = QByteArray::fromStdString(info.substr(0,current-1));
+        p.score = 0;
+
+        qDebug() << p.name;
+
+        singletonData->playerList.appendItem(p);
+    }
+
+//
+
+//    p.name = QByteArray::fromStdString(data.substr(0,current-1));
+//    int previous = current + 1;
+//    current = data.find_first_of('-', previous);
+//    p.avatar = QByteArray::fromStdString(data.substr(0,current-1));
+//    p.score = 0;
+
+//    playerList.appendItem(p);
+}
 
 void MainWindow::sendAnswer(int answer) {
     _socket.write(sendConv(to_string(answer), "W"));

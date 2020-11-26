@@ -184,15 +184,18 @@ void MainWindow::addNewPlayer(string name, QTcpSocket* socket) {
     player.id = room->players.size();
     player.name = name;
     player.clientSocket = socket;
+    player.avatar = colors[rand() % 4];
     room->players.push_back(player);
     qDebug() << QByteArray::fromStdString("Add new player: " + name);
 
+     string data = room->playersInfo();
      for (Player player : room->players) {
          if (player.clientSocket != socket) {
              player.clientSocket->write(sendConv(" Player " + name + " has just joined !\n","N"));
          } else {
              player.clientSocket->write(sendConv(" Hello " + name + " !\n","J"));
          }
+         player.clientSocket->write(sendConv(data, "P"));
      }
 
      if (room->players.size() >= room->maxPlayer) {

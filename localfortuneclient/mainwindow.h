@@ -5,6 +5,7 @@
 #include <QTcpSocket>
 
 #include "pack.h"
+#include "testt.h"
 #include <QObject>
 
 
@@ -32,9 +33,6 @@ class MainWindow : public QObject
     Q_PROPERTY(int cResult MEMBER cResult NOTIFY resultUpdated);
     Q_PROPERTY(int dResult MEMBER dResult NOTIFY resultUpdated);
 
-
-
-
 public:
 //    explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -56,6 +54,7 @@ private:
     void splitQ(const string& str);
     void checkAnwer(int correct);
     QByteArray sendConv(string data, string tag);
+    void addNewPlayer(string data);
     QString getQ() const{ return curPack.q; }
     QString getA() const{ return curPack.a; }
     QString getB() const{ return curPack.b; }
@@ -72,6 +71,7 @@ private:
     int dResult=3;
 
     Pack curPack = Pack();
+    SingletonClass *singletonData = SingletonClass::Instance();
 
 };
 

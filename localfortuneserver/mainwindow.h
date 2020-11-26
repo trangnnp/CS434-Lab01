@@ -49,6 +49,7 @@ private:
     void addNewPlayer(string name, QTcpSocket* socket);
     void collectAnswer(int answer, QTcpSocket* socket);
     void sendCorrectAnswer();
+    string colors[5] = {"yellow", "blue", "green", "gray", "pink"};
 };
 
 #endif // MAINWINDOW_H

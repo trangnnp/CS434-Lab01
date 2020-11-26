@@ -17,8 +17,9 @@ public:
     int maxPlayer = 2;
     void run() override;
     void sendAll(QByteArray dataSend);
+    void sendPlayersInfo();
+    string playersInfo();
     bool isOnGame=false;
-
     void updateScores();
 };
 

@@ -23,34 +23,30 @@
 #include "playerlist.h"
 #include "playermodel.h"
 #include "mainwindow.h"
+#include "testt.h"
+
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
+    SingletonClass *t = SingletonClass::Instance();
+
     qmlRegisterType<MainWindow>("MainWindow", 1, 0, "MainWindow");
     qmlRegisterType<PlayerModel>("PlayerModel", 1, 0, "PlayerModel");
     qmlRegisterUncreatableType<PlayerList>("PlayerList", 1, 0, "PlayerList",
         QStringLiteral("playerList should not be created in QML"));
 
-    PlayerList playerList;
-    Player item = Player();
-    item.name = "Meo1";
-    item.score=10000;
-    item.avatar="#f4a261";
-    playerList.appendItem(item);
-
-    item.name = "Meo2";
-    item.score=20000;
-    item.avatar="pink";
-    playerList.appendItem(item);
-
     QQmlApplicationEngine engine;
-    engine.rootContext()->setContextProperty(QStringLiteral("playerList"), &playerList);
+    engine.rootContext()->setContextProperty(QStringLiteral("playerList"), &t->playerList);
     engine.load(QUrl(QLatin1String("qrc:/Layout.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
 
     return app.exec();
+}
+
+void tst() {
+    return;
 }

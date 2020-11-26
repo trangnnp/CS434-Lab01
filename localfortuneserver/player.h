@@ -14,6 +14,7 @@ public:
     string name;
     int stauts = 0;
     int score = 0;
+    string avatar = "white";
     QTcpSocket *clientSocket;
 };
 

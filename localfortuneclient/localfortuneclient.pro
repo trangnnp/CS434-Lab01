@@ -2,13 +2,15 @@ HEADERS       = client.h \
     mainwindow.h \
     pack.h \
     playerlist.h \
-    playermodel.h
+    playermodel.h \
+    testt.h
 SOURCES       = client.cpp \
                 main.cpp \
                 mainwindow.cpp \
                 pack.cpp \
                 playerlist.cpp \
-                playermodel.cpp
+                playermodel.cpp \
+                testt.cpp
 
 FORMS += \
     mainwindow.ui \

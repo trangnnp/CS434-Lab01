@@ -56,10 +56,12 @@ import QtQuick.Layouts 1.3
 import QtQml.Models 2.15
 import QtQuick.Controls.Styles 1.4
 import QtQuick 2.0
+import QtQuick.Controls 1.4
 
 import MainWindow 1.0
 import PlayerModel 1.0
 
+import QtQml 2.2
 
 ApplicationWindow {
     id: root
@@ -102,7 +104,6 @@ ApplicationWindow {
         Layout.fillHeight: true
         id : welcomePage
 
-
         Text {
             id : lable
             text: "Please enter your name:"
@@ -116,15 +117,12 @@ ApplicationWindow {
             id: edit
             anchors.topMargin: 10
             anchors.leftMargin: 10
-//            width: flick.width
             focus: true
             wrapMode: TextEdit.Wrap
             Layout.alignment: Qt.AlignHCenter
         }
 
         Button {
-//          anchors.top: parent.top
-//          anchors.left: parent.left
           anchors.topMargin: 40
           anchors.leftMargin: 20
           text: "Continue"
@@ -163,6 +161,123 @@ ApplicationWindow {
                     Layout.fillHeight: true
                     Layout.preferredHeight: 3
                     source: "qrc:/shared/2.jpg"
+
+                    Item {
+                        id: packTimer
+                        Canvas {
+                            id: canvas
+                            width: 240
+                            height: 240
+                            antialiasing: true
+
+                            property color primaryColor: "gray"
+                            property color secondaryColor: "#ff36ab"
+
+                            property real centerWidth: width / 2
+                            property real centerHeight: height / 2
+                            property real radius: Math.min(canvas.width, canvas.height) / 2
+
+                            property real minimumValue: 0
+                            property real maximumValue: 100
+                            property real currentValue: 33
+
+                            // this is the angle that splits the circle in two arcs
+                            // first arc is drawn from 0 radians to angle radians
+                            // second arc is angle radians to 2*PI radians
+                            property real angle: (currentValue - minimumValue) / (maximumValue - minimumValue) * 2 * Math.PI
+
+                            // we want both circle to start / end at 12 o'clock
+                            // without this offset we would start / end at 9 o'clock
+                            property real angleOffset: -Math.PI / 2
+
+                            property string text: "Text"
+
+                            signal clicked()
+
+                            onPrimaryColorChanged: requestPaint()
+                            onSecondaryColorChanged: requestPaint()
+                            onMinimumValueChanged: requestPaint()
+                            onMaximumValueChanged: requestPaint()
+                            onCurrentValueChanged: requestPaint()
+
+                            onPaint: {
+                                var ctx = getContext("2d");
+                                ctx.save();
+
+                                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                                // fills the mouse area when pressed
+                                // the fill color is a lighter version of the
+                                // secondary color
+
+                                if (mouseArea.pressed) {
+                                    ctx.beginPath();
+                                    ctx.lineWidth = 5;
+                                    ctx.fillStyle = Qt.lighter(canvas.secondaryColor, 1.25);
+                                    ctx.arc(canvas.centerWidth,
+                                            canvas.centerHeight,
+                                            canvas.radius,
+                                            0,
+                                            2*Math.PI);
+                                    ctx.fill();
+                                }
+
+                                // First, thinner arc
+                                // From angle to 2*PI
+
+                                ctx.beginPath();
+                                ctx.lineWidth = 5;
+                                ctx.strokeStyle = primaryColor;
+                                ctx.arc(canvas.centerWidth,
+                                        canvas.centerHeight,
+                                        canvas.radius,
+                                        angleOffset + canvas.angle,
+                                        angleOffset + 2*Math.PI);
+                                ctx.stroke();
+
+
+                                // Second, thicker arc
+                                // From 0 to angle
+
+                                ctx.beginPath();
+                                ctx.lineWidth = 5;
+                                ctx.strokeStyle = canvas.secondaryColor;
+                                ctx.arc(canvas.centerWidth,
+                                        canvas.centerHeight,
+                                        canvas.radius,
+                                        canvas.angleOffset,
+                                        canvas.angleOffset + canvas.angle);
+                                ctx.stroke();
+
+                                ctx.restore();
+                                text = currentValue
+                            }
+
+                            Text {
+                                anchors.centerIn: parent
+
+                                text: canvas.text
+                                color: canvas.primaryColor
+                            }
+
+                            MouseArea {
+                                id: mouseArea
+
+                                anchors.fill: parent
+                                onClicked: canvas.clicked()
+                                onPressedChanged: canvas.requestPaint()
+                            }
+                        }
+
+                         // Timer to show off the progress bar
+                         Timer {
+                             id: simpletimer
+                             interval: 1000
+                             repeat: true
+                             running: true
+                             onTriggered: canvas.currentValue < canvas.maximumValue ? canvas.currentValue += 1.0 : canvas.currentValue = canvas.minimumValue
+                         }
+                    }
                 }
                 Rectangle {
                     Layout.fillWidth: true
@@ -345,16 +460,14 @@ ApplicationWindow {
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
                                     Layout.preferredHeight: implicitHeight
-//                                    Layout.preferredWidth: columnWidths.code
                                     text: score
                                     color: "pink"
                                 }
-
                             }
                         }
                     }
-                    }
                 }
+        }
 
         }
 }
