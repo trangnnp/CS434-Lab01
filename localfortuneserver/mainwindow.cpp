@@ -152,7 +152,6 @@ void MainWindow::sendCorrectAnswer() {
 
 void MainWindow::sendData() {
     for (Player player : room->players) {
-        qDebug() << i;
         player.clientSocket->write(room->sendData);
     }
 }
