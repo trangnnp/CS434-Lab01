@@ -6,6 +6,10 @@
         <file>coffee4.jpg</file>
         <file>1.jpeg</file>
         <file>2.jpg</file>
+        <file>logo.png</file>
+        <file>save2.png</file>
+        <file>save3.png</file>
+        <file>info.png</file>
     </qresource>
     <qresource prefix="/qmlfiles"/>
     <qresource prefix="/">

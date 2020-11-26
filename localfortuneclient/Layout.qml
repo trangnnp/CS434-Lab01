@@ -159,29 +159,44 @@ ApplicationWindow {
                 anchors.fill: parent
                 spacing: 0
                 Image {
+                    id: image
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.preferredHeight: 3
                     source: "qrc:/shared/2.jpg"
+                    property real lineWidthx: 5
+
+                    Image {
+                        id: logo
+                        source: "qrc:/shared/logo.png"
+                        x: image.paintedWidth*0.444
+                        y: image.paintedHeight*0.134
+                        width: image.paintedHeight*0.23
+                        height: logo.width
+                    }
 
                     Item {
                         id: packTimer
+                        x: image.paintedWidth*0.444-image.lineWidthx*2
+                        y: image.paintedHeight*0.134-image.lineWidthx*2
                         Canvas {
                             id: canvas
-                            width: 240
-                            height: 240
+                            width: image.paintedHeight*0.23 + image.lineWidthx*4
+                            height: canvas.width
                             antialiasing: true
 
                             property color primaryColor: "gray"
                             property color secondaryColor: "#ff36ab"
 
+                            property real lineWidth: image.lineWidthx
                             property real centerWidth: width / 2
                             property real centerHeight: height / 2
-                            property real radius: Math.min(canvas.width, canvas.height) / 2
+                            property real radius: Math.min(canvas.width, canvas.height) / 2 - lineWidth/2
 
                             property real minimumValue: 0
                             property real maximumValue: 100
-                            property real currentValue: 33
+                            property real currentValue: 0
+
 
                             // this is the angle that splits the circle in two arcs
                             // first arc is drawn from 0 radians to angle radians
@@ -214,7 +229,7 @@ ApplicationWindow {
 
                                 if (mouseArea.pressed) {
                                     ctx.beginPath();
-                                    ctx.lineWidth = 5;
+                                    ctx.lineWidth = lineWidth;
                                     ctx.fillStyle = Qt.lighter(canvas.secondaryColor, 1.25);
                                     ctx.arc(canvas.centerWidth,
                                             canvas.centerHeight,
@@ -228,7 +243,7 @@ ApplicationWindow {
                                 // From angle to 2*PI
 
                                 ctx.beginPath();
-                                ctx.lineWidth = 5;
+                                ctx.lineWidth = lineWidth;
                                 ctx.strokeStyle = primaryColor;
                                 ctx.arc(canvas.centerWidth,
                                         canvas.centerHeight,
@@ -242,7 +257,7 @@ ApplicationWindow {
                                 // From 0 to angle
 
                                 ctx.beginPath();
-                                ctx.lineWidth = 5;
+                                ctx.lineWidth = lineWidth;
                                 ctx.strokeStyle = canvas.secondaryColor;
                                 ctx.arc(canvas.centerWidth,
                                         canvas.centerHeight,
@@ -280,6 +295,47 @@ ApplicationWindow {
                              onTriggered: canvas.currentValue < canvas.maximumValue ? canvas.currentValue += 1.0 : canvas.currentValue = canvas.minimumValue
                          }
                     }
+
+                    Image {
+                        id: save
+                        source: client.playerStatus == 0 ? "qrc:/shared/save2.png" : "qrc:/shared/save3.png"
+                        width: image.paintedHeight*0.25
+                        height: save.width
+                        x: image.paintedWidth - width - 10
+                        y: image.paintedHeight - height - 10
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                client.skipThisTurn();
+                            }
+                        }
+                    }
+
+                    Frame {
+                        x: image.paintedWidth*0.03
+                        y: image.paintedHeight*0.1
+                        Column {
+                            property var textSize: 14
+                            spacing: 5
+                            Text {
+                                text: '<b> Num. of Players: </b> meoooo'
+                                font.family: "Helvetica"; font.pointSize: textSize; color: textColor
+                            }
+                            Text {
+                                text: '<b> Num. of Questions: </b>'
+                                font.family: "Helvetica"; font.pointSize: textSize; color: textColor
+                            }
+                            Text {
+                                text: '<b> Current Question: </b>'
+                                font.family: "Helvetica"; font.pointSize: textSize; color: textColor
+                            }
+                            Text {
+                                text: '<b> Time limited: </b>'
+                                font.family: "Helvetica"; font.pointSize: textSize; color: textColor
+                            }
+                        }
+                    }
+
                 }
                 Rectangle {
                     Layout.fillWidth: true

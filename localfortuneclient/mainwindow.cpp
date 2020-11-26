@@ -218,6 +218,14 @@ void MainWindow::sendAnswer(int answer) {
     qDebug() << "Sent";
 }
 
+void MainWindow::skipThisTurn()
+{
+    if (playerStatus == 0) {
+        playerStatus = 1;
+        playerStatusUpdated();
+    }
+}
+
 
 void MainWindow::on_pushButton_clicked()
 {

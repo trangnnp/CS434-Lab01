@@ -21,6 +21,7 @@ class MainWindow : public QObject
     Q_INVOKABLE void printMessage(QString txt);
     Q_INVOKABLE void createMe(QString name);
     Q_INVOKABLE void sendAnswer(int answer);
+    Q_INVOKABLE void skipThisTurn();
     Q_PROPERTY(QString packq READ getQ NOTIFY curPackChanged);
     Q_PROPERTY(QString packa READ getA NOTIFY curPackChanged);
     Q_PROPERTY(QString packb READ getB NOTIFY curPackChanged);
@@ -32,6 +33,7 @@ class MainWindow : public QObject
     Q_PROPERTY(int bResult MEMBER bResult NOTIFY resultUpdated);
     Q_PROPERTY(int cResult MEMBER cResult NOTIFY resultUpdated);
     Q_PROPERTY(int dResult MEMBER dResult NOTIFY resultUpdated);
+    Q_PROPERTY(int playerStatus MEMBER playerStatus NOTIFY playerStatusUpdated);
 
 public:
 //    explicit MainWindow(QWidget *parent = 0);
@@ -45,6 +47,7 @@ private slots:
 signals:
     void curPackChanged();
     void resultUpdated();
+    void playerStatusUpdated();
 
 private:
     Ui::MainWindow *ui;
@@ -57,12 +60,17 @@ private:
     void updatePlayerInfo(string data);
     void addNewMsg(string data);
     string getTime();
+
+    int playerStatus=0;
+
     void splitConbinedCmd(vector<string>& res, const string& str, string delims);
     QString getQ() const{ return curPack.q; }
     QString getA() const{ return curPack.a; }
     QString getB() const{ return curPack.b; }
     QString getC() const{ return curPack.c; }
     QString getD() const{ return curPack.d; }
+
+    int getPlayerStatus() const{ return playerStatus; }
 
 //    int getAResult() const{ return curPack.aResult; }
 
