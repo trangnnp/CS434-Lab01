@@ -88,8 +88,11 @@ void MainWindow::onSocketStateChanged(QAbstractSocket::SocketState socketState)
 }
 
 void MainWindow::onGame() {
+    connect(room, SIGNAL(sendSignal()),this,SLOT(sendData()));
     room->isOnGame = true;
     room->start();
+
+    qDebug() << "Luigi";
 
 
 
@@ -144,6 +147,14 @@ void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
 void MainWindow::sendCorrectAnswer() {
     for (Player player : room->players) {
         player.clientSocket->write(sendConv("The correct answer is " + to_string(room->packs.at(room->curPackId).correct) + " ! ","K"));
+    }
+}
+
+void MainWindow::sendData() {
+    qDebug() << "vo dc send data";
+    qDebug() << room->sendData;
+    for (Player player : players) {
+        player.clientSocket->write(room->sendData);
     }
 }
 
