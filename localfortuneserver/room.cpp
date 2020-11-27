@@ -45,7 +45,7 @@ void Room::sendPlayersInfo() {
 string Room::playersInfo() {
     string data = "";
     for (Player player : players) {
-        data += player.name +"-"+to_string(player.score)+"-"+player.avatar + "-"+ to_string(player.stauts) + "*";
+        data += player.name +"-"+to_string(player.score)+"-"+player.avatar + "-"+ to_string(player.status) + "*";
     }
     return data;
 }
@@ -64,24 +64,52 @@ string Room::roomInfo() {
 }
 
 void Room::run() {
-    qDebug() << "running";
-    qDebug() << "Mario";
 
 //    sendAll(sendConv("Meooooooooooooooooooooooooooooooooooooo","N"));
 
-    for (int i=0; i<packs.size(); i++) {
-        curPackId++;
-        qDebug() << QByteArray::fromStdString("Sending " + to_string(curPackId));
-        string packQuestion = "Q=" + string(packs.at(i).q)+"\~" + "A=" + string(packs.at(i).a)+"\~"
-                            + "B=" + string(packs.at(i).b)+"\~" + "C=" + string(packs.at(i).c)+"\~"
-                            "D=" + string(packs.at(i).d)+"\~";
-        sendData = sendConv(packQuestion,"Q");
-        emitSendSignal();
-//        while (!isSent) {
+    curPackId = 0;
+    curPlayerId = 0;
+    isNext = false;
+    string packQuestion = "Q=" + string(packs.at(curPackId).q)+"\~" + "A=" + string(packs.at(curPackId).a)+"\~"
+                        + "B=" + string(packs.at(curPackId).b)+"\~" + "C=" + string(packs.at(curPackId).c)+"\~"
+                        + "D=" + string(packs.at(curPackId).d)+"\~" + "I=" + to_string(curPlayerId);
+    sendData = sendConv(packQuestion,"Q");
+    qDebug() << sendData;
+    emitSendSignal();
 
-//        }
-//        isSent = true;
+
+    while (isOnGame) {
+
+        if (isNext) {
+            if (curPackId == packs.size()) {
+                isOnGame = false;
+                break;
+            }
+            if (packs.at(curPackId).answered) {
+                curPackId++;
+                string packQuestion = "Q=" + string(packs.at(curPackId).q)+"\~" + "A=" + string(packs.at(curPackId).a)+"\~"
+                                    + "B=" + string(packs.at(curPackId).b)+"\~" + "C=" + string(packs.at(curPackId).c)+"\~"
+                                    + "D=" + string(packs.at(curPackId).d)+"\~" + "I=" + to_string(curPlayerId);
+                sendData = sendConv(packQuestion,"Q");
+                qDebug() << sendData;
+                emitSendSignal();
+            } else {
+                if (curPlayerId = players.size() + 1) {
+                    curPlayerId = 0;
+                } else {
+                    curPlayerId++;
+                }
+                string packQuestion = "Q=" + string(packs.at(curPackId).q)+"\~" + "A=" + string(packs.at(curPackId).a)+"\~"
+                                    + "B=" + string(packs.at(curPackId).b)+"\~" + "C=" + string(packs.at(curPackId).c)+"\~"
+                                    + "D=" + string(packs.at(curPackId).d)+"\~" + "I=" + to_string(curPlayerId);
+                sendData = sendConv(packQuestion,"Q");
+                emitSendSignal();
+            }
+            isNext = false;
+        }
+
     }
+
 
     exec();
 

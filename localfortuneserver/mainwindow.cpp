@@ -99,23 +99,34 @@ void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
     for (Player &player : room->players) {
         if (player.clientSocket == socket) {
             qDebug() << "======found player======";
-            if (player.stauts == 2) {
+            if (player.status == 3) {
                 socket->write(sendConv("You cannot answer this question!","N"));
                 return;
             }
 
+            room->isNext = true;
             socket->write(sendConv(to_string(room->packs.at(room->curPackId).correct),"K"));
             qDebug() << "======ready update scores======";
             socket->write(sendConv("really?","N"));
             if (answer == room->packs.at(room->curPackId).correct) {
                 socket->write(sendConv("You right!","N"));
                 player.score+=room->scorePerPack;
+                room->packs.at(room->curPackId).answered = true;
                 qDebug() << player.score;
             } else {
-                socket->write(sendConv("You wrong!","N"));
-                if (++player.stauts == 2) {
-                    socket->write(sendConv("Chet!","N"));
+                if (answer = -1) {
+                    player.status++;
+                    if (player.status == 2) {
+                        socket->write(sendConv("1 more chance","N"));
+                    }
+                    if (player.status == 3) {
+                        socket->write(sendConv("Chet!","N"));
+                    }
+
+                } else {
+                    socket->write(sendConv("You are wrong, bye bye!","N"));
                 }
+
             }
             room->sendPlayersInfo();
             return;

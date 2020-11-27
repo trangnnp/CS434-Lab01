@@ -34,7 +34,8 @@ public:
     vector<Player> players;
     vector<Pack> packs;
     int curPackId = -1;
-    int maxPlayer = 5;
+    int curPlayerId;
+    int maxPlayer = 1;
     void run() override;
     void sendAll(QByteArray dataSend);
     void sendPlayersInfo();
@@ -44,11 +45,12 @@ public:
     int scorePerPack=1000;
     bool isOnGame=false;
     void updateScores();
-    bool isSent=false;
+    bool isNext=false;
     QByteArray sendData;
     void emitSendSignal();
 signals:
     void sendSignal();
+    void answerSignal();
 };
 
 #endif // ROOM_H

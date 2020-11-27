@@ -12,10 +12,11 @@ public:
     Player();
     int id;
     string name;
-    int stauts = 0;
+    int status = 0;
     //    0: waiting, not in turn
     //    1: start, in turn
-    //    2: start, die
+    //    2: 1 more chance
+    //    3: sayonara
     int score = 0;
     string avatar = "white";
     QTcpSocket *clientSocket;

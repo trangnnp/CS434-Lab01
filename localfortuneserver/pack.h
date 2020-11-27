@@ -18,6 +18,7 @@ public:
     char* c;
     char* d;
     int correct;
+    bool answered = false;
 };
 
 #endif // PACK_H
