@@ -213,7 +213,7 @@ ApplicationWindow {
                             Text {
                                 text: "<b> " + name + "<b>"
                                 anchors.centerIn: parent
-                                color:  status == 0 ? statusNotInTurnColor : status == 1 ? statusInTurnColor : status == 2 ? statusDieColor : statusWaitingColor
+                                color:  status == 0 ? statusNotInTurnColor : status == 1 ? statusInTurnColor : statusDieColor
                                 transform: [
                                     Translate {y: -30}
                                 ]
@@ -356,7 +356,7 @@ ApplicationWindow {
 
                     Image {
                         id: save
-                        source: client.playerStatus == 0 ? "qrc:/shared/save2.png" : "qrc:/shared/save3.png"
+                        source: client.skipped === 0 ? "qrc:/shared/save2.png" : "qrc:/shared/save3.png"
                         width: image.paintedHeight*0.25
                         height: save.width
                         x: image.paintedWidth - width - 10

@@ -15,8 +15,8 @@ public:
     int status = 0;
     //    0: waiting, not in turn
     //    1: start, in turn
-    //    2: 1 more chance
-    //    3: sayonara
+    //    2: sayonara
+    bool skipped=false;
     int score = 0;
     string avatar = "white";
     QTcpSocket *clientSocket;

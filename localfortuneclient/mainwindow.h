@@ -37,7 +37,8 @@ public:
     Q_PROPERTY(int dResult MEMBER dResult NOTIFY resultUpdated);
     Q_PROPERTY(int kotae MEMBER kotae NOTIFY resultUpdated);
 
-    Q_PROPERTY(int playerStatus MEMBER playerStatus NOTIFY playerStatusUpdated);
+    Q_PROPERTY(int skipped MEMBER skipped NOTIFY playerInfoUpdated);
+    Q_PROPERTY(int playerStatus MEMBER playerStatus NOTIFY playerInfoUpdated);
     Q_PROPERTY(int totalQuestion MEMBER totalQuestion NOTIFY initRoom);
     Q_PROPERTY(int totalPlayer MEMBER totalPlayer NOTIFY initRoom);
     Q_PROPERTY(QString roomName MEMBER roomName NOTIFY initRoom);
@@ -51,7 +52,7 @@ public slots:
 signals:
     void curPackChanged();
     void resultUpdated();
-    void playerStatusUpdated();
+    void playerInfoUpdated();
     void initRoom();
     void packTimerTrigged();
 
@@ -74,6 +75,8 @@ private:
     QTimer *timerTurn = new QTimer(this);
 
     int playerStatus=0;
+    int playerId=0;
+    int skipped=0;
     int totalQuestion=0;
     int totalPlayer=0;
     int timeLimited=0;

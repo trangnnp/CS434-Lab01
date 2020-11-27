@@ -28,14 +28,14 @@ class Room: public QThread
 public:
     Room();
     char* name;
-    int limitPacks = 2;
-    int timeLimited = 5;
+    int limitPacks = 5;
+    int timeLimited = 10;
     int maxPacks = 30;
     vector<Player> players;
     vector<Pack> packs;
     int curPackId = -1;
-    int curPlayerId;
-    int maxPlayer = 1;
+    int curPlayerId=0;
+    int maxPlayer = 5;
     void run() override;
     void sendAll(QByteArray dataSend);
     void sendPlayersInfo();

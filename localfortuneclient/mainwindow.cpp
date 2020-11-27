@@ -44,6 +44,7 @@ void MainWindow::updatepackTimerValue() {
 
     if (packTimerValue >= timeLimited*1000) {
         timerTurn->stop();
+        packTimerValue = 0;
         sendAnswer(kotae);
     }
 
@@ -101,11 +102,7 @@ void MainWindow::splitQ(const string& str) {
     curPack.d = QByteArray::fromStdString(str.substr(previous+2,current - previous-3));
     curPackChanged();
 
-    qDebug() << curPack.q;
-    qDebug() << curPack.a;
-    qDebug() << curPack.b;
-    qDebug() << curPack.c;
-    qDebug() << curPack.d;
+    timerTurn->start(100);
 }
 
 void MainWindow::splitConbinedCmd(vector<string>& res, const string& str, string delims) {
@@ -131,11 +128,6 @@ void MainWindow::checkAnwer(int correct) {
     if (bResult == 0 and correct!=1) bResult=4;
     if (cResult == 0 and correct!=2) cResult=4;
     if (dResult == 0 and correct!=3) dResult=4;
-    qDebug() << aResult;
-    qDebug() << bResult;
-    qDebug() << cResult;
-    qDebug() << dResult;
-
 
     resultUpdated();
 }
@@ -143,17 +135,17 @@ void MainWindow::checkAnwer(int correct) {
 void MainWindow::onReadyRead() {
     QByteArray datas = _socket.readAll();
     string data = datas.toStdString();
-    qDebug() << QByteArray::fromStdString("datas: ") + datas;
+//    qDebug() << QByteArray::fromStdString("datas: ") + datas;
 
     vector<pair<string,string>> vec;
     string delimiter = "\n";
     splitS(data.append("##"),vec,delimiter);
 
-    qDebug() << vec.size();
+//    qDebug() << vec.size();
 
     for (auto i: vec) {
         qDebug() << QByteArray::fromStdString("first: ") + i.first[0];
-        qDebug() << QByteArray::fromStdString("second: "+ i.second);
+//        qDebug() << QByteArray::fromStdString("second: "+ i.second);
         switch(i.first[0]) {
             case 'N':
                 qDebug() << QByteArray::fromStdString(i.second);
@@ -161,7 +153,6 @@ void MainWindow::onReadyRead() {
                 break;
             case 'Q':
                 splitQ(i.second);
-                timerTurn->start(100);
                 break;
             case 'K':
                 qDebug() << QByteArray::fromStdString(i.second);
@@ -203,13 +194,18 @@ void MainWindow::updatePlayerInfo(string data) {
 
         Player p = Player();
         p.name =  QByteArray::fromStdString(info.at(0));
-        if (p.name == myName) {
-            p.name += " (you)";
-        }
         p.score = atoi(info.at(1).c_str());
         p.avatar = QByteArray::fromStdString("#" + info.at(2));
         p.status = atoi(info.at(3).c_str());
 
+        if (p.name == myName) {
+            p.name += " (you)";
+            playerStatus = p.status;
+            qDebug() << playerStatus;
+            skipped = atoi(info.at(4).c_str());
+        }
+
+        playerInfoUpdated();
         singletonData->playerList.appendItem(p);
     }
 }
@@ -249,20 +245,27 @@ void MainWindow::sendAnswer(int answer) {
     if (kotae == 2) cResult = 0;
     if (kotae == 3) dResult = 0;
 
-    _socket.write(sendConv(to_string(answer), "W"));
-    qDebug() << "Sent";
+    if (playerStatus == 1) {
+        _socket.write(sendConv(to_string(answer), "W"));
+        qDebug() << "Sent";
+    } else {
+        qDebug() << "Not Sent";
+    }
+
+
 }
 
 void MainWindow::skipThisTurn() {
-    if (playerStatus == 0) {
-        playerStatus = 1;
-        playerStatusUpdated();
+    if (skipped == 0) {
+        skipped = 1;
+        playerInfoUpdated();
     }
 
     kotae = -1;
 }
 
 void MainWindow::createMe(QString name) {
-    _socket.write(sendConv(name.toStdString(), "J"));
     myName = name;
+    qDebug() << myName;
+    _socket.write(sendConv(name.toStdString(), "J"));
 }

@@ -45,7 +45,7 @@ void Room::sendPlayersInfo() {
 string Room::playersInfo() {
     string data = "";
     for (Player player : players) {
-        data += player.name +"-"+to_string(player.score)+"-"+player.avatar + "-"+ to_string(player.status) + "*";
+        data += player.name +"-"+to_string(player.score)+"-"+player.avatar + "-"+ to_string(player.status) + "-"+ to_string(player.skipped ? 1 : 0) + "*";
     }
     return data;
 }
@@ -64,47 +64,44 @@ string Room::roomInfo() {
 }
 
 void Room::run() {
-
-//    sendAll(sendConv("Meooooooooooooooooooooooooooooooooooooo","N"));
-
     curPackId = 0;
-    curPlayerId = 0;
-    isNext = false;
-    string packQuestion = "Q=" + string(packs.at(curPackId).q)+"\~" + "A=" + string(packs.at(curPackId).a)+"\~"
-                        + "B=" + string(packs.at(curPackId).b)+"\~" + "C=" + string(packs.at(curPackId).c)+"\~"
-                        + "D=" + string(packs.at(curPackId).d)+"\~" + "I=" + to_string(curPlayerId);
-    sendData = sendConv(packQuestion,"Q");
-    qDebug() << sendData;
-    emitSendSignal();
-
+    curPlayerId = -1;
+    isNext = true;
 
     while (isOnGame) {
-
         if (isNext) {
-            if (curPackId == packs.size()) {
+            if (curPackId == packs.size() - 1) {
                 isOnGame = false;
                 break;
             }
+
             if (packs.at(curPackId).answered) {
                 curPackId++;
-                string packQuestion = "Q=" + string(packs.at(curPackId).q)+"\~" + "A=" + string(packs.at(curPackId).a)+"\~"
-                                    + "B=" + string(packs.at(curPackId).b)+"\~" + "C=" + string(packs.at(curPackId).c)+"\~"
-                                    + "D=" + string(packs.at(curPackId).d)+"\~" + "I=" + to_string(curPlayerId);
-                sendData = sendConv(packQuestion,"Q");
-                qDebug() << sendData;
-                emitSendSignal();
-            } else {
-                if (curPlayerId = players.size() + 1) {
-                    curPlayerId = 0;
-                } else {
-                    curPlayerId++;
-                }
-                string packQuestion = "Q=" + string(packs.at(curPackId).q)+"\~" + "A=" + string(packs.at(curPackId).a)+"\~"
-                                    + "B=" + string(packs.at(curPackId).b)+"\~" + "C=" + string(packs.at(curPackId).c)+"\~"
-                                    + "D=" + string(packs.at(curPackId).d)+"\~" + "I=" + to_string(curPlayerId);
-                sendData = sendConv(packQuestion,"Q");
-                emitSendSignal();
             }
+
+            if (curPlayerId != -1) {
+                if (players.at(curPlayerId).status != 2) {
+                    players.at(curPlayerId).status = 0;
+                }
+
+                curPlayerId++;
+
+                while (players.at(curPlayerId).status == 2) {
+                    curPlayerId == (players.size() - 1) ? curPlayerId = 0 : curPlayerId++;
+                }
+            } else {
+                curPlayerId = 0;
+            }
+
+            players.at(curPlayerId).status = 1;
+
+            string packQuestion = "Q=" + string(packs.at(curPackId).q)+"\~" + "A=" + string(packs.at(curPackId).a)+"\~"
+                                + "B=" + string(packs.at(curPackId).b)+"\~" + "C=" + string(packs.at(curPackId).c)+"\~"
+                                + "D=" + string(packs.at(curPackId).d)+"\~" + "I=" + to_string(curPlayerId);
+            sendPlayersInfo();
+
+            sendData = sendConv(packQuestion,"Q");
+            emitSendSignal();
             isNext = false;
         }
 
@@ -112,27 +109,6 @@ void Room::run() {
 
 
     exec();
-
-//    for (int i=0; i<packs.size(); i++) {
-//        qDebug() << QByteArray::fromStdString("Sending " + to_string(i));
-//        curPackId++;
-//        for (Player player : players) {
-//            qDebug() << QByteArray::fromStdString("send to player: " + to_string(player.id));
-//            string packQuestion = "Q=" + string(packs.at(i).q)+"\~" + "A=" + string(packs.at(i).a)+"\~"
-//                    + "B=" + string(packs.at(i).b)+"\~" + "C=" + string(packs.at(i).c)+"\~"
-//                    "D=" + string(packs.at(i).d)+"\~";
-//            QByteArray dataSend = sendConv(packQuestion,"Q");
-//            qDebug() << dataSend;
-//            player.clientSocket->write(dataSend);
-
-//        }
-
-//        if (!isOnGame) {
-//            return;
-//        }
-
-//        qDebug() << QByteArray::fromStdString("lan " + to_string(i));
-//    }
 }
 
 void Room::updateScores() {
