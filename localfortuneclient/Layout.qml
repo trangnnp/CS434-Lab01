@@ -69,7 +69,7 @@ ApplicationWindow {
     id: root
     visible: true
     width: 1200
-    height: 620
+    height: 680
 
     function myQmlFunction(msg) {
           console.log("Got message:", msg)

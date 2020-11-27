@@ -16,8 +16,9 @@ class MainWindow;
 class MainWindow : public QObject
 {
     Q_OBJECT
-    public:
+public:
     explicit MainWindow(QObject *parent = 0);
+    ~MainWindow();
     Q_INVOKABLE void printMessage(QString txt);
     Q_INVOKABLE void createMe(QString name);
     Q_INVOKABLE void sendAnswer(int answer);
@@ -40,15 +41,9 @@ class MainWindow : public QObject
     Q_PROPERTY(QString roomName MEMBER roomName NOTIFY initRoom);
     Q_PROPERTY(int timeLimited MEMBER timeLimited NOTIFY initRoom);
 
-public:
-//    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-
 public slots:
     void onReadyRead();
 
-private slots:
-    void on_pushButton_clicked();
 signals:
     void curPackChanged();
     void resultUpdated();

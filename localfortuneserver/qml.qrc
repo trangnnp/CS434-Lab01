@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/shared">
+        <file>2_60.png</file>
+        <file>2_65.png</file>
+        <file>2_70.png</file>
+        <file>2_75.png</file>
+        <file>logo.png</file>
+        <file>2.jpg</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>Layout.qml</file>
+    </qresource>
+</RCC>

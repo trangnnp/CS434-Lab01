@@ -12,15 +12,13 @@
 #include <sstream>
 #include <algorithm>
 #include <iterator>
+#include <QObject>
 
 using namespace std;
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow),
+MainWindow::MainWindow(QObject *parent):QObject(parent),
     _server(this)
 {
-    ui->setupUi(this);
     qDebug() << "Start server";
     qDebug() << packBank.packs.size();
 

@@ -17,18 +17,12 @@ namespace Ui {
 class MainWindow;
 }
 
-//connect guest - server: room names + username
-
-//                        split buffer in client
-//                        reconignize tags
-//                        add data to client pack
-
-class MainWindow : public QMainWindow
+class MainWindow : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QObject *parent = 0);
     ~MainWindow();
 
 public slots:

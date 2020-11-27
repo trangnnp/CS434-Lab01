@@ -245,17 +245,6 @@ void MainWindow::skipThisTurn()
     }
 }
 
-
-void MainWindow::on_pushButton_clicked()
-{
-    QString mString;
-    mString = ui->lineEdit->text();
-    ui->lineEdit->setText("");
-    createMe(mString);
-    // change man hinh
-    qDebug() << mString;
-}
-
 void MainWindow::createMe(QString name) {
     _socket.write(sendConv(name.toStdString(), "J"));
     myName = name;

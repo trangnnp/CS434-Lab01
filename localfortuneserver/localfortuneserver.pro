@@ -13,7 +13,9 @@ SOURCES       = \
                 packnew.cpp \
                 player.cpp \
                 room.cpp
-QT           += network widgets
+QT += network widgets
+QT += quick qml
+QT += qml quick core quickcontrols2
 #LIBS += -framework IOK it
 
 # install
@@ -22,3 +24,6 @@ INSTALLS += target
 
 FORMS += \
     mainwindow.ui
+
+RESOURCES += \
+    qml.qrc
