@@ -188,23 +188,25 @@ ApplicationWindow {
                     Layout.fillHeight: true
                     Layout.preferredHeight: 3
                     source: "qrc:/shared/2_75.png"
+
                     property real lineWidthx: 5
+                    property real recSize: 20
+                    property real viewSize: 100
+
 
                     PathView {
                         id: pathView
+
                         width: image.paintedHeight*0.3
                         height: width
                         x: 40
-                        y: image.paintedHeight*0.3
-
-                        property real recSize: 20
-                        property real viewSize: 200
+                        y: image.paintedHeight - 2*image.viewSize - 2*image.recSize
 
                         model: PlayerModel {
                             list: playerList
                         }
                         delegate: Rectangle {
-                            width: parent.recSize
+                            width: image.recSize
                             height: width
                             radius: 10
                             color: avatar
@@ -220,7 +222,7 @@ ApplicationWindow {
                         path: Path {
                             id: myPath
                             startX: 0; startY: 0
-                            PathSvg { path: "M " + pathView.viewSize + " " + pathView.viewSize + " m -" + pathView.viewSize + " 0 a " + pathView.viewSize + " " + pathView.viewSize + " 0 1 0 " + pathView.viewSize + " 0 a " + pathView.viewSize + " " + pathView.viewSize + " 0 1 0 -" + pathView.viewSize + " 0" }
+                            PathSvg { path: "M " + image.viewSize + " " + image.viewSize + " m -" + image.viewSize + " 0 a " + image.viewSize + " " + image.viewSize + " 0 1 0 " + 2*image.viewSize + " 0 a " + image.viewSize + " " + image.viewSize + " 0 1 0 -" + 2*image.viewSize + " 0" }
                         }
                     }
 

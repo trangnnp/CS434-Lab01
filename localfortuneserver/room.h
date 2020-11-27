@@ -34,7 +34,7 @@ public:
     vector<Player> players;
     vector<Pack> packs;
     int curPackId = -1;
-    int maxPlayer = 2;
+    int maxPlayer = 5;
     void run() override;
     void sendAll(QByteArray dataSend);
     void sendPlayersInfo();
