@@ -237,14 +237,12 @@ ApplicationWindow {
                         id: packTimer
                         x: image.paintedWidth*0.444-image.lineWidthx*2
                         y: image.paintedHeight*0.134-image.lineWidthx*2
+                        visible: client.packTimerValue > 0 ? true : false
                         Canvas {
                             id: canvas
                             width: image.paintedHeight*0.23 + image.lineWidthx*4
                             height: canvas.width
                             antialiasing: true
-
-                            property color primaryColor: "gray"
-                            property color secondaryColor: "#ff36ab"
 
                             property real lineWidth: image.lineWidthx
                             property real centerWidth: width / 2
@@ -252,9 +250,11 @@ ApplicationWindow {
                             property real radius: Math.min(canvas.width, canvas.height) / 2 - lineWidth/2
 
                             property real minimumValue: 0
-                            property real maximumValue: client.timeLimited*1000
-                            property real currentValue: 0
+                            property real maximumValue: client.timeLimited * 1000
+                            property real currentValue: client.packTimerValue
 
+                            property color primaryColor: "gray"
+                            property color secondaryColor:  client.packTimerValue < client.timeLimited*1000 *0.8 ? "#ff36ab" : "#d00000"
 
                             // this is the angle that splits the circle in two arcs
                             // first arc is drawn from 0 radians to angle radians
@@ -343,13 +343,13 @@ ApplicationWindow {
                         }
 
                          // Timer to show off the progress bar
-                         Timer {
-                             id: simpletimer
-                             interval: 100
-                             repeat: true
-                             running: true
-                             onTriggered: canvas.currentValue < canvas.maximumValue ? canvas.currentValue += interval: canvas.currentValue = canvas.minimumValue
-                         }
+//                         Timer {
+//                             id: simpletimer
+//                             interval: 100
+//                             repeat: true
+//                             running: true
+//                             onTriggered: canvas.currentValue < canvas.maximumValue ? canvas.currentValue += interval: canvas.currentValue = canvas.minimumValue
+//                         }
                     }
 
                     Image {
@@ -443,7 +443,7 @@ ApplicationWindow {
 
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    color: client.aResult===0 ? choosen : client.aResult===1 ? correct : client.aResult===2 ? correctans : client.aResult ==4 ? wrongans : normal
+                                    color:  client.aResult===1 ? correct : client.aResult===2 ? correctans : client.aResult ==4 ? wrongans : client.kotae===0 ? choosen : normal
                                     radius: 30
                                     border.color: boderColor
                                     border.width: 2
@@ -455,8 +455,7 @@ ApplicationWindow {
                                     MouseArea {
                                         anchors.fill: parent
                                         onClicked: {
-                                            client.sendAnswer(0)
-                                            client.aResult = 0
+                                            client.kotae = 0
                                         }
                                     }
                                 }
@@ -464,7 +463,7 @@ ApplicationWindow {
                                     id: packB
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    color: client.bResult===0 ? choosen : client.bResult===1 ? correct : client.bResult===2 ? correctans : client.bResult ==4 ? wrongans : normal
+                                    color: client.bResult===1 ? correct : client.bResult===2 ? correctans : client.bResult ==4 ? wrongans : client.kotae===1 ? choosen : normal
                                     radius: 30
                                     border.color: boderColor
                                     border.width: 2
@@ -476,8 +475,7 @@ ApplicationWindow {
                                     MouseArea {
                                         anchors.fill: parent
                                         onClicked: {
-                                            client.sendAnswer(1)
-                                            client.bResult = 0
+                                            client.kotae = 1
                                         }
                                     }
                                 }
@@ -497,7 +495,7 @@ ApplicationWindow {
                                     id: packC
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    color: client.cResult===0 ? choosen : client.cResult===1 ? correct : client.cResult===2 ? correctans : client.cResult ==4 ? wrongans : normal
+                                    color: client.cResult===1 ? correct : client.cResult===2 ? correctans : client.cResult==4 ? wrongans : client.kotae===2 ? choosen : normal
                                     radius: 30
                                     border.color: boderColor
                                     border.width: 2
@@ -509,8 +507,7 @@ ApplicationWindow {
                                     MouseArea {
                                         anchors.fill: parent
                                         onClicked: {
-                                            client.sendAnswer(2)
-                                            client.cResult = 0
+                                            client.kotae = 2
                                         }
                                     }
                                 }
@@ -518,7 +515,7 @@ ApplicationWindow {
                                     id: packD
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    color: client.dResult===0 ? choosen : client.dResult===1 ? correct : client.dResult===2 ? correctans : client.dResult ==4 ? wrongans : normal
+                                    color: client.dResult===1 ? correct : client.dResult===2 ? correctans : client.dResult ==4 ? wrongans : client.kotae===3 ? choosen : normal
                                     radius: 30
                                     border.color: boderColor
                                     border.width: 2
@@ -531,8 +528,7 @@ ApplicationWindow {
                                     MouseArea {
                                         anchors.fill: parent
                                         onClicked: {
-                                            client.sendAnswer(3)
-                                            client.dResult = 0
+                                            client.kotae = 3
                                         }
                                     }
                                 }

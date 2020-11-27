@@ -29,15 +29,25 @@ MainWindow::MainWindow(QObject *parent):QObject(parent) {
     msg.content = QByteArray::fromStdString("Hello!");
     msg.sender = QByteArray::fromStdString("Server");
     singletonData->msgList.appendItem(msg);
+
+    connect(timerTurn, &QTimer::timeout, this, &MainWindow::updatepackTimerValue);
 }
 
-void MainWindow::printMessage(QString txt)
-{
+void MainWindow::printMessage(QString txt) {
 qDebug() << "Message from QML: " << txt;
 
 }
 
+void MainWindow::updatepackTimerValue() {
+    packTimerValue+=timerTurn->interval();
+    packTimerTrigged();
 
+    if (packTimerValue >= timeLimited*1000) {
+        timerTurn->stop();
+        sendAnswer(kotae);
+    }
+
+}
 MainWindow::~MainWindow() {
 //    delete ui;
 }
@@ -151,6 +161,7 @@ void MainWindow::onReadyRead() {
                 break;
             case 'Q':
                 splitQ(i.second);
+                timerTurn->start(100);
                 break;
             case 'K':
                 qDebug() << QByteArray::fromStdString(i.second);
@@ -233,16 +244,22 @@ string MainWindow::getTime() {
 }
 
 void MainWindow::sendAnswer(int answer) {
+    if (kotae == 0) aResult = 0;
+    if (kotae == 1) bResult = 0;
+    if (kotae == 2) cResult = 0;
+    if (kotae == 3) dResult = 0;
+
     _socket.write(sendConv(to_string(answer), "W"));
     qDebug() << "Sent";
 }
 
-void MainWindow::skipThisTurn()
-{
+void MainWindow::skipThisTurn() {
     if (playerStatus == 0) {
         playerStatus = 1;
         playerStatusUpdated();
     }
+
+    kotae = -1;
 }
 
 void MainWindow::createMe(QString name) {

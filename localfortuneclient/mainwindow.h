@@ -7,6 +7,7 @@
 #include "pack.h"
 #include "singletondata.h"
 #include <QObject>
+#include <QTimer>
 
 
 namespace Ui {
@@ -34,12 +35,15 @@ public:
     Q_PROPERTY(int bResult MEMBER bResult NOTIFY resultUpdated);
     Q_PROPERTY(int cResult MEMBER cResult NOTIFY resultUpdated);
     Q_PROPERTY(int dResult MEMBER dResult NOTIFY resultUpdated);
+    Q_PROPERTY(int kotae MEMBER kotae NOTIFY resultUpdated);
 
     Q_PROPERTY(int playerStatus MEMBER playerStatus NOTIFY playerStatusUpdated);
     Q_PROPERTY(int totalQuestion MEMBER totalQuestion NOTIFY initRoom);
     Q_PROPERTY(int totalPlayer MEMBER totalPlayer NOTIFY initRoom);
     Q_PROPERTY(QString roomName MEMBER roomName NOTIFY initRoom);
     Q_PROPERTY(int timeLimited MEMBER timeLimited NOTIFY initRoom);
+
+    Q_PROPERTY(int packTimerValue MEMBER packTimerValue NOTIFY packTimerTrigged);
 
 public slots:
     void onReadyRead();
@@ -49,6 +53,7 @@ signals:
     void resultUpdated();
     void playerStatusUpdated();
     void initRoom();
+    void packTimerTrigged();
 
 private:
     Ui::MainWindow *ui;
@@ -60,9 +65,13 @@ private:
     QByteArray sendConv(string data, string tag);
     void updatePlayerInfo(string data);
     void addNewMsg(string data);
+    void updatepackTimerValue();
     void extractRoomInfo(string data);
     string getTime();
     QString myName;
+
+    int packTimerValue;
+    QTimer *timerTurn = new QTimer(this);
 
     int playerStatus=0;
     int totalQuestion=0;
@@ -87,6 +96,7 @@ private:
     int bResult=3;
     int cResult=3;
     int dResult=3;
+    int kotae=-1;
 
     Pack curPack = Pack();
     SingletonClass *singletonData = SingletonClass::Instance();
