@@ -98,43 +98,66 @@ ApplicationWindow {
         id: client
     }
 
-
-    ColumnLayout{
-        spacing: 2
-        Layout.alignment: Qt.AlignHCenter
+    Image {
+        id : welcomePage
         Layout.fillWidth: true
         Layout.fillHeight: true
-        id : welcomePage
+        source: "qrc:/shared/2_75.png"
+        anchors.fill: parent
 
-        Text {
-            id : lable
-            text: "Please enter your name:"
-            font.family: "Helvetica"
-            font.pointSize: 16
-            color: "black"
-            Layout.alignment: Qt.AlignHCenter
+        property real lineWidthx: 5
+
+        Image {
+            id: logo1
+            source: "qrc:/shared/logo.png"
+            x: welcomePage.paintedWidth*0.444
+            y: welcomePage.paintedHeight*0.134
+            width: welcomePage.paintedHeight*0.23
+            height: logo1.width
         }
 
-        TextEdit {
-            id: edit
-            anchors.topMargin: 10
-            anchors.leftMargin: 10
-            focus: true
-            wrapMode: TextEdit.Wrap
-            Layout.alignment: Qt.AlignHCenter
-        }
+        Rectangle {
+            id: name_textbox
+            width: welcomePage.width*0.4
+            height: welcomePage.height*0.3
+            color: "white"
+            opacity: 0.7
+            layer.enabled: true
+            x: welcomePage.width*0.52 - width/2
+            y: welcomePage.height*0.5
+            Rectangle {
+                anchors.centerIn: parent
+                height: enter_name.height + input_name.height
+                width: enter_name.width + input_name.width
+                Label {
+                    id: enter_name
+                    text: "Enter your name"
+                    font.family: font.name
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.pixelSize: 25
+                    font.bold: true
+                    font.capitalization: Font.AllUppercase
+                }
+                TextField {
+                    id: input_name
+                    anchors.top: enter_name.bottom
+                    anchors.topMargin: 10
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.pixelSize: 18
 
-        Button {
-          anchors.topMargin: 40
-          anchors.leftMargin: 20
-          text: "Continue"
-          onClicked: {
-              client.createMe(edit.text)
-              welcomePage.visible = false
-              onGameLayout.visible = true
-          }
+                    function _onEnterPressed(event) {
+                        client.createMe(input_name.text)
+                        welcomePage.visible = false
+                        onGameLayout.visible = true
+                    }
+
+                    Keys.onReturnPressed: { _onEnterPressed(event) }
+                    Keys.onEnterPressed: { _onEnterPressed(event) }
+                }
+            }
         }
     }
+
 
     GridLayout {
         id: onGameLayout
@@ -164,7 +187,7 @@ ApplicationWindow {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.preferredHeight: 3
-                    source: "qrc:/shared/2_60.png"
+                    source: "qrc:/shared/2_75.png"
                     property real lineWidthx: 5
 
                     PathView {
