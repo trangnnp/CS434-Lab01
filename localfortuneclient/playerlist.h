@@ -11,6 +11,10 @@ struct Player
     QString name;
     int score;
     QString avatar;
+    int status;
+//    0: waiting, not in turn
+//    1: start, in turn
+//    2: start, die
 };
 
 class PlayerList : public QObject

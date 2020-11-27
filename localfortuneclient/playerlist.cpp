@@ -17,7 +17,7 @@ bool PlayerList::setItemAt(int index, const Player &item)
         return false;
 
     const Player &oldItem = mItems.at(index);
-    if (item.name == oldItem.name && item.score == oldItem.score)
+    if (item.name == oldItem.name && item.score == oldItem.score && item.status == oldItem.status)
         return false;
 
     mItems[index] = item;
@@ -52,5 +52,5 @@ void PlayerList::resetItems()
         emit preItemRemoved(i);
         mItems.removeAt(i);
         emit postItemRemoved();
-     }
+    }
 }

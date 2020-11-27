@@ -30,6 +30,8 @@ QVariant PlayerModel::data(const QModelIndex &index, int role) const
         return QVariant(item.score);
     case AvatarRole:
         return QVariant(item.avatar);
+    case StatusRole:
+        return QVariant(item.status);
     }
 
     return QVariant();
@@ -50,6 +52,9 @@ bool PlayerModel::setData(const QModelIndex &index, const QVariant &value, int r
         break;
     case AvatarRole:
         item.avatar = value.toString();
+        break;
+    case StatusRole:
+        item.status = value.toInt();
         break;
     }
 
@@ -74,6 +79,7 @@ QHash<int, QByteArray> PlayerModel::roleNames() const
     names[NameRole] = "name";
     names[ScoreRole] = "score";
     names[AvatarRole] = "avatar";
+    names[StatusRole] = "status";
     return names;
 }
 

@@ -16,7 +16,8 @@ public:
     enum {
         NameRole = Qt::UserRole,
         ScoreRole,
-        AvatarRole
+        AvatarRole,
+        StatusRole
     };
 
     // Basic functionality:

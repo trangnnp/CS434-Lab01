@@ -89,6 +89,11 @@ ApplicationWindow {
     property var textColor: "white"
     property var prefixColor: "<b> <font color=\"#ffea00\">A:</font> <font color=\"#ffea00\"></font><b>"
 
+    property var statusWaitingColor: "white"
+    property var statusNotInTurnColor: "#e5e5e5"
+    property var statusInTurnColor: "#fca311"
+    property var statusDieColor: "#e5e5e5"
+
     MainWindow {
         id: client
     }
@@ -153,13 +158,48 @@ ApplicationWindow {
                 visible: true
                 anchors.fill: parent
                 spacing: 0
+
                 Image {
                     id: image
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.preferredHeight: 3
-                    source: "qrc:/shared/2.jpg"
+                    source: "qrc:/shared/2_60.png"
                     property real lineWidthx: 5
+
+                    PathView {
+                        id: pathView
+                        width: image.paintedHeight*0.3
+                        height: width
+                        x: 40
+                        y: image.paintedHeight*0.3
+
+                        property real recSize: 20
+                        property real viewSize: 200
+
+                        model: PlayerModel {
+                            list: playerList
+                        }
+                        delegate: Rectangle {
+                            width: parent.recSize
+                            height: width
+                            radius: 10
+                            color: avatar
+                            Text {
+                                text: "<b> " + name + "<b>"
+                                anchors.centerIn: parent
+                                color:  status == 0 ? statusNotInTurnColor : status == 1 ? statusInTurnColor : status == 2 ? statusDieColor : statusWaitingColor
+                                transform: [
+                                    Translate {y: -30}
+                                ]
+                            }
+                        }
+                        path: Path {
+                            id: myPath
+                            startX: 0; startY: 0
+                            PathSvg { path: "M " + pathView.viewSize + " " + pathView.viewSize + " m -" + pathView.viewSize + " 0 a " + pathView.viewSize + " " + pathView.viewSize + " 0 1 0 " + pathView.viewSize + " 0 a " + pathView.viewSize + " " + pathView.viewSize + " 0 1 0 -" + pathView.viewSize + " 0" }
+                        }
+                    }
 
                     Image {
                         id: logo

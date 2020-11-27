@@ -10,6 +10,10 @@
         <file>save2.png</file>
         <file>save3.png</file>
         <file>info.png</file>
+        <file>2_75.png</file>
+        <file>2_65.png</file>
+        <file>2_70.png</file>
+        <file>2_60.png</file>
     </qresource>
     <qresource prefix="/qmlfiles"/>
     <qresource prefix="/">
