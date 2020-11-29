@@ -89,6 +89,7 @@ void MainWindow::onSocketStateChanged(QAbstractSocket::SocketState socketState)
 }
 
 void MainWindow::onGame() {
+    countActive = room->players.size();
     connect(room, SIGNAL(sendSignal()),this,SLOT(sendData()));
     room->isOnGame = true;
     room->start();
@@ -114,6 +115,8 @@ void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
                 player.score+=room->scorePerPack;
                 room->packs.at(room->curPackId).answered = true;
                 qDebug() << player.score;
+
+                if (countActive ==1) endGame();
             } else {
                 if (answer == -1) {
                     if (player.skipped == false) {
@@ -122,24 +125,51 @@ void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
                     } else {
                         player.status = 2;
                         socket->write(sendConv("Chet!","N"));
+                        countActive--;
                     }
 
                 } else {
                     socket->write(sendConv("You are wrong!","N"));
+                    room->packs.at(room->curPackId).answered = true;
+                    if (countActive ==1) countActive--;
+
                 }
             }
 
-            if (room->curPackId >= room->packs.size() - 1) {
-                room->isNext = true;
+            if (countActive == 0 || room->curPackId == room->packs.size()-1) {
+                endGame();
             }
+
             room->sendPlayersInfo();
+            updatePlayerInfo();
+            room->isNext = true;
             return;
         }
     }
 }
 
+void MainWindow::endGame() {
+
+    int highestScore = 0;
+
+    for (Player p:room->players){
+        if (p.status != 2) {
+            if (p.score > highestScore) highestScore = p.score;
+        }
+    }
+
+    for (Player p:room->players){
+        if (p.status != 2 && p.score == highestScore) {
+            p.status = 3;
+        }
+    }
+
+    updatePlayerInfo();
+    room->sendAll(sendConv("Game Ended", "Y"));
+}
+
 void MainWindow::sendCorrectAnswer() {
-    room->sendAll(sendConv("The correct answer is " + to_string(room->packs.at(room->curPackId).correct) + " ! ","K"));
+    room->sendAll(sendConv("The correct answer is " + to_string(room->packs.at(room->curPackId).correct) + " ! ","N"));
 }
 
 void MainWindow::sendData() {
@@ -216,7 +246,6 @@ void MainWindow::addNewPlayer(string name, QTcpSocket* socket) {
          qDebug() << room->packs.size();
          onGame();
      }
-
 }
 
 

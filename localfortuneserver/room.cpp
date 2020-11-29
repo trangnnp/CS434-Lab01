@@ -71,8 +71,16 @@ void Room::run() {
     curPlayerId = -1;
     isNext = true;
 
+    qDebug() << "============First turn=============";
+    qDebug() << limitPacks;
+    qDebug() << maxPlayer;
+    qDebug() << timeLimited;
+    qDebug() << "============First turn=============";
+
+
     while (isOnGame) {
         if (isNext) {
+            qDebug() << "============next turn=============";
             if (curPackId == packs.size() - 1) {
                 isOnGame = false;
                 qDebug() << "============end game=============";
@@ -83,12 +91,20 @@ void Room::run() {
                 curPackId++;
             }
 
+            qDebug() << curPackId;
+
+            if (curPackId == limitPacks) {
+                isOnGame = false;
+                qDebug() << "============end game 1=============";
+                return;
+            }
+
             if (curPlayerId != -1) {
                 if (players.at(curPlayerId).status != 2) {
                     players.at(curPlayerId).status = 0;
                 }
 
-                curPlayerId++;
+                curPlayerId == (players.size() - 1) ? curPlayerId = 0 : curPlayerId++;
 
                 while (players.at(curPlayerId).status == 2) {
                     curPlayerId == (players.size() - 1) ? curPlayerId = 0 : curPlayerId++;
@@ -98,6 +114,8 @@ void Room::run() {
             }
 
             players.at(curPlayerId).status = 1;
+            qDebug() << "============player id=============";
+            qDebug() << curPlayerId;
 
             string packQuestion = "Q=" + string(packs.at(curPackId).q)+"\~" + "A=" + string(packs.at(curPackId).a)+"\~"
                                 + "B=" + string(packs.at(curPackId).b)+"\~" + "C=" + string(packs.at(curPackId).c)+"\~"
@@ -118,7 +136,6 @@ void Room::run() {
             isNext = false;
         }
     }
-
 
     exec();
 }

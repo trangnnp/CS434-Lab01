@@ -66,11 +66,12 @@ private:
     void updatePlayerInfo(string data);
     void addNewMsg(string data);
     void updatepackTimerValue();
+    void endGame();
     void extractRoomInfo(string data);
     string getTime();
     QString myName;
 
-    int packTimerValue;
+    int packTimerValue=0;
     QTimer *timerTurn = new QTimer(this);
 
     int playerStatus=0;

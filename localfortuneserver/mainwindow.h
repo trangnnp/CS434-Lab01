@@ -62,15 +62,18 @@ private:
     void collectAnswer(int answer, QTcpSocket* socket);
     void sendCorrectAnswer();
     void updatePlayerInfo();
+    void endGame();
     string getSenderFromConnection(QTcpSocket *connection);
     void addNewMsg(string data, string sender);
     string getTime();
+
+    int countActive;
 
     string colors[10] = {"fb8f67", "ffc2b4", "f8e16c", "00c49a", "156064", "f2b5d4", "8980f5", "ff70a6", "ffc462", "d0e3cc"};
 
     SingletonClass *singletonData = SingletonClass::Instance();
 
-    QString packq = "aaaaaaaaaaaa";
+    QString packq;
     QString packa;
     QString packb;
     QString packc;

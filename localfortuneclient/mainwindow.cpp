@@ -17,6 +17,7 @@
 #include <QQmlApplicationEngine>
 #include "singletondata.h"
 #include <time.h>
+#include <iostream>
 
 MainWindow::MainWindow(QObject *parent):QObject(parent) {
     _socket.connectToHost(QHostAddress("127.0.0.1"), 4242);
@@ -42,6 +43,8 @@ void MainWindow::updatepackTimerValue() {
     packTimerValue+=timerTurn->interval();
     packTimerTrigged();
 
+//    qDebug() << packTimerValue;
+
     if (packTimerValue >= timeLimited*1000) {
         timerTurn->stop();
         packTimerValue = 0;
@@ -61,7 +64,6 @@ void splitS(const string& str, Container& cont, const string& delims = "\n")
     mid = str.find_first_of("%%",previous);
     current = min(str.length(), str.find_first_of("##",previous+2));
 
-
     pair<string,string> packet;
     while (current != std::string::npos) {
         packet.first = str.substr(previous+2, mid - previous - 2);
@@ -76,7 +78,6 @@ void splitS(const string& str, Container& cont, const string& delims = "\n")
 QByteArray MainWindow::sendConv(string data, string tag) {
     return QByteArray::fromStdString("##"+tag+"%%"+data);
 }
-
 
 void MainWindow::splitQ(const string& str) {
     const string& delims = "\~";
@@ -101,6 +102,13 @@ void MainWindow::splitQ(const string& str) {
 
     curPack.d = QByteArray::fromStdString(str.substr(previous+2,current - previous-3));
     curPackChanged();
+
+    aResult=3;
+    bResult=3;
+    cResult=3;
+    dResult=3;
+    kotae=-1;
+    resultUpdated();
 
     timerTurn->start(100);
 }
@@ -145,7 +153,7 @@ void MainWindow::onReadyRead() {
 
     for (auto i: vec) {
         qDebug() << QByteArray::fromStdString("first: ") + i.first[0];
-//        qDebug() << QByteArray::fromStdString("second: "+ i.second);
+        qDebug() << QByteArray::fromStdString("second: "+ i.second);
         switch(i.first[0]) {
             case 'N':
                 qDebug() << QByteArray::fromStdString(i.second);
@@ -176,9 +184,21 @@ void MainWindow::onReadyRead() {
                 qDebug() << QByteArray::fromStdString(i.second);
                 extractRoomInfo(i.second);
                 break;
+            case 'Y':
+                qDebug() << QByteArray::fromStdString(i.second);
+                endGame();
+                break;
         }
     }
 }
+
+void MainWindow::endGame() {
+    if (playerStatus == 3) {
+        qDebug() << "==========ehehe============";
+    }
+
+}
+
 
 void MainWindow::updatePlayerInfo(string data) {
     singletonData->playerList.resetItems();
@@ -223,8 +243,8 @@ void MainWindow::extractRoomInfo(string data) {
     string delimiter = "-";
     splitConbinedCmd(info, data, delimiter);
     roomName = QByteArray::fromStdString(info.at(0));
-    totalQuestion = atoi(info.at(1).c_str());
-    totalPlayer = atoi(info.at(2).c_str());
+    totalPlayer = atoi(info.at(1).c_str());
+    totalQuestion = atoi(info.at(2).c_str());
     timeLimited = atoi(info.at(3).c_str());
     initRoom();
 }
@@ -244,6 +264,8 @@ void MainWindow::sendAnswer(int answer) {
     if (kotae == 1) bResult = 0;
     if (kotae == 2) cResult = 0;
     if (kotae == 3) dResult = 0;
+
+    resultUpdated();
 
     if (playerStatus == 1) {
         _socket.write(sendConv(to_string(answer), "W"));
