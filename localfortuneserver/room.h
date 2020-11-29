@@ -26,8 +26,8 @@ class Room: public QThread
 {
     Q_OBJECT
 public:
-    Room();
-    char* name;
+    Room(QObject *parent = 0);
+    QString name = "Camel";
     int limitPacks = 5;
     int timeLimited = 10;
     int maxPacks = 30;
@@ -35,7 +35,7 @@ public:
     vector<Pack> packs;
     int curPackId = -1;
     int curPlayerId=0;
-    int maxPlayer = 5;
+    int maxPlayer = 2;
     void run() override;
     void sendAll(QByteArray dataSend);
     void sendPlayersInfo();
@@ -48,9 +48,28 @@ public:
     bool isNext=false;
     QByteArray sendData;
     void emitSendSignal();
+
+    Q_PROPERTY(int totalQuestion MEMBER limitPacks NOTIFY initRoom);
+    Q_PROPERTY(int totalPlayer MEMBER maxPlayer NOTIFY initRoom);
+    Q_PROPERTY(QString roomName MEMBER name NOTIFY initRoom);
+    Q_PROPERTY(int timeLimited MEMBER timeLimited NOTIFY initRoom);
+
+    QString packq = "aaaaaaaaaaaa";
+    QString packa;
+    QString packb;
+    QString packc;
+    QString packd;
+    int kotae=-1;
+
 signals:
     void sendSignal();
     void answerSignal();
+    void curPackChanged();
+    void initRoom();
+
+
+private:
+
 };
 
 #endif // ROOM_H

@@ -30,7 +30,6 @@ public:
     Q_PROPERTY(QString packc READ getC NOTIFY curPackChanged);
     Q_PROPERTY(QString packd READ getD NOTIFY curPackChanged);
 
-//    Q_PROPERTY(int aResult READ getAResult WRIRTE setAResult NOTIFY resultUpdated);
     Q_PROPERTY(int aResult MEMBER aResult NOTIFY resultUpdated);
     Q_PROPERTY(int bResult MEMBER bResult NOTIFY resultUpdated);
     Q_PROPERTY(int cResult MEMBER cResult NOTIFY resultUpdated);

@@ -11,12 +11,12 @@ class Pack
 {
 public:
     Pack();
-    Pack(char* q, char* a, char* b, char* c, char* d, int correct);
-    char* q;
-    char* a;
-    char* b;
-    char* c;
-    char* d;
+    Pack(string q, string a, string b, string c, string d, int correct);
+    string q;
+    string a;
+    string b;
+    string c;
+    string d;
     int correct;
     bool answered = false;
 };

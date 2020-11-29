@@ -23,9 +23,6 @@ MainWindow::MainWindow(QObject *parent):QObject(parent),
     qDebug() << packBank.packs.size();
 
     room->name = (char*)"Default Room Name";
-
-    _server.listen(QHostAddress::Any, 4242);
-    connect(&_server, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
 }
 
 MainWindow::~MainWindow()
@@ -36,6 +33,12 @@ MainWindow::~MainWindow()
     }
 
     delete ui;
+}
+
+void MainWindow::createRoom(){
+    initRoom();
+    _server.listen(QHostAddress::Any, 4242);
+    connect(&_server, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
 }
 
 template <class Container>
@@ -124,10 +127,11 @@ void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
                 } else {
                     socket->write(sendConv("You are wrong!","N"));
                 }
-
             }
 
-            room->isNext = true;
+            if (room->curPackId >= room->packs.size() - 1) {
+                room->isNext = true;
+            }
             room->sendPlayersInfo();
             return;
         }
@@ -139,9 +143,18 @@ void MainWindow::sendCorrectAnswer() {
 }
 
 void MainWindow::sendData() {
-    for (Player player : room->players) {
-        player.clientSocket->write(room->sendData);
-    }
+    room->sendAll(room->sendData);
+    updatePack();
+}
+
+void MainWindow::updatePack() {
+    packq = room->packq;
+    packa = room->packa;
+    packb = room->packb;
+    packc = room->packc;
+    packd = room->packd;
+    correct = room->kotae;
+    onCurPackChanged();
 }
 
 void MainWindow::onReadyRead() {
@@ -181,9 +194,10 @@ void MainWindow::addNewPlayer(string name, QTcpSocket* socket) {
     player.id = room->players.size();
     player.name = name;
     player.clientSocket = socket;
-    player.avatar = colors[rand() % 4];
+    player.avatar = colors[rand() % colors->size()];
     room->players.push_back(player);
     qDebug() << QByteArray::fromStdString("Add new player: " + name);
+    updatePlayerInfo();
 
      string data = room->playersInfo();
      for (Player player : room->players) {
@@ -214,4 +228,34 @@ void MainWindow::getPacksForRoom(Room *room) {
     for (int i: numbers) {
         room->packs.push_back(packBank.packs.at(i));
     }
+}
+
+
+void MainWindow::addNewMsg(string data) {
+    Msg msg = Msg();
+    msg.timestamp = QByteArray::fromStdString(getTime());
+    msg.content = QByteArray::fromStdString(data);
+    msg.sender = QByteArray::fromStdString("Server");
+    singletonData->msgList.appendItem(msg);
+}
+
+string MainWindow::getTime() {
+    tm * timeinfo;
+    time_t rawtime;
+    char timebuff[120] = {0};
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+    strftime(timebuff, 12, "%r", timeinfo);
+    return string(timebuff);
+}
+
+
+void MainWindow::updatePlayerInfo() {
+    singletonData->playerList.resetItems();
+
+    for (auto player: room->players) {
+        singletonData->playerList.appendItem(player);
+    }
+
+    playerInfoUpdated();
 }

@@ -1,18 +1,28 @@
 HEADERS       = \
     mainwindow.h \
+    msglist.h \
+    msgmodel.h \
     pack.h \
     packbank.h \
     packnew.h \
     player.h \
-    room.h
+    playerlist.h \
+    playermodel.h \
+    room.h \
+    singletondata.h
 SOURCES       = \
                 main.cpp \
                 mainwindow.cpp \
+                msglist.cpp \
+                msgmodel.cpp \
                 pack.cpp \
                 packbank.cpp \
                 packnew.cpp \
                 player.cpp \
-                room.cpp
+                playerlist.cpp \
+                playermodel.cpp \
+                room.cpp \
+                singletondata.cpp
 QT += network widgets
 QT += quick qml
 QT += qml quick core quickcontrols2

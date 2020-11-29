@@ -21,9 +21,12 @@
 #include <set>
 #include <QDebug>
 #include <algorithm>
+#include <QObject>
+#include <QString>
+
 using namespace std;
 
-Room::Room():QThread()
+Room::Room(QObject *parent):QThread()
 {
 
 }
@@ -45,7 +48,7 @@ void Room::sendPlayersInfo() {
 string Room::playersInfo() {
     string data = "";
     for (Player player : players) {
-        data += player.name +"-"+to_string(player.score)+"-"+player.avatar + "-"+ to_string(player.status) + "-"+ to_string(player.skipped ? 1 : 0) + "*";
+        data += player.name + "-"+to_string(player.score)+"-"+player.avatar + "-"+ to_string(player.status) + "-"+ to_string(player.skipped ? 1 : 0) + "*";
     }
     return data;
 }
@@ -56,7 +59,7 @@ void Room::sendRoomInfo() {
 
 string Room::roomInfo() {
     string data = "";
-    data += string(name) + "-";
+    data += name.toStdString() + "-";
     data += to_string(players.size()) + "-";
     data += to_string(packs.size()) + "-";
     data += to_string(timeLimited) + "-";
@@ -72,7 +75,8 @@ void Room::run() {
         if (isNext) {
             if (curPackId == packs.size() - 1) {
                 isOnGame = false;
-                break;
+                qDebug() << "============end game=============";
+                return;
             }
 
             if (packs.at(curPackId).answered) {
@@ -98,13 +102,21 @@ void Room::run() {
             string packQuestion = "Q=" + string(packs.at(curPackId).q)+"\~" + "A=" + string(packs.at(curPackId).a)+"\~"
                                 + "B=" + string(packs.at(curPackId).b)+"\~" + "C=" + string(packs.at(curPackId).c)+"\~"
                                 + "D=" + string(packs.at(curPackId).d)+"\~" + "I=" + to_string(curPlayerId);
+
+            packq = QByteArray::fromStdString(packs.at(curPackId).q);
+            packa = QByteArray::fromStdString(packs.at(curPackId).a);
+            packb = QByteArray::fromStdString(packs.at(curPackId).b);
+            packc = QByteArray::fromStdString(packs.at(curPackId).c);
+            packd = QByteArray::fromStdString(packs.at(curPackId).d);
+            kotae = packs.at(curPackId).correct;
+
             sendPlayersInfo();
+            qDebug() << "============meoooooooo=============";
 
             sendData = sendConv(packQuestion,"Q");
             emitSendSignal();
             isNext = false;
         }
-
     }
 
 
