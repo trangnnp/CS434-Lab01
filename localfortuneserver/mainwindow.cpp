@@ -170,6 +170,7 @@ void MainWindow::onReadyRead() {
     for (auto i: vec) {
         qDebug() << QByteArray::fromStdString("first: ") + i.first[0];
         qDebug() << QByteArray::fromStdString("second: "+ i.second);
+        addNewMsg(i.second, getSenderFromConnection(sender));
         switch(i.first[0]) {
             case 'J':
                 addNewPlayer(i.second, sender);
@@ -231,12 +232,19 @@ void MainWindow::getPacksForRoom(Room *room) {
 }
 
 
-void MainWindow::addNewMsg(string data) {
+void MainWindow::addNewMsg(string data, string sender) {
     Msg msg = Msg();
     msg.timestamp = QByteArray::fromStdString(getTime());
     msg.content = QByteArray::fromStdString(data);
-    msg.sender = QByteArray::fromStdString("Server");
+    msg.sender = QByteArray::fromStdString(sender);
     singletonData->msgList.appendItem(msg);
+}
+
+string MainWindow::getSenderFromConnection(QTcpSocket *connection) {
+    for (Player player: room->players) {
+        if (connection == player.clientSocket) return player.name;
+    }
+    return "GUESS";
 }
 
 string MainWindow::getTime() {
