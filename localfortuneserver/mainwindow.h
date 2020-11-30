@@ -11,6 +11,7 @@
 #include "packbank.h"
 #include "room.h"
 #include "singletondata.h"
+#include <QTimer>
 
 using namespace std;
 
@@ -27,6 +28,7 @@ public:
     ~MainWindow();
 
     Q_INVOKABLE void createRoom();
+    Q_INVOKABLE void resetRoom();
 
     Q_PROPERTY(QString packq MEMBER packq NOTIFY onCurPackChanged);
     Q_PROPERTY(QString packa MEMBER packa NOTIFY onCurPackChanged);
@@ -35,11 +37,14 @@ public:
     Q_PROPERTY(QString packd MEMBER packd NOTIFY onCurPackChanged);
     Q_PROPERTY(int correct MEMBER correct NOTIFY onCurPackChanged);
 
+    Q_PROPERTY(int startStatus MEMBER startStatus NOTIFY onStartStatusChanged);
+
 signals:
     void resultUpdated();
     void playerInfoUpdated();
     void initRoom();
     void onCurPackChanged();
+    void onStartStatusChanged();
 
 public slots:
     void onNewConnection();
@@ -57,6 +62,7 @@ private:
     Room *room = new Room();
     void getPacksForRoom(Room *room);
     void onGame();
+    void updatepackTimerValue();
     QByteArray sendConv(string data, string tag);
     void addNewPlayer(string name, QTcpSocket* socket);
     void collectAnswer(int answer, QTcpSocket* socket);
@@ -68,6 +74,7 @@ private:
     string getTime();
 
     int countActive;
+    QTimer *timerTurn = new QTimer(this);
 
     string colors[10] = {"fb8f67", "ffc2b4", "f8e16c", "00c49a", "156064", "f2b5d4", "8980f5", "ff70a6", "ffc462", "d0e3cc"};
 
@@ -79,6 +86,8 @@ private:
     QString packc;
     QString packd;
     int correct=-1;
+
+    int startStatus = 0; // 0: not able to start  1: able   3: restart    2: ongame
 };
 
 #endif // MAINWINDOW_H

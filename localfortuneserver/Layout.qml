@@ -65,8 +65,8 @@ ApplicationWindow {
 
     Rectangle   {
         id: settingLayout
-        x: background.paintedWidth*0.444
-        y: background.paintedHeight*0.4
+        x: background.paintedWidth*0.4
+        y: background.paintedHeight*0.5
         width: background.paintedHeight*0.4
         color: "yellow"
 
@@ -113,7 +113,7 @@ ApplicationWindow {
 
                 Button {
                     text: "Create room"
-                    width: settingLayout.width*0.6
+                    width: settingLayout.width
                     onClicked: {
                         settingLayout.visible = false
                         onGameLayout.visible = true
@@ -206,17 +206,26 @@ ApplicationWindow {
                     property real recSize: 20
                     property real viewSize: 100
 
-                    Image {
-                        id: save
-                        source: server.isOnGame === 0 ? "qrc:/shared/save2.png" : "qrc:/shared/save3.png"
+                    Rectangle {
+                        id: start
                         width: image.paintedHeight*0.25
-                        height: save.width
-                        x: image.paintedWidth - width - 10
-                        y: image.paintedHeight - height - 10
+                        height: start.width / 2
+                        x: image.paintedWidth - width
+                        y: image.paintedHeight - height
+                        radius: 5
+                        color: server.startStatus === 0 ? "grey" : server.startStatus === 1 ? "#90be6d" : server.startStatus ===2 ? "#3d405b" : "#ff6b6b"
+                        Label {
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            text: server.startStatus === 0 ? "waiting" : server.startStatus === 1 ? "Start Game" : server.startStatus ===2 ? "On game" : "Reset Game"
+                            color: "white"
+                            font.pixelSize: 18
+                        }
+
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
-                                server.skipThisTurn();
+                                server.resetRoom();
                             }
                         }
                     }

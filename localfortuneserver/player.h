@@ -17,6 +17,7 @@ public:
     //    1: start, in turn
     //    2: sayonara
     //    3: isWinner
+    //    4: NotBeWinner
     bool skipped=false;
     int score = 0;
     string avatar = "white";

@@ -21,6 +21,7 @@
 #include "pack.h"
 #include <QThread>
 #include <QObject>
+#include <QTimer>
 
 class Room: public QThread
 {
@@ -40,6 +41,7 @@ public:
     void sendAll(QByteArray dataSend);
     void sendPlayersInfo();
     void sendRoomInfo();
+    void updatepackTimerValue();
     string playersInfo();
     string roomInfo();
     int scorePerPack=1000;
@@ -69,6 +71,8 @@ signals:
 
 
 private:
+    QTimer *timerTurn = new QTimer(this);
+    string packQuestion;
 
 };
 

@@ -30,11 +30,6 @@ MainWindow::MainWindow(QObject *parent):QObject(parent) {
     singletonData->msgList.appendItem(msg);
 
     connect(timerTurn, &QTimer::timeout, this, &MainWindow::updatepackTimerValue);
-
-//    object = singletonData->component->create();
-
-//    QMetaObject::invokeMethod(singletonData->object, "popupMsg",
-//        Q_ARG(QVariant, "msg"));
 }
 
 void MainWindow::printMessage(QString txt) {
@@ -55,6 +50,7 @@ void MainWindow::updatepackTimerValue() {
     }
 
 }
+
 MainWindow::~MainWindow() {
 //    delete ui;
 }
@@ -112,7 +108,6 @@ void MainWindow::splitQ(const string& str) {
     dResult=3;
     kotae=-1;
     resultUpdated();
-
     timerTurn->start(100);
 }
 
@@ -163,7 +158,7 @@ void MainWindow::onReadyRead() {
                 addNewMsg(i.second);
                 break;
             case 'Q':
-//                sleep(3);
+                if (playerStatus==1) popup("Your turn!");
                 splitQ(i.second);
                 break;
             case 'K':
@@ -172,6 +167,13 @@ void MainWindow::onReadyRead() {
                 break;
             case 'E':
                 qDebug() << QByteArray::fromStdString(i.second);
+                popup("This name is taken!");
+                break;
+            case 'O':
+                qDebug() << QByteArray::fromStdString(i.second);
+                success = true;
+                successLogin();
+                popup("Welcome!");
                 break;
             case 'J':
                 qDebug() << QByteArray::fromStdString(i.second);
@@ -226,6 +228,8 @@ void MainWindow::updatePlayerInfo(string data) {
             playerStatus = p.status;
             qDebug() << playerStatus;
             skipped = atoi(info.at(4).c_str());
+            if (p.status == 3) win = 1;
+            if (p.status == 4) win = 0;
         }
 
         playerInfoUpdated();
@@ -263,9 +267,10 @@ string MainWindow::getTime() {
 }
 
 
-void MainWindow::popup(QVariant msg) {
-    QMetaObject::invokeMethod(singletonData->object, "popupMsg",
-                              Q_ARG(QVariant, msg));
+void MainWindow::popup(QString msg) {
+    msgNoti = msg;
+    notiType = 1;
+    notiUpdated();
 }
 
 void MainWindow::sleep(float seconds)
@@ -298,6 +303,8 @@ void MainWindow::skipThisTurn() {
         skipped = 1;
         playerInfoUpdated();
     }
+
+    popup("You skipped this turn!");
 
     kotae = -1;
 }

@@ -97,9 +97,15 @@ ApplicationWindow {
     property var msg: ""
 
     function popupMsg(msg) {
-        root.msg = msg;
         popup.open();
         animTimer.start();
+        client.notiType = 0
+    }
+
+    function popupMsgWin(msg) {
+        popupWin.open();
+        animTimerWin.start();
+        client.win = -1
     }
 
     Image {
@@ -114,7 +120,8 @@ ApplicationWindow {
             id: popup
             width: 200
             height: 50
-            x: rootItem.paintedWidth - width*1.05
+            visible: client.notiType === 0 ? false : true
+            x: rootItem.paintedWidth*2/3 - width/2
             y: 10
 
             focus: true
@@ -128,7 +135,14 @@ ApplicationWindow {
                 }
 
             Label {
-                text: root.msg
+                text: client.msgNoti
+                color: "white"
+            }
+
+            onVisibleChanged: {
+                if (popup.visible === true) {
+                    popupMsg(client.msgNoti)
+                }
             }
 
             background: Rectangle {
@@ -143,12 +157,58 @@ ApplicationWindow {
                 }
         }
 
+        Popup {
+            id: popupWin
+            width: rootItem.paintedWidth/2
+            height: rootItem.paintedHeight/2
+            visible: client.win == -1 ? false : true
+            x: rootItem.paintedWidth - width/2
+            y: rootItem.paintedHeight - height/2
+
+            focus: true
+            closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+            enter: Transition {
+                    NumberAnimation { property: "opacity"; from: 0.0; to: 1.0 }
+                }
+            exit: Transition {
+                    NumberAnimation { property: "opacity"; from: 1.0; to: 0.0 }
+                }
+
+            Label {
+                text: client.win === 0 ? "You Lose!" : client.win === 1 ? "You Win!" : ""
+                font.pixelSize: 28
+                color: "white"
+            }
+
+            onVisibleChanged: {
+                if (popupWin.visible === true) {
+                    popupMsg(client.msgNoti)
+                }
+            }
+
+            background: Rectangle {
+                        border.color: "#2c6e49"
+                        color: "#2b9348"
+            }
+
+            Timer {
+                    id: animTimerWin
+                    interval: 5000; repeat: false
+                    onTriggered: {
+                        popupWin.close()
+                    }
+                }
+        }
+
         Image {
             id : welcomePage
             Layout.fillWidth: true
             Layout.fillHeight: true
             source: "qrc:/shared/2_75.png"
             anchors.fill: parent
+
+            visible: client.success == false ? true : false
 
             property real lineWidthx: 5
 
@@ -193,8 +253,8 @@ ApplicationWindow {
 
                         function _onEnterPressed(event) {
                             client.createMe(input_name.text)
-                            welcomePage.visible = false
-                            onGameLayout.visible = true
+//                            welcomePage.visible = false
+//                            onGameLayout.visible = true
                         }
 
                         Keys.onReturnPressed: { _onEnterPressed(event);}
@@ -207,7 +267,7 @@ ApplicationWindow {
 
         GridLayout {
             id: onGameLayout
-            visible: false
+            visible: client.success
             anchors.fill: parent
             rowSpacing: 20
             columnSpacing: 0
@@ -425,6 +485,10 @@ ApplicationWindow {
                             Column {
 
                                 spacing: 5
+                                Text {
+                                    text: '<b>Room name: </b> ' + client.roomName
+                                    font.family: "Helvetica"; font.pointSize: frame.textSize; color: textColor
+                                }
                                 Text {
                                     text: '<b> Num. of Players: </b> ' + client.totalPlayer
                                     font.family: "Helvetica"; font.pointSize: frame.textSize; color: textColor

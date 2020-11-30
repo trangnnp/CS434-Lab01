@@ -37,12 +37,17 @@ public:
     Q_PROPERTY(int dResult MEMBER dResult NOTIFY resultUpdated);
     Q_PROPERTY(int kotae MEMBER kotae NOTIFY resultUpdated);
 
+    Q_PROPERTY(int win MEMBER win NOTIFY winUpdated);
+    Q_PROPERTY(int notiType MEMBER notiType NOTIFY notiUpdated);
+    Q_PROPERTY(QString msgNoti MEMBER msgNoti NOTIFY notiUpdated);
+
     Q_PROPERTY(int skipped MEMBER skipped NOTIFY playerInfoUpdated);
     Q_PROPERTY(int playerStatus MEMBER playerStatus NOTIFY playerInfoUpdated);
     Q_PROPERTY(int totalQuestion MEMBER totalQuestion NOTIFY initRoom);
     Q_PROPERTY(int totalPlayer MEMBER totalPlayer NOTIFY initRoom);
     Q_PROPERTY(QString roomName MEMBER roomName NOTIFY initRoom);
     Q_PROPERTY(int timeLimited MEMBER timeLimited NOTIFY initRoom);
+    Q_PROPERTY(bool success MEMBER success NOTIFY successLogin);
 
     Q_PROPERTY(int packTimerValue MEMBER packTimerValue NOTIFY packTimerTrigged);
 
@@ -55,6 +60,9 @@ signals:
     void playerInfoUpdated();
     void initRoom();
     void packTimerTrigged();
+    void notiUpdated();
+    void winUpdated();
+    void successLogin();
 
 private:
     Ui::MainWindow *ui;
@@ -72,7 +80,7 @@ private:
     void endGame();
     void extractRoomInfo(string data);
     string getTime();
-    void popup(QVariant msg);
+    void popup(QString msg);
     QString myName;
     void sleep(float seconds);
 
@@ -109,6 +117,11 @@ private:
     Pack curPack = Pack();
     SingletonClass *singletonData = SingletonClass::Instance();
 
+    QString msgNoti;
+    int win=-1;
+    int notiType=0;
+//    0: hide  1: show
+    bool success = false;
 };
 
 #endif // MAINWINDOW_H

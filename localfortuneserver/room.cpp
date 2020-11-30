@@ -28,6 +28,7 @@ using namespace std;
 
 Room::Room(QObject *parent):QThread()
 {
+    connect(timerTurn, &QTimer::timeout, this, &Room::updatepackTimerValue);
 
 }
 
@@ -55,6 +56,16 @@ string Room::playersInfo() {
 
 void Room::sendRoomInfo() {
     sendAll(sendConv(roomInfo(), "I"));
+}
+
+void Room::updatepackTimerValue()
+{
+    sendPlayersInfo();
+    qDebug() << "============meoooooooo=============";
+    sendData = sendConv(packQuestion,"Q");
+    emitSendSignal();
+    isNext = false;
+    timerTurn->stop();
 }
 
 string Room::roomInfo() {
@@ -117,7 +128,7 @@ void Room::run() {
             qDebug() << "============player id=============";
             qDebug() << curPlayerId;
 
-            string packQuestion = "Q=" + string(packs.at(curPackId).q)+"\~" + "A=" + string(packs.at(curPackId).a)+"\~"
+            packQuestion = "Q=" + string(packs.at(curPackId).q)+"\~" + "A=" + string(packs.at(curPackId).a)+"\~"
                                 + "B=" + string(packs.at(curPackId).b)+"\~" + "C=" + string(packs.at(curPackId).c)+"\~"
                                 + "D=" + string(packs.at(curPackId).d)+"\~" + "I=" + to_string(curPlayerId);
 
@@ -128,6 +139,7 @@ void Room::run() {
             packd = QByteArray::fromStdString(packs.at(curPackId).d);
             kotae = packs.at(curPackId).correct;
 
+//            timerTurn->start(2000);
             sendPlayersInfo();
             qDebug() << "============meoooooooo=============";
 

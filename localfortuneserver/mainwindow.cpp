@@ -22,7 +22,7 @@ MainWindow::MainWindow(QObject *parent):QObject(parent),
     qDebug() << "Start server";
     qDebug() << packBank.packs.size();
 
-    room->name = (char*)"Default Room Name";
+    connect(timerTurn, &QTimer::timeout, this, &MainWindow::updatepackTimerValue);
 }
 
 MainWindow::~MainWindow()
@@ -39,6 +39,38 @@ void MainWindow::createRoom(){
     initRoom();
     _server.listen(QHostAddress::Any, 4242);
     connect(&_server, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
+}
+
+void MainWindow::updatepackTimerValue() {
+    room->isNext = true;
+    timerTurn->stop();
+}
+
+void MainWindow::resetRoom() {
+    if (startStatus == 1) {
+        isOnGame = true;
+        getPacksForRoom(room);
+        startStatus = 2;
+        onStartStatusChanged();
+        qDebug() << room->packs.size();
+        onGame();
+    } else {
+        if (startStatus == 3) {
+            isOnGame = true;
+            getPacksForRoom(room);
+            startStatus = 1;
+            onStartStatusChanged();
+            qDebug() << room->packs.size();
+
+            for (Player p: room->players) {
+                p.score = 0;
+                p.skipped = false;
+                p.status = 0;
+            }
+
+            room->sendPlayersInfo();
+        }
+    }
 }
 
 template <class Container>
@@ -90,6 +122,8 @@ void MainWindow::onSocketStateChanged(QAbstractSocket::SocketState socketState)
 
 void MainWindow::onGame() {
     countActive = room->players.size();
+    qDebug() << "======countActive======";
+    qDebug() << countActive;
     connect(room, SIGNAL(sendSignal()),this,SLOT(sendData()));
     room->isOnGame = true;
     room->start();
@@ -115,8 +149,6 @@ void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
                 player.score+=room->scorePerPack;
                 room->packs.at(room->curPackId).answered = true;
                 qDebug() << player.score;
-
-                if (countActive ==1) endGame();
             } else {
                 if (answer == -1) {
                     if (player.skipped == false) {
@@ -133,11 +165,14 @@ void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
                     room->packs.at(room->curPackId).answered = true;
                     player.status = 2;
                     socket->write(sendConv("Chet!","N"));
-                    if (countActive ==1) countActive--;
+                    countActive--;
                 }
             }
 
-            if (countActive == 0 || room->curPackId == room->packs.size()-1) {
+            qDebug() << "======countActive======";
+            qDebug() << countActive;
+
+            if (countActive <= 1 || room->curPackId == room->packs.size()-1) {
                 endGame();
             }
 
@@ -150,9 +185,7 @@ void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
 }
 
 void MainWindow::endGame() {
-
     room->isOnGame = false;
-
     int highestScore = 0;
 
     for (Player p:room->players){
@@ -164,11 +197,16 @@ void MainWindow::endGame() {
     for (Player p:room->players){
         if (p.status != 2 && p.score == highestScore) {
             p.status = 3;
+        } else {
+            p.status = 4;
         }
     }
 
     updatePlayerInfo();
     room->sendAll(sendConv("Game Ended", "Y"));
+
+    startStatus = 3;
+    onStartStatusChanged();
 }
 
 void MainWindow::sendCorrectAnswer() {
@@ -224,6 +262,8 @@ void MainWindow::addNewPlayer(string name, QTcpSocket* socket) {
         }
     }
 
+    socket->write(sendConv("OK!","O"));
+
     Player player;
     player.id = room->players.size();
     player.name = name;
@@ -244,10 +284,8 @@ void MainWindow::addNewPlayer(string name, QTcpSocket* socket) {
      }
 
      if (room->players.size() >= room->maxPlayer) {
-         isOnGame = true;
-         getPacksForRoom(room);
-         qDebug() << room->packs.size();
-         onGame();
+         startStatus = 1;
+         onStartStatusChanged();
      }
 }
 
