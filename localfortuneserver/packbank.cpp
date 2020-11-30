@@ -248,4 +248,204 @@ void PackBank::initPacks() {
     pack.d=(char*)"Mars";
     pack.correct=2;
     packs.push_back(pack);
+
+    pack.q=(char*)"In what children's game are participants chased by someone designated IT";
+    pack.a=(char*)"Simon Says";
+    pack.b=(char*)"Charades";
+    pack.c=(char*)"Tag";
+    pack.d=(char*)"Hopscotch";
+    pack.correct=2;
+    packs.push_back(pack);
+
+    pack.q=(char*)"On a radio, stations are changed by using what control?";
+    pack.a=(char*)"Tuning";
+    pack.b=(char*)"Volume";
+    pack.c=(char*)"Bass";
+    pack.d=(char*)"Treble";
+    pack.correct=0;
+    packs.push_back(pack);
+
+    pack.q=(char*)"Which material is most dense?";
+    pack.a=(char*)"Silver";
+    pack.b=(char*)"Styrofoam";
+    pack.c=(char*)"Butter";
+    pack.d=(char*)"Gold";
+    pack.correct=3;
+    packs.push_back(pack);
+
+    pack.q=(char*)"Which state in the United States is largest by area?";
+    pack.a=(char*)"Alaska";
+    pack.b=(char*)"California";
+    pack.c=(char*)"Texas";
+    pack.d=(char*)"Hawaii";
+    pack.correct=0;
+    packs.push_back(pack);
+
+    pack.q=(char*)"What is Aurora Borealis commonly known as?";
+    pack.a=(char*)"Fairy Dust";
+    pack.b=(char*)"Northern Lights";
+    pack.c=(char*)"Book of ages";
+    pack.d=(char*)"a Game of Thrones main character";
+    pack.correct=2;
+    packs.push_back(pack);
+
+    pack.q=(char*)"In the U.S., if it's not Daylight Saving Time, it's what?";
+    pack.a=(char*)"Borrowed time";
+    pack.b=(char*)"Overtime";
+    pack.c=(char*)"Standard time";
+    pack.d=(char*)"Party time";
+    pack.correct=1;
+    packs.push_back(pack);
+
+    pack.q=(char*)"Which part of the body are you most likely to stub?";
+    pack.a=(char*)"Toe";
+    pack.b=(char*)"Knee";
+    pack.c=(char*)"Elbow";
+    pack.d=(char*)"Brain";
+    pack.correct=0;
+    packs.push_back(pack);
+
+    pack.q=(char*)"Which country is largest by area?";
+    pack.a=(char*)"UK";
+    pack.b=(char*)"USA";
+    pack.c=(char*)"Russia";
+    pack.d=(char*)"China";
+    pack.correct=2;
+    packs.push_back(pack);
+
+    pack.q=(char*)"The US declared war on which country after the bombing of Pearl Harbor?";
+    pack.a=(char*)"Japan";
+    pack.b=(char*)"Russia";
+    pack.c=(char*)"Germany";
+    pack.d=(char*)"China";
+    pack.correct=0;
+    packs.push_back(pack);
+
+    pack.q=(char*)"What is the S.I. unit of temperature?";
+    pack.a=(char*)"Kelvin";
+    pack.b=(char*)"Celsius";
+    pack.c=(char*)"Centigrade";
+    pack.d=(char*)"Fahrenheit";
+    pack.correct=0;
+    packs.push_back(pack);
+
+    pack.q=(char*)"When did US astronauts Neil Armstrong and Edwin E. Aldrin land on the moon?";
+    pack.a=(char*)"July 21, 1969";
+    pack.b=(char*)"July 21, 1970";
+    pack.c=(char*)"July 21, 1963";
+    pack.d=(char*)"July 21, 1972";
+    pack.correct=0;
+    packs.push_back(pack);
+
+    pack.q=(char*)"When cream is separated from milk";
+    pack.a=(char*)"the density of milk increases";
+    pack.b=(char*)"the density of milk decreases";
+    pack.c=(char*)"the density of milk remains unchanged";
+    pack.d=(char*)"it becomes more viscous";
+    pack.correct=0;
+    packs.push_back(pack);
+
+    pack.q=(char*)"An albino gorilla usually has what color fur?";
+    pack.a=(char*)"Brown";
+    pack.b=(char*)"Black";
+    pack.c=(char*)"White";
+    pack.d=(char*)"Golden";
+    pack.correct=2;
+    packs.push_back(pack);
+
+    pack.q=(char*)"Hamid Karzai was chosen president of Afghanistan in";
+    pack.a=(char*)"2000";
+    pack.b=(char*)"2001";
+    pack.c=(char*)"2002";
+    pack.d=(char*)"2003";
+    pack.correct=2;
+    packs.push_back(pack);
+
+    pack.q=(char*)"The headquarters of UN are situated at";
+    pack.a=(char*)"New York, USA";
+    pack.b=(char*)"Haque (Netherlands)";
+    pack.c=(char*)"Geneva";
+    pack.d=(char*)"Paris";
+    pack.correct=0;
+    packs.push_back(pack);
+
+    pack.q=(char*)"When and where was hockey introduced for women in Olympics?";
+    pack.a=(char*)"1924 at Paris";
+    pack.b=(char*)"1936 at Berlin";
+    pack.c=(char*)"1980 at Moscow";
+    pack.d=(char*)"1908 at London";
+    pack.correct=1;
+    packs.push_back(pack);
+
+    pack.q=(char*)"Lime is sometimes applied to soil in order to";
+    pack.a=(char*)"increase the alkalinity of the soil";
+    pack.b=(char*)"increase the acidity of the soil";
+    pack.c=(char*)"restore nitrates to the soil";
+    pack.d=(char*)"make the soil more porous";
+    pack.correct=2;
+    packs.push_back(pack);
+
+    pack.q=(char*)"Lal Bahadur Shastri is also known as";
+    pack.a=(char*)"Guruji";
+    pack.b=(char*)"Man of Peace";
+    pack.c=(char*)"Punjab Kesari";
+    pack.d=(char*)"Mahamana";
+    pack.correct=1;
+    packs.push_back(pack);
+
+    pack.q=(char*)"What are the three primary colors?";
+    pack.a=(char*)"Red, green, blue";
+    pack.b=(char*)"Magenta, pink, cyan";
+    pack.c=(char*)"Yellow, salmon, brown";
+    pack.d=(char*)"White, grey, black";
+    pack.correct=0;
+    packs.push_back(pack);
+
+    pack.q=(char*)"In aviation, what does UFO stand for?";
+    pack.a=(char*)"Unified Flying Object";
+    pack.b=(char*)"Unitary Flinging Obsession";
+    pack.c=(char*)"United Flag Opposition";
+    pack.d=(char*)"Unidentified Flying Object";
+    pack.correct=3;
+    packs.push_back(pack);
+
+    pack.q=(char*)"Guwahati High Court is the judicature of";
+    pack.a=(char*)"Nagaland";
+    pack.b=(char*)"Arunachal Pradesh";
+    pack.c=(char*)"Assam";
+    pack.d=(char*)"All of the above";
+    pack.correct=2;
+    packs.push_back(pack);
+
+    pack.q=(char*)"Numismatics is the study of";
+    pack.a=(char*)"coins";
+    pack.b=(char*)"numbers";
+    pack.c=(char*)"stamps";
+    pack.d=(char*)"space";
+    pack.correct=0;
+    packs.push_back(pack);
+
+    pack.q=(char*)"Karl Marx's ideology advocated";
+    pack.a=(char*)"a classed unique society";
+    pack.b=(char*)"a united society";
+    pack.c=(char*)"a classed society";
+    pack.d=(char*)"None of the above";
+    pack.correct=2;
+    packs.push_back(pack);
+
+    pack.q=(char*)"What kind of animal traditionally lives in a sty?";
+    pack.a=(char*)"Cow";
+    pack.b=(char*)"Pig";
+    pack.c=(char*)"Fox";
+    pack.d=(char*)"Teenager";
+    pack.correct=1;
+    packs.push_back(pack);
+
+    pack.q=(char*)"What is the second most common gas in the air?";
+    pack.a=(char*)"Nitrogen";
+    pack.b=(char*)"Oxygen";
+    pack.c=(char*)"Water";
+    pack.d=(char*)"Helium";
+    pack.correct=1;
+    packs.push_back(pack);
 }
