@@ -47,22 +47,23 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<MsgList>("MsgList", 1, 0, "MsgList",
         QStringLiteral("MsgList should not be created in QML"));
 
-    QQmlEngine engine;
-    engine.rootContext()->setContextProperty(QStringLiteral("msgList"), &t->msgList);
-    engine.rootContext()->setContextProperty(QStringLiteral("playerList"), &t->playerList);
+    t->engine.rootContext()->setContextProperty(QStringLiteral("msgList"), &t->msgList);
+    t->engine.rootContext()->setContextProperty(QStringLiteral("playerList"), &t->playerList);
 
-    QQmlComponent component(&engine, "qrc:/Layout.qml");
-    QObject *object = component.create();
+    t->component = new QQmlComponent(&t->engine, "qrc:/Layout.qml");
+    t->object = t->component->create();
 
+//    QVariant returnedValue;
+//    QVariant msg = "Hello from C++";
 
-    QVariant returnedValue;
-    QVariant msg = "Hello from C++";
+//    QMetaObject::invokeMethod(t->object, "myQmlFunction",
+//        Q_RETURN_ARG(QVariant, returnedValue),
+//        Q_ARG(QVariant, msg));
 
-    QMetaObject::invokeMethod(object, "myQmlFunction",
-        Q_RETURN_ARG(QVariant, returnedValue),
-        Q_ARG(QVariant, msg));
+//    QMetaObject::invokeMethod(t->object, "popupMsg",
+//        Q_ARG(QVariant, msg));
 
-    qDebug() << "QML function returned:" << returnedValue.toString();
+//    qDebug() << "QML function returned:" << returnedValue.toString();
 
 
     return app.exec();

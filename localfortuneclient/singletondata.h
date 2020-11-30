@@ -2,6 +2,9 @@
 #define TESTT_H
 #include "playerlist.h"
 #include "msglist.h"
+#include <QQmlEngine>
+#include <QObject>
+#include <QQmlComponent>
 
 class SingletonClass
 {
@@ -14,6 +17,9 @@ class SingletonClass
 
         PlayerList playerList;
         MsgList msgList;
+        QQmlEngine engine;
+        QQmlComponent *component;
+        QObject *object;
 
 
     private:

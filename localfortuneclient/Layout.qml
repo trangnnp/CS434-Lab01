@@ -75,6 +75,8 @@ ApplicationWindow {
           return "some return value"
     }
 
+
+
     property var choosen: "#f4a261"
     property var correctans: "#e76f51"
 //    property var normal: "#eec1a2"
@@ -93,6 +95,12 @@ ApplicationWindow {
     property var statusInTurnColor: "#fca311"
     property var statusDieColor: "#e5e5e5"
     property var msg: ""
+
+    function popupMsg(msg) {
+        root.msg = msg;
+        popup.open();
+        animTimer.start();
+    }
 
     Image {
         id: rootItem
@@ -120,7 +128,12 @@ ApplicationWindow {
                 }
 
             Label {
-                text: msg
+                text: root.msg
+            }
+
+            background: Rectangle {
+                        border.color: "#2c6e49"
+                        color: "#2b9348"
             }
 
             Timer {
@@ -129,13 +142,6 @@ ApplicationWindow {
                     onTriggered: popup.close()
                 }
         }
-
-        function popupMsg(msg) {
-            rootItem.msg = msg;
-            popup.open();
-            animTimer.start();
-        }
-
 
         Image {
             id : welcomePage
@@ -173,7 +179,6 @@ ApplicationWindow {
                     Label {
                         id: enter_name
                         text: "Enter your name"
-                        font.family: font.name
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: 25
                         font.bold: true

@@ -22,8 +22,6 @@
 MainWindow::MainWindow(QObject *parent):QObject(parent) {
     _socket.connectToHost(QHostAddress("127.0.0.1"), 4242);
     connect(&_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
-//    createMe(QByteArray::fromStdString("Meo" + to_string(rand()%10)));
-//    curPack.q = QByteArray::fromStdString("bbbbbbbbbbbbbbbbbbbbb");
     qDebug() << "Constructor Done!";
     Msg msg = Msg();
     msg.timestamp = QByteArray::fromStdString(getTime());
@@ -32,6 +30,11 @@ MainWindow::MainWindow(QObject *parent):QObject(parent) {
     singletonData->msgList.appendItem(msg);
 
     connect(timerTurn, &QTimer::timeout, this, &MainWindow::updatepackTimerValue);
+
+//    object = singletonData->component->create();
+
+//    QMetaObject::invokeMethod(singletonData->object, "popupMsg",
+//        Q_ARG(QVariant, "msg"));
 }
 
 void MainWindow::printMessage(QString txt) {
@@ -160,6 +163,7 @@ void MainWindow::onReadyRead() {
                 addNewMsg(i.second);
                 break;
             case 'Q':
+//                sleep(3);
                 splitQ(i.second);
                 break;
             case 'K':
@@ -196,7 +200,6 @@ void MainWindow::endGame() {
     if (playerStatus == 3) {
         qDebug() << "==========ehehe============";
     }
-
 }
 
 
@@ -259,6 +262,21 @@ string MainWindow::getTime() {
     return string(timebuff);
 }
 
+
+void MainWindow::popup(QVariant msg) {
+    QMetaObject::invokeMethod(singletonData->object, "popupMsg",
+                              Q_ARG(QVariant, msg));
+}
+
+void MainWindow::sleep(float seconds)
+{
+    clock_t startClock = clock();
+    float secondsAhead = seconds * CLOCKS_PER_SEC;
+    // do nothing until the elapsed time has passed.
+    while(clock() < startClock+secondsAhead);
+    return;
+}
+
 void MainWindow::sendAnswer(int answer) {
     if (kotae == 0) aResult = 0;
     if (kotae == 1) bResult = 0;
@@ -273,8 +291,6 @@ void MainWindow::sendAnswer(int answer) {
     } else {
         qDebug() << "Not Sent";
     }
-
-
 }
 
 void MainWindow::skipThisTurn() {

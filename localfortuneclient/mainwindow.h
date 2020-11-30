@@ -8,7 +8,8 @@
 #include "singletondata.h"
 #include <QObject>
 #include <QTimer>
-
+#include <iostream>
+#include <ctime>
 
 namespace Ui {
 class MainWindow;
@@ -58,6 +59,8 @@ signals:
 private:
     Ui::MainWindow *ui;
     QTcpSocket  _socket;
+//    QObject *object;
+//    =component.create();
 //    void createMe(string name);
     void onGame();
     void splitQ(const string& str);
@@ -69,7 +72,9 @@ private:
     void endGame();
     void extractRoomInfo(string data);
     string getTime();
+    void popup(QVariant msg);
     QString myName;
+    void sleep(float seconds);
 
     int packTimerValue=0;
     QTimer *timerTurn = new QTimer(this);

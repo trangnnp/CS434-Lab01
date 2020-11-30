@@ -131,8 +131,9 @@ void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
                 } else {
                     socket->write(sendConv("You are wrong!","N"));
                     room->packs.at(room->curPackId).answered = true;
+                    player.status = 2;
+                    socket->write(sendConv("Chet!","N"));
                     if (countActive ==1) countActive--;
-
                 }
             }
 
@@ -149,6 +150,8 @@ void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
 }
 
 void MainWindow::endGame() {
+
+    room->isOnGame = false;
 
     int highestScore = 0;
 
