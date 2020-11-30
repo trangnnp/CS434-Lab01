@@ -51,7 +51,7 @@ ApplicationWindow {
         Layout.fillWidth: true
         Layout.fillHeight: true
         anchors.fill: parent
-        source: "qrc:/shared/2_75.png"
+        source: "qrc:/shared/2_70.png"
 
         Image {
             id: logo
@@ -65,12 +65,16 @@ ApplicationWindow {
 
     Rectangle   {
         id: settingLayout
-        x: background.paintedWidth*0.4
+        x: background.paintedWidth*0.39
         y: background.paintedHeight*0.5
         width: background.paintedHeight*0.4
         color: "yellow"
 
         Frame {
+            background: Rectangle {
+                color: "#4a4e69"
+            }
+
             Column {
                 anchors.fill: parent
                 spacing: 10
@@ -148,7 +152,7 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 anchors.fill: parent
-                source: "qrc:/shared/2_75.png"
+                source: "qrc:/shared/2_70.png"
 
                 PathView {
                     id: pathView
@@ -234,6 +238,9 @@ ApplicationWindow {
                         id: frame
                         x: image.paintedWidth*0.03
                         y: image.paintedHeight*0.1
+                        background: Rectangle {
+                            color: "#4a4e69"
+                        }
 
                         property var textSize: 14
 

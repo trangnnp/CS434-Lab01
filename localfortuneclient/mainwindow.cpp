@@ -228,8 +228,14 @@ void MainWindow::updatePlayerInfo(string data) {
             playerStatus = p.status;
             qDebug() << playerStatus;
             skipped = atoi(info.at(4).c_str());
-            if (p.status == 3) win = 1;
-            if (p.status == 4) win = 0;
+            if (p.status == 3) {
+                win = 1;
+                winUpdated();
+            }
+            if (p.status == 4) {
+                win = 0;
+                winUpdated();
+            }
         }
 
         playerInfoUpdated();
@@ -307,6 +313,21 @@ void MainWindow::skipThisTurn() {
     popup("You skipped this turn!");
 
     kotae = -1;
+}
+
+void MainWindow::resetGame() {
+    aResult=3;
+    bResult=3;
+    cResult=3;
+    dResult=3;
+    kotae=-1;
+    resultUpdated();
+
+    playerStatus=0;
+    playerId=0;
+    skipped=0;
+    playerInfoUpdated();
+
 }
 
 void MainWindow::createMe(QString name) {

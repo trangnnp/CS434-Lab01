@@ -25,6 +25,7 @@ public:
     Q_INVOKABLE void createMe(QString name);
     Q_INVOKABLE void sendAnswer(int answer);
     Q_INVOKABLE void skipThisTurn();
+    Q_INVOKABLE void resetGame();
     Q_PROPERTY(QString packq READ getQ NOTIFY curPackChanged);
     Q_PROPERTY(QString packa READ getA NOTIFY curPackChanged);
     Q_PROPERTY(QString packb READ getB NOTIFY curPackChanged);

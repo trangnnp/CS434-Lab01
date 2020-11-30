@@ -174,6 +174,7 @@ void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
 
             if (countActive <= 1 || room->curPackId == room->packs.size()-1) {
                 endGame();
+                return;
             }
 
             room->sendPlayersInfo();
@@ -194,7 +195,7 @@ void MainWindow::endGame() {
         }
     }
 
-    for (Player p:room->players){
+    for (Player &p:room->players){
         if (p.status != 2 && p.score == highestScore) {
             p.status = 3;
         } else {
@@ -202,6 +203,7 @@ void MainWindow::endGame() {
         }
     }
 
+    room->sendPlayersInfo();
     updatePlayerInfo();
     room->sendAll(sendConv("Game Ended", "Y"));
 
@@ -263,6 +265,7 @@ void MainWindow::addNewPlayer(string name, QTcpSocket* socket) {
     }
 
     socket->write(sendConv("OK!","O"));
+    room->sendRoomInfo();
 
     Player player;
     player.id = room->players.size();

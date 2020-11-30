@@ -102,7 +102,7 @@ ApplicationWindow {
         client.notiType = 0
     }
 
-    function popupMsgWin(msg) {
+    function popupMsgWin() {
         popupWin.open();
         animTimerWin.start();
         client.win = -1
@@ -162,8 +162,8 @@ ApplicationWindow {
             width: rootItem.paintedWidth/2
             height: rootItem.paintedHeight/2
             visible: client.win == -1 ? false : true
-            x: rootItem.paintedWidth - width/2
-            y: rootItem.paintedHeight - height/2
+            x: rootItem.paintedWidth/2 - width/2
+            y: rootItem.paintedHeight/2 - height/2
 
             focus: true
             closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
@@ -183,7 +183,7 @@ ApplicationWindow {
 
             onVisibleChanged: {
                 if (popupWin.visible === true) {
-                    popupMsg(client.msgNoti)
+                    popupMsgWin()
                 }
             }
 
@@ -197,6 +197,7 @@ ApplicationWindow {
                     interval: 5000; repeat: false
                     onTriggered: {
                         popupWin.close()
+                        client.resetGame()
                     }
                 }
         }
@@ -205,9 +206,8 @@ ApplicationWindow {
             id : welcomePage
             Layout.fillWidth: true
             Layout.fillHeight: true
-            source: "qrc:/shared/2_75.png"
+            source: "qrc:/shared/2_65.png"
             anchors.fill: parent
-
             visible: client.success == false ? true : false
 
             property real lineWidthx: 5
@@ -293,7 +293,7 @@ ApplicationWindow {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         Layout.preferredHeight: 3
-                        source: "qrc:/shared/2_75.png"
+                        source: "qrc:/shared/2_65.png"
 
                         property real lineWidthx: 5
                         property real recSize: 20
@@ -479,6 +479,9 @@ ApplicationWindow {
                             id: frame
                             x: image.paintedWidth*0.03
                             y: image.paintedHeight*0.1
+                            background: Rectangle {
+                                color : "#4a4e69"
+                            }
 
                             property var textSize: 14
 
