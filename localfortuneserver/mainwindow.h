@@ -51,6 +51,7 @@ public slots:
     void onSocketStateChanged(QAbstractSocket::SocketState socketState);
     void onReadyRead();
     void sendData();
+    void sendInfoPlayersData();
     void updatePack();
 
 private:

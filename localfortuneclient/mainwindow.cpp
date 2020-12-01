@@ -301,8 +301,10 @@ void MainWindow::sendAnswer(int answer) {
     if (playerStatus == 1) {
         _socket.write(sendConv(to_string(answer), "W"));
         qDebug() << "Sent";
+        qDebug() << playerStatus;
     } else {
         qDebug() << "Not Sent";
+        qDebug() << playerStatus;
     }
 }
 

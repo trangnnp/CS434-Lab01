@@ -45,7 +45,9 @@ void Room::sendAll(QByteArray dataSend) {
 }
 
 void Room::sendPlayersInfo() {
-    sendAll(sendConv(playersInfo(), "P"));
+    QByteArray data = sendConv(playersInfo(), "P");
+    qDebug() << data;
+    sendAll(data);
 }
 
 string Room::playersInfo() {
@@ -137,7 +139,8 @@ void Room::run() {
                 sendData = sendConv(packQuestion,"Q");
 
     //            timerTurn->start(2000);
-                sendPlayersInfo();
+//                sendPlayersInfo();
+                emitSendInfoSignal();
                 qDebug() << "============meoooooooo=============";
 
                 emitSendSignal();
@@ -168,5 +171,10 @@ void Room::emitSendSignal() {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     qDebug() << "vo dc emit signal";
     emit sendSignal();
+}
+
+void Room::emitSendInfoSignal() {
+    qDebug() << "vo dc emit info signal";
+    emit sendInfoSignal();
 }
 

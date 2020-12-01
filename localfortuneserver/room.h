@@ -50,7 +50,9 @@ public:
     void updateScores();
     bool isNext=false;
     QByteArray sendData;
+    QByteArray infoPlayersData;
     void emitSendSignal();
+    void emitSendInfoSignal();
 
     Q_PROPERTY(int totalQuestion MEMBER limitPacks NOTIFY initRoom);
     Q_PROPERTY(int totalPlayer MEMBER maxPlayer NOTIFY initRoom);
@@ -66,6 +68,7 @@ public:
 
 signals:
     void sendSignal();
+    void sendInfoSignal();
     void answerSignal();
     void curPackChanged();
     void initRoom();

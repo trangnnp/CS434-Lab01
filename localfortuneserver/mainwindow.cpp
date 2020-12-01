@@ -135,6 +135,7 @@ void MainWindow::onGame() {
     qDebug() << "======countActive======";
     qDebug() << countActive;
     connect(room, SIGNAL(sendSignal()),this,SLOT(sendData()));
+    connect(room, SIGNAL(sendInfoSignal()),this,SLOT(sendPlayersInfoData()));
     room->isOnGame = true;
     room->isOnProcess = true;
 
@@ -236,6 +237,12 @@ void MainWindow::sendCorrectAnswer() {
 void MainWindow::sendData() {
     room->sendAll(room->sendData);
     updatePack();
+}
+
+void MainWindow::sendInfoPlayersData() {
+    QByteArray data = sendConv(room->playersInfo(), "P");
+    qDebug() << data;
+    room->sendAll(data);
 }
 
 void MainWindow::updatePack() {
