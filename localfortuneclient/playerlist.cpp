@@ -56,7 +56,7 @@ void PlayerList::resetItems()
 }
 
 bool comparePlayerScore(Player player1, Player player2) {
-    return (player1.score < player2.score);
+    return (player1.score > player2.score);
 }
 
 void PlayerList::sortPlayer() {
