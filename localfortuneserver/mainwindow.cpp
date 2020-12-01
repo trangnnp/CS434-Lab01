@@ -27,7 +27,7 @@ MainWindow::MainWindow(QObject *parent):QObject(parent),
 
 MainWindow::~MainWindow()
 {
-    room->isOnGame = false;
+    room->isOnProcess = false;
     if (!room->isFinished()) {
         room->terminate();
     }
@@ -47,6 +47,16 @@ void MainWindow::updatepackTimerValue() {
 }
 
 void MainWindow::resetRoom() {
+
+    packq = "";
+    packa = "";
+    packb = "";
+    packc = "";
+    packd = "";
+    onCurPackChanged();
+
+    room->sendAll(sendConv("Reset Game", "R"));
+
     if (startStatus == 1) {
         isOnGame = true;
         getPacksForRoom(room);
@@ -62,7 +72,7 @@ void MainWindow::resetRoom() {
             onStartStatusChanged();
             qDebug() << room->packs.size();
 
-            for (Player p: room->players) {
+            for (Player &p: room->players) {
                 p.score = 0;
                 p.skipped = false;
                 p.status = 0;
@@ -126,7 +136,15 @@ void MainWindow::onGame() {
     qDebug() << countActive;
     connect(room, SIGNAL(sendSignal()),this,SLOT(sendData()));
     room->isOnGame = true;
-    room->start();
+    room->isOnProcess = true;
+
+    if (!room->isRunning())
+        room->start();
+    else {
+        room->curPackId = 0;
+        room->curPlayerId = -1;
+        room->isNext = true;
+    }
 
     room->sendAll(sendConv("\n\n================== Game Starting ======================\n","N"));
     room->sendRoomInfo();

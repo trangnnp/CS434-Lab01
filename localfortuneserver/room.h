@@ -46,6 +46,7 @@ public:
     string roomInfo();
     int scorePerPack=1000;
     bool isOnGame=false;
+    bool isOnProcess=false;
     void updateScores();
     bool isNext=false;
     QByteArray sendData;

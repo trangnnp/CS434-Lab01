@@ -99,7 +99,7 @@ void MainWindow::splitQ(const string& str) {
     previous = current + 1;
     current = str.find_first_of(delims,previous);
 
-    curPack.d = QByteArray::fromStdString(str.substr(previous+2,current - previous-3));
+    curPack.d = QByteArray::fromStdString(str.substr(previous+2,current - previous-2));
     curPackChanged();
 
     aResult=3;
@@ -194,6 +194,10 @@ void MainWindow::onReadyRead() {
                 qDebug() << QByteArray::fromStdString(i.second);
                 endGame();
                 break;
+            case 'R':
+                qDebug() << QByteArray::fromStdString(i.second);
+                resetGame();
+                break;
         }
     }
 }
@@ -201,7 +205,13 @@ void MainWindow::onReadyRead() {
 void MainWindow::endGame() {
     if (playerStatus == 3) {
         qDebug() << "==========ehehe============";
+        win = 1;
+    } else {
+        qDebug() << "==========uhuhu============";
+        win = 0;
     }
+
+    winUpdated();
 }
 
 
@@ -228,14 +238,6 @@ void MainWindow::updatePlayerInfo(string data) {
             playerStatus = p.status;
             qDebug() << playerStatus;
             skipped = atoi(info.at(4).c_str());
-            if (p.status == 3) {
-                win = 1;
-                winUpdated();
-            }
-            if (p.status == 4) {
-                win = 0;
-                winUpdated();
-            }
         }
 
         playerInfoUpdated();
@@ -321,13 +323,21 @@ void MainWindow::resetGame() {
     cResult=3;
     dResult=3;
     kotae=-1;
-    resultUpdated();
 
     playerStatus=0;
     playerId=0;
     skipped=0;
-    playerInfoUpdated();
+    win = -1;
 
+    curPack = Pack();
+
+    packTimerValue = 0;
+
+    updatepackTimerValue();
+    resultUpdated();
+    curPackChanged();
+    winUpdated();
+    playerInfoUpdated();
 }
 
 void MainWindow::createMe(QString name) {

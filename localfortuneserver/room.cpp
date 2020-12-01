@@ -89,63 +89,65 @@ void Room::run() {
     qDebug() << "============First turn=============";
 
 
-    while (isOnGame) {
-        if (isNext) {
-            qDebug() << "============next turn=============";
-            if (curPackId == packs.size() - 1) {
-                isOnGame = false;
-                qDebug() << "============end game=============";
-                return;
-            }
-
-            if (packs.at(curPackId).answered) {
-                curPackId++;
-            }
-
-            qDebug() << curPackId;
-
-            if (curPackId == limitPacks) {
-                isOnGame = false;
-                qDebug() << "============end game 1=============";
-                return;
-            }
-
-            if (curPlayerId != -1) {
-                if (players.at(curPlayerId).status != 2) {
-                    players.at(curPlayerId).status = 0;
+    while (isOnProcess) {
+        if (isOnGame) {
+            if (isNext) {
+                qDebug() << "============next turn=============";
+                if (curPackId == packs.size() - 1) {
+                    isOnGame = false;
+                    qDebug() << "============end game=============";
+                    continue;
                 }
 
-                curPlayerId == (players.size() - 1) ? curPlayerId = 0 : curPlayerId++;
+                if (packs.at(curPackId).answered) {
+                    curPackId++;
+                }
 
-                while (players.at(curPlayerId).status == 2) {
+                qDebug() << curPackId;
+
+                if (curPackId == limitPacks) {
+                    isOnGame = false;
+                    qDebug() << "============end game 1=============";
+                    continue;
+                }
+
+                if (curPlayerId != -1) {
+                    if (players.at(curPlayerId).status != 2) {
+                        players.at(curPlayerId).status = 0;
+                    }
+
                     curPlayerId == (players.size() - 1) ? curPlayerId = 0 : curPlayerId++;
+
+                    while (players.at(curPlayerId).status == 2) {
+                        curPlayerId == (players.size() - 1) ? curPlayerId = 0 : curPlayerId++;
+                    }
+                } else {
+                    curPlayerId = 0;
                 }
-            } else {
-                curPlayerId = 0;
+
+                players.at(curPlayerId).status = 1;
+                qDebug() << "============player id=============";
+                qDebug() << curPlayerId;
+
+                packQuestion = "Q=" + string(packs.at(curPackId).q)+"\~" + "A=" + string(packs.at(curPackId).a)+"\~"
+                                    + "B=" + string(packs.at(curPackId).b)+"\~" + "C=" + string(packs.at(curPackId).c)+"\~"
+                                    + "D=" + string(packs.at(curPackId).d)+"\~" + "I=" + to_string(curPlayerId);
+
+                packq = QByteArray::fromStdString(packs.at(curPackId).q);
+                packa = QByteArray::fromStdString(packs.at(curPackId).a);
+                packb = QByteArray::fromStdString(packs.at(curPackId).b);
+                packc = QByteArray::fromStdString(packs.at(curPackId).c);
+                packd = QByteArray::fromStdString(packs.at(curPackId).d);
+                kotae = packs.at(curPackId).correct;
+
+    //            timerTurn->start(2000);
+                sendPlayersInfo();
+                qDebug() << "============meoooooooo=============";
+
+                sendData = sendConv(packQuestion,"Q");
+                emitSendSignal();
+                isNext = false;
             }
-
-            players.at(curPlayerId).status = 1;
-            qDebug() << "============player id=============";
-            qDebug() << curPlayerId;
-
-            packQuestion = "Q=" + string(packs.at(curPackId).q)+"\~" + "A=" + string(packs.at(curPackId).a)+"\~"
-                                + "B=" + string(packs.at(curPackId).b)+"\~" + "C=" + string(packs.at(curPackId).c)+"\~"
-                                + "D=" + string(packs.at(curPackId).d)+"\~" + "I=" + to_string(curPlayerId);
-
-            packq = QByteArray::fromStdString(packs.at(curPackId).q);
-            packa = QByteArray::fromStdString(packs.at(curPackId).a);
-            packb = QByteArray::fromStdString(packs.at(curPackId).b);
-            packc = QByteArray::fromStdString(packs.at(curPackId).c);
-            packd = QByteArray::fromStdString(packs.at(curPackId).d);
-            kotae = packs.at(curPackId).correct;
-
-//            timerTurn->start(2000);
-            sendPlayersInfo();
-            qDebug() << "============meoooooooo=============";
-
-            sendData = sendConv(packQuestion,"Q");
-            emitSendSignal();
-            isNext = false;
         }
     }
 

@@ -81,7 +81,7 @@ ApplicationWindow {
 
                 Row {
                     spacing: 10
-                    Label { text: '<b>' + "Room name: " + '</b>'; color: textColor;}
+                    Label { text: '<b>' + "_______Room name: " + '</b>'; color: textColor;}
                     TextField {
                         text: room.roomName
                         onTextChanged: room.roomName = text
@@ -90,7 +90,7 @@ ApplicationWindow {
 
                 Row {
                     spacing: 10
-                    Label { text: '<b>' + "Total Question: " + '</b>'; color: textColor;}
+                    Label { text: '<b>' + "____Total Question: " + '</b>'; color: textColor;}
                     TextField {
                         text: room.totalQuestion
                         onTextChanged: room.totalQuestion = text
@@ -99,7 +99,7 @@ ApplicationWindow {
 
                 Row {
                     spacing: 10
-                    Label { text: '<b>' + "Total Player: " + '</b>'; color: textColor;}
+                    Label { text: '<b>' + "_______Total Player: " + '</b>'; color: textColor;}
                     TextField {
                         text: room.totalPlayer
                         onTextChanged: room.totalPlayer = text

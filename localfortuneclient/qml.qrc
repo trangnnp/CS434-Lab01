@@ -14,6 +14,9 @@
         <file>2_65.png</file>
         <file>2_70.png</file>
         <file>2_60.png</file>
+        <file>lose.png</file>
+        <file>win.jpg</file>
+        <file>win2.jpg</file>
     </qresource>
     <qresource prefix="/qmlfiles"/>
     <qresource prefix="/">

@@ -135,8 +135,11 @@ ApplicationWindow {
                 }
 
             Label {
+                anchors.fill: parent
                 text: client.msgNoti
                 color: "white"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
             }
 
             onVisibleChanged: {
@@ -161,7 +164,7 @@ ApplicationWindow {
             id: popupWin
             width: rootItem.paintedWidth/2
             height: rootItem.paintedHeight/2
-            visible: client.win == -1 ? false : true
+            visible: client.win === -1 ? false : true
             x: rootItem.paintedWidth/2 - width/2
             y: rootItem.paintedHeight/2 - height/2
 
@@ -176,9 +179,13 @@ ApplicationWindow {
                 }
 
             Label {
-                text: client.win === 0 ? "You Lose!" : client.win === 1 ? "You Win!" : ""
-                font.pixelSize: 28
+                anchors.fill: parent
+//                text: client.playerStatus === 4 ? "You Lose!" : client.playerStatus === 3 ? "You Win!" : "Error"
+                font.pointSize: 28
+                fontSizeMode: Text.Fit
                 color: "white"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
             }
 
             onVisibleChanged: {
@@ -187,17 +194,17 @@ ApplicationWindow {
                 }
             }
 
-            background: Rectangle {
-                        border.color: "#2c6e49"
-                        color: "#2b9348"
+            background: Image {
+                 source: client.playerStatus === 4 ? "qrc:/shared/lose.png" : "qrc:/shared/win2.jpg"
             }
 
             Timer {
                     id: animTimerWin
                     interval: 5000; repeat: false
                     onTriggered: {
+                        client.win = -1
                         popupWin.close()
-                        client.resetGame()
+//                        client.resetGame()
                     }
                 }
         }
