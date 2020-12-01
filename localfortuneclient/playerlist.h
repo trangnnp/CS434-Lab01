@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVector>
+#include <algorithm>
 
 struct Player
 {
@@ -26,6 +27,7 @@ public:
     QVector<Player> items() const;
 
     bool setItemAt(int index, const Player &item);
+    void sortPlayer();
 
 signals:
     void preItemAppended();

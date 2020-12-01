@@ -214,7 +214,6 @@ void MainWindow::endGame() {
     winUpdated();
 }
 
-
 void MainWindow::updatePlayerInfo(string data) {
     singletonData->playerList.resetItems();
     qDebug() << "==========Update player info============";
@@ -243,6 +242,7 @@ void MainWindow::updatePlayerInfo(string data) {
         playerInfoUpdated();
         singletonData->playerList.appendItem(p);
     }
+    singletonData->playerList.sortPlayer();
 }
 
 void MainWindow::addNewMsg(string data) {
