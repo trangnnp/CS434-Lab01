@@ -223,7 +223,7 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                             text: server.startStatus === 0 ? "waiting" : server.startStatus === 1 ? "Start Game" : server.startStatus ===2 ? "On game" : "Reset Game"
                             color: "white"
-                            font.pixelSize: 18
+                            font.pixelSize: 14
                         }
 
                         MouseArea {

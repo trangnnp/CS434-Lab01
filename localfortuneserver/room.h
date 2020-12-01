@@ -72,7 +72,6 @@ signals:
 
 
 private:
-    QTimer *timerTurn = new QTimer(this);
     string packQuestion;
 
 };

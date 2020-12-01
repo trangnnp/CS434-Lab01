@@ -23,13 +23,15 @@
 #include <algorithm>
 #include <QObject>
 #include <QString>
+#include <QTime>
+#include <QEventLoop>
+#include <QCoreApplication>
 
 using namespace std;
 
 Room::Room(QObject *parent):QThread()
 {
-    connect(timerTurn, &QTimer::timeout, this, &Room::updatepackTimerValue);
-
+//    connect(timerTurn, &QTimer::timeout, this, &Room::updatepackTimerValue);
 }
 
 QByteArray sendConv(string data, string tag) {
@@ -58,16 +60,6 @@ void Room::sendRoomInfo() {
     sendAll(sendConv(roomInfo(), "I"));
 }
 
-void Room::updatepackTimerValue()
-{
-    sendPlayersInfo();
-    qDebug() << "============meoooooooo=============";
-    sendData = sendConv(packQuestion,"Q");
-    emitSendSignal();
-    isNext = false;
-    timerTurn->stop();
-}
-
 string Room::roomInfo() {
     string data = "";
     data += name.toStdString() + "-";
@@ -87,6 +79,9 @@ void Room::run() {
     qDebug() << maxPlayer;
     qDebug() << timeLimited;
     qDebug() << "============First turn=============";
+
+//    QTimer *timerTurn = new QTimer(this);
+//    connect(timerTurn, &QTimer::timeout, this, &Room::updatepackTimerValue);
 
 
     while (isOnProcess) {
@@ -139,12 +134,12 @@ void Room::run() {
                 packc = QByteArray::fromStdString(packs.at(curPackId).c);
                 packd = QByteArray::fromStdString(packs.at(curPackId).d);
                 kotae = packs.at(curPackId).correct;
+                sendData = sendConv(packQuestion,"Q");
 
     //            timerTurn->start(2000);
                 sendPlayersInfo();
                 qDebug() << "============meoooooooo=============";
 
-                sendData = sendConv(packQuestion,"Q");
                 emitSendSignal();
                 isNext = false;
             }
@@ -168,6 +163,9 @@ void Room::updateScores() {
 }
 
 void Room::emitSendSignal() {
+    QTime dieTime= QTime::currentTime().addSecs(3);
+    while (QTime::currentTime() < dieTime)
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     qDebug() << "vo dc emit signal";
     emit sendSignal();
 }
