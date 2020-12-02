@@ -118,10 +118,10 @@ ApplicationWindow {
 
         Popup {
             id: popup
-            width: 200
+            width: 250
             height: 50
             visible: client.notiType === 0 ? false : true
-            x: rootItem.paintedWidth*2/3 - width/2
+            x: rootItem.paintedWidth*2/3 - width/2 - 25
             y: 10
 
             focus: true
@@ -307,12 +307,23 @@ ApplicationWindow {
                         property real viewSize: 100
 
 
+                        Rectangle {
+                            width: image.paintedHeight*0.3 - 1*image.recSize
+                            height: width
+                            x: 50 + 1.5*image.recSize
+                            y: image.paintedHeight - 1.5*image.viewSize - 3*image.recSize
+                            border.color: "white"
+                            color: "transparent"
+                            border.width: 5
+                            radius: width*0.5
+                        }
+
                         PathView {
                             id: pathView
 
                             width: image.paintedHeight*0.3
                             height: width
-                            x: 40
+                            x: 50
                             y: image.paintedHeight - 2*image.viewSize - 2*image.recSize
 
                             model: PlayerModel {
@@ -508,7 +519,7 @@ ApplicationWindow {
                                     font.family: "Helvetica"; font.pointSize: frame.textSize; color: textColor
                                 }
                                 Text {
-                                    text: '<b> Current Question: </b>' + "<b> <font color=\"#ffea00\">" + client.totalPlayer + "</font> <font color=\"#ffea00\"></font><b>"
+                                    text: '<b> Current Question: </b>' + "<b> <font color=\"#ffea00\">" + client.curPackId + "</font> <font color=\"#ffea00\"></font><b>"
                                     font.family: "Helvetica"; font.pointSize: frame.textSize; color: textColor
                                 }
                                 Text {

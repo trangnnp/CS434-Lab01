@@ -17,14 +17,6 @@ void PackBank::initPacks() {
     pack.correct=2;
     packs.push_back(pack);
 
-    pack.q=(char*)"What is \"torrenting\"\?";
-    pack.a=(char*)"The file type for programs such as Bittorrent to open to obtain illegal files";
-    pack.b=(char*)"A file in which it stores your browsing history on your computer.";
-    pack.c=(char*)"Visiting a piracy website";
-    pack.d=(char*)"Using your computer to remotely take over another computer unwillingly.";
-    pack.correct=0;
-    packs.push_back(pack);
-
     pack.q=(char*)"Which of the following is a Cyberlocker site?";
     pack.a=(char*)"PirateBay";
     pack.b=(char*)"RapidShare";
@@ -41,7 +33,7 @@ void PackBank::initPacks() {
     pack.correct=0;
     packs.push_back(pack);
 
-    pack.q=(char*)"Around the world, many websites are used for piracy, Which of the following is the most used?";
+    pack.q=(char*)"Many websites are used for piracy, Which of the following is the most used?";
     pack.a=(char*)"torrent.com";
     pack.b=(char*)"IsoHunt";
     pack.c=(char*)"TorrentReactor";
@@ -49,20 +41,12 @@ void PackBank::initPacks() {
     pack.correct=2;
     packs.push_back(pack);
 
-    pack.q=(char*)"Around the world, Much of the data transfered using P2P networks are copyrighted. Which of the following percentages is the closest?";
+    pack.q=(char*)"Data transfered using P2P networks are copyrighted. Which percentages is the closest?";
     pack.a=(char*)"92%";
     pack.b=(char*)"52%";
     pack.c=(char*)"33%";
     pack.d=(char*)"99%";
     pack.correct=3;
-    packs.push_back(pack);
-
-    pack.q=(char*)"What is the percentage of softwares that are running worldwide and are downloaded illegally?";
-    pack.a=(char*)"52%";
-    pack.b=(char*)"49%";
-    pack.c=(char*)"42%";
-    pack.d=(char*)"73%";
-    pack.correct=2;
     packs.push_back(pack);
 
     pack.q=(char*)"In 2010, the amount of software downloaded illegally was worth how much?";
@@ -89,22 +73,6 @@ void PackBank::initPacks() {
     pack.correct=3;
     packs.push_back(pack);
 
-    pack.q=(char*)"In 2010, Second most popular movie was Batman: The Dark Knight. How many pirated downloads did it have?";
-    pack.a=(char*)"10 Million";
-    pack.b=(char*)"30 Million";
-    pack.c=(char*)"19 Million";
-    pack.d=(char*)"17 Million";
-    pack.correct=2;
-    packs.push_back(pack);
-
-    pack.q=(char*)"In 2010, Many Video Games were pirated for use. Which of the following was the most pirated?";
-    pack.a=(char*)"Tom Clancy HAWX";
-    pack.b=(char*)"Call of Duty Modern Warfare 3";
-    pack.c=(char*)"Call of Duty Black Ops";
-    pack.d=(char*)"Battlefield 2 Bad Company";
-    pack.correct=3;
-    packs.push_back(pack);
-
     pack.q=(char*)"Which king was married to Eleanor of Aquitaine?";
     pack.a=(char*)"Henry I";
     pack.b=(char*)"Henry II";
@@ -119,14 +87,6 @@ void PackBank::initPacks() {
     pack.c=(char*)"Uranus";
     pack.d=(char*)"Mars";
     pack.correct=2;
-    packs.push_back(pack);
-
-    pack.q=(char*)"In 1912, former US President Theodore Roosevelt was a candidate for which political party?";
-    pack.a=(char*)"Bull Moose";
-    pack.b=(char*)"Bull Dog";
-    pack.c=(char*)"Bull Elephant";
-    pack.d=(char*)"Bull Frog";
-    pack.correct=0;
     packs.push_back(pack);
 
     pack.q=(char*)"Tomas Masaryk was the first president of which country?";
@@ -185,7 +145,7 @@ void PackBank::initPacks() {
     pack.correct=1;
     packs.push_back(pack);
 
-    pack.q=(char*)"Which boxer was famous for striking the gong in the introduction to J. Arthur Rank films?";
+    pack.q=(char*)"Which boxer was famous for striking the gong in the introduction?";
     pack.a=(char*)"Bombardier Billy Wells";
     pack.b=(char*)"Freddie Mills";
     pack.c=(char*)"Terry Spinks";
@@ -217,7 +177,7 @@ void PackBank::initPacks() {
     pack.correct=3;
     packs.push_back(pack);
 
-    pack.q=(char*)"In 1718, which pirate died in battle off the coast of what is now North Carolina?";
+    pack.q=(char*)"Which pirate died in battle off the coast of what is now North Carolina?";
     pack.a=(char*)"Calico Jack";
     pack.b=(char*)"Blackbeard";
     pack.c=(char*)"Bartholomew Roberts";

@@ -128,7 +128,7 @@ void Room::run() {
 
                 packQuestion = "Q=" + string(packs.at(curPackId).q)+"\~" + "A=" + string(packs.at(curPackId).a)+"\~"
                                     + "B=" + string(packs.at(curPackId).b)+"\~" + "C=" + string(packs.at(curPackId).c)+"\~"
-                                    + "D=" + string(packs.at(curPackId).d)+"\~" + "I=" + to_string(curPlayerId);
+                                    + "D=" + string(packs.at(curPackId).d)+"\~" + "I=" + to_string(curPackId);
 
                 packq = QByteArray::fromStdString(packs.at(curPackId).q);
                 packa = QByteArray::fromStdString(packs.at(curPackId).a);
@@ -166,7 +166,7 @@ void Room::updateScores() {
 }
 
 void Room::emitSendSignal() {
-    QTime dieTime= QTime::currentTime().addSecs(3);
+    QTime dieTime= QTime::currentTime().addSecs(5);
     while (QTime::currentTime() < dieTime)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     qDebug() << "vo dc emit signal";

@@ -9,6 +9,7 @@
 #include <string>
 #include <string.h>
 #include <set>
+#include <regex>
 #include <sstream>
 #include <algorithm>
 #include <iterator>
@@ -53,6 +54,7 @@ void MainWindow::resetRoom() {
     packb = "";
     packc = "";
     packd = "";
+    correct=-1;
     onCurPackChanged();
 
     room->sendAll(sendConv("Reset Game", "R"));
@@ -135,7 +137,7 @@ void MainWindow::onGame() {
     qDebug() << "======countActive======";
     qDebug() << countActive;
     connect(room, SIGNAL(sendSignal()),this,SLOT(sendData()));
-    connect(room, SIGNAL(sendInfoSignal()),this,SLOT(sendPlayersInfoData()));
+    connect(room, SIGNAL(sendInfoSignal()),this,SLOT(sendInfoPlayersData()));
     room->isOnGame = true;
     room->isOnProcess = true;
 
@@ -161,13 +163,13 @@ void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
                 return;
             }
 
-            socket->write(sendConv(to_string(room->packs.at(room->curPackId).correct),"K"));
             qDebug() << "======ready update scores======";
             if (answer == room->packs.at(room->curPackId).correct) {
                 socket->write(sendConv("You right!","N"));
                 player.score+=room->scorePerPack;
                 room->packs.at(room->curPackId).answered = true;
                 qDebug() << player.score;
+                socket->write(sendConv(to_string(room->packs.at(room->curPackId).correct),"K"));
             } else {
                 if (answer == -1) {
                     if (player.skipped == false) {
@@ -180,6 +182,7 @@ void MainWindow::collectAnswer(int answer, QTcpSocket* socket) {
                     }
 
                 } else {
+                    socket->write(sendConv(to_string(room->packs.at(room->curPackId).correct),"K"));
                     socket->write(sendConv("You are wrong!","N"));
                     room->packs.at(room->curPackId).answered = true;
                     player.status = 2;
@@ -282,9 +285,17 @@ void MainWindow::onReadyRead() {
 }
 
 void MainWindow::addNewPlayer(string name, QTcpSocket* socket) {
+    if (regex_match(name, regex("[a-zA-Z0-9]*"))) {
+
+    } else {
+        socket->write(sendConv("Name must not contain symbols!","E"));
+        return;
+    }
+
+
     for (Player player : room->players) {
         if (strcmp(name.c_str(), player.name.c_str()) == 0) {
-            socket->write(sendConv("Name is not available!","E"));
+            socket->write(sendConv("This name is taken before!","E"));
             return;
         }
     }
@@ -296,7 +307,13 @@ void MainWindow::addNewPlayer(string name, QTcpSocket* socket) {
     player.id = room->players.size();
     player.name = name;
     player.clientSocket = socket;
-    player.avatar = colors[rand() % colors->size()];
+
+    int tmp = rand() % colors->size();
+
+    while (colorsCheck[tmp]==1) tmp = rand() % colors->size();
+    colorsCheck[tmp]=1;
+
+    player.avatar = colors[tmp];
     room->players.push_back(player);
     qDebug() << QByteArray::fromStdString("Add new player: " + name);
     updatePlayerInfo();
@@ -322,6 +339,13 @@ void MainWindow::getPacksForRoom(Room *room) {
     set<int> numbers;
     while (numbers.size() < room->limitPacks) {
        numbers.insert(rand() % room->maxPacks);
+    }
+
+    if (room->packs.size() > 0) {
+        while (!room->packs.empty())
+          {
+             room->packs.pop_back();
+          }
     }
 
     for (int i: numbers) {

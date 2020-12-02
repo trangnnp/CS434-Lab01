@@ -100,6 +100,10 @@ void MainWindow::splitQ(const string& str) {
     current = str.find_first_of(delims,previous);
 
     curPack.d = QByteArray::fromStdString(str.substr(previous+2,current - previous-2));
+    previous = current + 1;
+    current = str.find_first_of(delims,previous);
+
+    curPackId = atoi(str.substr(previous+2,current - previous-2).c_str()) + 1;
     curPackChanged();
 
     aResult=3;
@@ -167,13 +171,13 @@ void MainWindow::onReadyRead() {
                 break;
             case 'E':
                 qDebug() << QByteArray::fromStdString(i.second);
-                popup("This name is taken!");
+                popup(QByteArray::fromStdString(i.second));
                 break;
             case 'O':
                 qDebug() << QByteArray::fromStdString(i.second);
                 success = true;
                 successLogin();
-                popup("Welcome!");
+                popup("Registration Completed Successfully!");
                 break;
             case 'J':
                 qDebug() << QByteArray::fromStdString(i.second);
@@ -325,6 +329,7 @@ void MainWindow::resetGame() {
     cResult=3;
     dResult=3;
     kotae=-1;
+    curPackId=0;
 
     playerStatus=0;
     playerId=0;

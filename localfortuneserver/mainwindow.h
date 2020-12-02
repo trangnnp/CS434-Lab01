@@ -77,7 +77,8 @@ private:
     int countActive;
     QTimer *timerTurn = new QTimer(this);
 
-    string colors[10] = {"fb8f67", "ffc2b4", "f8e16c", "00c49a", "156064", "f2b5d4", "8980f5", "ff70a6", "ffc462", "d0e3cc"};
+    string colors[16] = {"da25c8", "faa300", "89fc00", "19d0ff", "ffd000", "ff00b2", "fb8f67", "ffc2b4", "f8e16c", "00c49a", "156064", "f2b5d4", "8980f5", "ff70a6", "ffc462", "d0e3cc"};
+    int colorsCheck[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     SingletonClass *singletonData = SingletonClass::Instance();
 

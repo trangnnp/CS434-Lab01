@@ -31,6 +31,7 @@ public:
     Q_PROPERTY(QString packb READ getB NOTIFY curPackChanged);
     Q_PROPERTY(QString packc READ getC NOTIFY curPackChanged);
     Q_PROPERTY(QString packd READ getD NOTIFY curPackChanged);
+    Q_PROPERTY(int curPackId MEMBER curPackId NOTIFY curPackChanged);
 
     Q_PROPERTY(int aResult MEMBER aResult NOTIFY resultUpdated);
     Q_PROPERTY(int bResult MEMBER bResult NOTIFY resultUpdated);
@@ -88,6 +89,7 @@ private:
     int packTimerValue=0;
     QTimer *timerTurn = new QTimer(this);
 
+    int curPackId=0;
     int playerStatus=0;
     int playerId=0;
     int skipped=0;

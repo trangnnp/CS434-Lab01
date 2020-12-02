@@ -154,6 +154,17 @@ ApplicationWindow {
                 anchors.fill: parent
                 source: "qrc:/shared/2_70.png"
 
+                Rectangle {
+                    width: image.paintedHeight*0.3 - 1*image.recSize
+                    height: width
+                    x: 50 + 1.5*image.recSize
+                    y: image.paintedHeight - 1.5*image.viewSize - 3*image.recSize
+                    border.color: "white"
+                    color: "transparent"
+                    border.width: 5
+                    radius: width*0.5
+                }
+
                 PathView {
                     id: pathView
 
